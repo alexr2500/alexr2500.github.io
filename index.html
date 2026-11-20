@@ -1,0 +1,1596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Alexandre Rollet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Alexandre Rollet, aerospace engineering student at ESILV. Lead Software Engineer for STAR-D, a student experiment flying on REXUS 38 in March 2027.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500&display=swap">
+<style>
+/* Layout: a four-column engineering grid with hairlines centred in its gutters. Type and data sit on it; photos run edge to edge. */
+:root {
+  --bg: #0A0B0C;
+  --fg: #F3F4F2;
+  --fg-2: #B4B8BB;
+  --muted: #878C91;
+  --rule: #26292C;
+  --rule-2: #3D4145;
+  --grid: #15171A;
+  --accent: #F5B041;     /* the amber ring of the STAR-D patch */
+  --on-accent: #140E02;
+  --sans: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --wrap: 1376px;
+  --gut: 16px;
+  --gap: 24px;
+  --bar-h: 56px;
+  color-scheme: dark;
+}
+@media (min-width: 720px) { :root { --gut: 32px; } }
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+a { color: inherit; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+img { display: block; max-width: 100%; }
+strong { font-weight: 500; color: var(--fg); }
+button { font: inherit; color: inherit; cursor: pointer; border-radius: 0; }
+
+.wrap {
+  max-width: var(--wrap); margin-inline: auto;
+  padding-left: max(var(--gut), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gut), env(safe-area-inset-right, 0px));
+}
+.g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); }
+.grid-lines { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.grid-lines .g4 { height: 100%; width: min(100% - 2 * var(--gut), var(--wrap) - 2 * var(--gut)); margin-inline: auto; }
+.grid-lines i { position: relative; left: -12px; border-left: 1px solid var(--grid); }
+.grid-lines i:first-child { border: 0; }
+@media (max-width: 900px) { .grid-lines { display: none; } }
+
+.eye { margin: 0; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3, h4 { margin: 0; font-weight: 500; text-wrap: balance; }
+h1 { font-size: clamp(48px, 7vw, 104px); line-height: .95; letter-spacing: -.04em; }
+h2 { font-size: clamp(44px, 5.4vw, 80px); line-height: .95; letter-spacing: -.035em; }
+h3 { font-size: clamp(28px, 2.8vw, 38px); line-height: 1.1; letter-spacing: -.02em; }
+
+/* ---------- top bar ---------- */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; gap: 24px; height: var(--bar-h); }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand b { font: 500 15px/1 var(--sans); white-space: nowrap; }
+.brand i { width: 7px; height: 7px; background: var(--accent); }
+.bar nav { display: flex; gap: 22px; margin-left: auto; }
+.bar nav a { padding-block: 6px; font: 400 14px/1 var(--sans); color: var(--fg-2); text-decoration: none; white-space: nowrap; border-bottom: 1px solid transparent; }
+.bar nav a:hover { color: var(--fg); }
+.bar nav a.on { color: var(--fg); border-bottom-color: var(--accent); }
+.brand .short { display: none; }
+@media (max-width: 520px) {
+  .bar nav a.opt { display: none; }
+  .bar nav { gap: 16px; }
+  .brand .full { display: none; }
+  .brand .short { display: inline; }
+}
+
+/* ---------- hero ---------- */
+.hero { padding-block: clamp(40px, 5vw, 72px) 0; }
+.hero-l { grid-column: 1 / 4; min-width: 0; }
+.hero-l .eye { margin-bottom: 16px; }
+.patch { grid-column: 4; margin: 0; }
+.patch img { width: 100%; height: auto; }
+.lede { margin: 20px 0 24px; max-width: 32em; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
+dt { font: 500 11px/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+dd { margin: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0; padding: 0; list-style: none; font: 500 12px/1 var(--mono); color: var(--fg); }
+.chips li { padding: 6px 8px; border: 1px solid var(--rule-2); }
+.chips .a { color: var(--accent); border-color: var(--accent); }
+.status { margin: clamp(32px, 4vw, 56px) 0 0; padding-block: 12px 14px; border-block: 1px solid var(--rule); row-gap: 14px; }
+.status > div { min-width: 0; }
+.status .focus { grid-column: span 2; }
+.status small { display: block; margin-top: 8px; font-size: 13.5px; line-height: 1.35; color: var(--fg-2); }
+.status .ph { display: block; margin-top: 4px; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.3; letter-spacing: -.01em; }
+.status .ph em { display: block; font-style: normal; color: var(--accent); }
+.ctas { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  display: inline-block; padding: 12px 18px; border: 1px solid var(--rule-2);
+  font: 500 14px/1 var(--sans); text-decoration: none; white-space: nowrap;
+}
+.btn:hover { border-color: var(--fg); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (max-width: 900px) {
+  .hero-l { grid-column: 1 / -1; }
+  .patch { grid-column: 1 / -1; width: 160px; margin-top: 28px; }
+}
+@media (max-width: 640px) { .status { grid-template-columns: repeat(2, minmax(0, 1fr)); } .status .focus { order: 1; } }
+
+/* ---------- photos ---------- */
+/* Training Week: the photos run sideways while the page scrolls down; without script they scroll natively */
+.hgal { position: relative; }
+.hgal-stage { display: flex; flex-direction: column; justify-content: center; gap: 16px; }
+.hgal-track {
+  display: flex; gap: 2px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding-inline: max(var(--gut), calc((100vw - var(--wrap)) / 2 + var(--gut)));
+}
+.hgal.on .hgal-stage {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h)); overflow: hidden;
+  height: calc(100vh - var(--bar-h)); height: calc(100dvh - var(--bar-h));
+}
+.hgal-track::after { content: ""; flex: none; width: max(var(--gut), calc((100vw - var(--wrap)) / 2 + var(--gut)) - 2px); }   /* end gutter; padding alone is not counted in the scroll width */
+.hgal.on .hgal-track { overflow: visible; will-change: transform; scroll-snap-type: none; }
+.hcard { flex: none; position: relative; margin: 0; height: min(68vh, 620px); aspect-ratio: var(--ar); background: var(--rule); scroll-snap-align: center; }
+.hcard img { width: 100%; height: 100%; object-fit: cover; }
+.hcard figcaption { position: absolute; left: 0; bottom: 0; max-width: min(380px, 100%); padding: 12px 16px 14px; background: var(--bg); }
+.hcard figcaption p { margin: 4px 0 0; font-size: 14.5px; line-height: 1.4; }
+.hgal.on .hcard figcaption { opacity: 0; transform: translateY(8px); transition: opacity .45s ease, transform .45s ease; }
+.hgal.on .hcard.on figcaption { opacity: 1; transform: none; }
+.hgal-foot { display: flex; align-items: center; gap: 16px; width: 100%; }
+.hgal-bar { flex: 1; height: 1px; background: var(--rule-2); }
+.hgal-bar i { display: block; height: 100%; background: var(--fg); transform-origin: left; transform: scaleX(0); }
+.hgal-count { font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) {
+  .hcard { height: min(52vh, 420px, calc(86vw / var(--ar))); }
+  .hcard figcaption { padding: 10px 12px 12px; }
+  .hcard figcaption p { font-size: 13.5px; }
+}
+.pair { display: grid; grid-template-columns: var(--a, 1fr) var(--b, 1fr); gap: 2px; }
+.pair figure { margin: 0; min-width: 0; }
+.pair img { width: 100%; height: auto; }
+.pair.crop img { aspect-ratio: 3 / 2; object-fit: cover; }
+.pair figcaption { padding: 12px var(--gut) 0; font-size: 14px; line-height: 1.45; color: var(--fg-2); }
+.pair figure:first-child figcaption { padding-left: max(var(--gut), calc((100vw - var(--wrap)) / 2 + var(--gut))); }
+.pair figcaption .eye { display: block; margin-bottom: 4px; }
+.pair figcaption h3 { margin-bottom: 8px; color: var(--fg); }
+.pair figcaption p { margin: 0; max-width: 34em; }
+@media (max-width: 640px) { .pair { grid-template-columns: 1fr; gap: 20px; } }
+
+/* ---------- sections ---------- */
+section.block { padding-block: clamp(88px, 11vw, 160px); }
+.sec-head { row-gap: 20px; margin-bottom: clamp(48px, 6vw, 88px); }
+.sec-head .eye { grid-column: 1 / -1; }
+.sec-head h2 { grid-column: 1 / 3; }
+.sec-head .sub { margin: 14px 0 0; font-size: 17px; color: var(--fg-2); }
+.sec-head .tx { grid-column: 3 / 5; margin: 0; align-self: end; max-width: 36em; font-size: 17px; line-height: 1.5; color: var(--fg-2); }
+@media (max-width: 900px) { .sec-head h2, .sec-head .tx { grid-column: 1 / -1; } }
+
+.sub-head { row-gap: 10px; margin: clamp(72px, 9vw, 128px) 0 28px; }
+.sub-head .eye, .sub-head h3 { grid-column: 1 / 3; }
+.sub-head .tx { grid-column: 3 / 5; grid-row: 1 / 3; margin: 0; align-self: end; max-width: 36em; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
+@media (max-width: 900px) { .sub-head .eye, .sub-head h3, .sub-head .tx { grid-column: 1 / -1; grid-row: auto; } }
+
+/* programme partners, shown as the big names they are */
+.orgs { padding-block: 16px 22px; border-top: 1px solid var(--rule); row-gap: 20px; }
+.orgs > div { min-width: 0; }
+.orgs .prog { display: block; margin-top: 4px; font-size: 19px; line-height: 1.3; }
+.orgs small { display: block; margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--fg-2); }
+.orgs b { display: block; font: 500 clamp(44px, 5vw, 76px)/1 var(--sans); letter-spacing: -.03em; }
+@media (max-width: 760px) {
+  .orgs { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 12px; }
+  .orgs > div:first-child { grid-column: 1 / -1; }
+  .orgs b { font-size: 36px; }
+}
+.stats { margin: 0; border-block: 1px solid var(--rule); }
+.stats > div { padding-block: 18px 20px; min-width: 0; }
+.stats dt { display: block; }
+.stats dd { margin-top: 6px; font: 500 clamp(52px, 6.4vw, 96px)/1 var(--sans); letter-spacing: -.04em; white-space: nowrap; }
+.stats small { font: 400 clamp(13px, 1.2vw, 16px)/1 var(--mono); letter-spacing: 0; color: var(--fg-2); }
+.stats small:last-child { margin-left: 6px; }
+.stats small:first-child { margin-right: 6px; }
+@media (max-width: 760px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats > div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+}
+
+/* mission file + map */
+.mission { margin-top: clamp(48px, 6vw, 88px); row-gap: 48px; }
+.mission > div { grid-column: 1 / 3; min-width: 0; }
+.mission .prose p { margin: 0 0 16px; max-width: 36em; font-size: 17px; line-height: 1.55; color: var(--fg-2); }
+/* what runs where, my role and the distinctions, as tiles rather than sentences */
+.langs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); margin-top: 12px; padding-block: 12px 16px; border-block: 1px solid var(--rule); }
+.langs .eye { grid-column: 1 / -1; margin-bottom: 8px; }
+.langs > div { min-width: 0; }
+.langs b { display: block; font: 500 clamp(48px, 5.4vw, 80px)/1 var(--sans); letter-spacing: -.04em; color: var(--accent); }
+.langs small, .first small { display: block; margin-top: 6px; font: 400 12.5px/1.4 var(--mono); color: var(--fg-2); }
+.role { padding-block: 12px 16px; border-bottom: 1px solid var(--rule); }
+.role h4 { margin: 2px 0 14px; font-size: 22px; line-height: 1.2; letter-spacing: -.01em; }
+.chain { row-gap: 6px; font-size: 11px; }
+.chain li + li { position: relative; margin-left: 14px; }
+.chain li + li::before { content: "→"; position: absolute; left: -16px; top: 6px; color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); }
+.tiles > div { min-width: 0; padding-block: 12px 14px; border-bottom: 1px solid var(--rule); }
+.first b { display: block; font: 500 clamp(52px, 6.4vw, 96px)/1 var(--sans); letter-spacing: -.04em; }
+.first small { max-width: 16em; font-size: 13.5px; }
+.tiles .wide { grid-column: 1 / -1; }
+.map { grid-column: 3 / 5; margin: 0; max-width: 420px; }
+.map svg { display: block; width: 100%; height: auto; margin-top: 10px; }
+.map .land { fill: none; stroke: #4A4E52; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0 9; }
+.map .route { fill: none; stroke: var(--fg-2); stroke-width: 1.2; stroke-dasharray: 3 5; }
+.map circle { fill: var(--accent); }
+.map text { paint-order: stroke; stroke: var(--bg); stroke-width: 6px; stroke-linejoin: round; }
+.map .nm { font: 500 20px var(--sans); fill: var(--fg); }
+.map .nm tspan { font-weight: 400; fill: var(--fg-2); }
+.map .rl { font: 500 14px var(--mono); letter-spacing: .04em; fill: var(--muted); text-transform: uppercase; }
+.map figcaption { margin-top: 8px; font-size: 14px; color: var(--fg-2); }
+@media (max-width: 900px) { .mission > div, .map { grid-column: 1 / -1; } }
+
+/* ---------- flight: altitude plot, RXSM signals and code, driven by scroll ---------- */
+.flight { position: relative; height: 260vh; }
+.stage {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h));
+  height: calc(100vh - var(--bar-h)); height: calc(100dvh - var(--bar-h));
+  padding: 10px max(var(--gut), env(safe-area-inset-right, 0px)) 12px max(var(--gut), env(safe-area-inset-left, 0px));
+  background: var(--bg);
+}
+.console { height: 100%; max-width: calc(var(--wrap) - 2 * var(--gut)); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr) 448px; column-gap: 24px; }
+.plotcol { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
+.ro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 16px; border-top: 1px solid var(--rule); }
+.ro > div { min-width: 0; padding-block: 8px 9px; border-bottom: 1px solid var(--rule); }
+.ro .eye { display: block; font-size: 10px; letter-spacing: .1em; }
+.ro b { display: block; margin-top: 3px; font: 400 21px/1.15 var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ro .c-met { grid-column: span 2; }
+.ro .c-met b { font-size: clamp(26px, 2.8vw, 36px); letter-spacing: -.02em; }
+.ro small { margin-left: 8px; font: 400 11px/1 var(--mono); color: var(--fg-2); }
+.modes, .sigs { display: flex; gap: 2px; margin-top: 5px; font: 500 12px/1 var(--mono); color: var(--muted); }
+.modes i, .sigs i { font-style: normal; padding: 4px 6px; }
+.modes i.on { background: var(--accent); color: var(--on-accent); }
+.sigs { gap: 10px; }
+.sigs i { display: flex; align-items: center; gap: 5px; padding: 4px 0; }
+.sigs i::before { content: ""; width: 7px; height: 7px; border: 1px solid var(--rule-2); }
+.sigs i.on { color: var(--fg); }
+.sigs i.on::before { background: var(--accent); border-color: var(--accent); }
+.plot { position: relative; min-height: 0; margin-block: 10px; }
+.plot canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
+.fl-cap { height: 3.9em; margin: 0; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 14px; line-height: 1.4; color: var(--fg-2); }
+.fl-cap b { font-weight: 500; color: var(--fg); margin-right: 6px; }
+.skip { float: right; margin-left: 16px; font: 500 11px/1.8 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+
+.soft { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding-left: 24px; border-left: 1px solid var(--rule); }
+.soft-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 8px; border-bottom: 1px solid var(--rule); }
+.code-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 16px 0 6px; font: 400 12px/1.2 var(--mono); color: var(--fg-2); }
+.code-meta .lang { font-size: 10px; letter-spacing: .1em; color: var(--muted); white-space: nowrap; }
+.code-t { margin: 0 0 14px; font: 500 20px/1.2 var(--sans); letter-spacing: -.01em; }
+.tabs { display: flex; gap: 2px; }
+.tabs button { padding: 5px 6px; border: 0; background: none; font: 500 10px/1 var(--mono); letter-spacing: .06em; color: var(--muted); }
+.tabs button:hover { color: var(--fg); }
+.tabs button.on { color: var(--on-accent); background: var(--accent); }
+.code-body { position: relative; flex: 0 1 auto; min-height: 0; overflow: hidden; padding-block: 8px; border-block: 1px solid var(--rule); font: 400 11.5px/1.75 var(--mono); }
+.code-src { margin: auto 0 0; padding-top: 12px; font: 400 10.5px/1.6 var(--mono); color: var(--muted); }
+.ln { display: flex; gap: 10px; padding-right: 4px; white-space: pre; }
+.ln i { flex: none; width: 20px; text-align: right; font-style: normal; color: var(--rule-2); }
+.ln code { font: inherit; color: var(--fg-2); }
+.ln.on { background: #1A1C1E; box-shadow: inset 1px 0 var(--accent); }
+.ln.on i { color: var(--accent); }
+.t-k, .t-f { color: var(--fg); } .t-n { color: var(--accent); } .t-c { color: var(--muted); }
+
+@media (max-width: 1100px) { .console { grid-template-columns: minmax(0, 1fr) 420px; column-gap: 16px; } .soft { padding-left: 16px; } .ro .c-met b { font-size: 26px; } .ro b { font-size: 17px; } .ro small { margin-left: 5px; font-size: 10px; } .sigs { gap: 7px; font-size: 11px; } }
+@media (max-width: 960px) {
+  .console { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
+  .soft { padding-left: 0; border-left: 0; }
+  .code-meta { margin: 8px 0 2px; }
+  .code-t { margin-bottom: 6px; font-size: 15px; }
+  .code-body { flex: none; height: 142px; padding-block: 4px; font-size: 11px; line-height: 1.6; }
+  .code-src { display: none; }
+  .ro { grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 10px; }
+  .ro > div { grid-column: span 3; padding-block: 5px 6px; }
+  .ro .c-met { grid-column: span 3; }
+  .ro .c-f { order: 1; }
+  .ro .c-3 { grid-column: span 2; order: 2; }
+  .ro b { font-size: 15px; margin-top: 1px; }
+  .ro .c-met b { font-size: 20px; }
+  .ro .eye { font-size: 9.5px; }
+  .modes, .sigs { margin-top: 3px; font-size: 11px; }
+  .fl-cap { height: 4.6em; font-size: 12.5px; padding-top: 5px; }
+  .plot { margin-block: 6px; }
+}
+@media (max-width: 640px) {
+  .tabs button { padding: 4px 5px; }
+  .code-meta { font-size: 10.5px; }
+  .code-body { font-size: 10px; line-height: 1.7; }
+  .ln { padding: 0 2px 0 6px; }
+  .ln i { display: none; }
+}
+@media (max-width: 960px) and (max-height: 720px) { .code-body { height: 96px; } .code-t { display: none; } }
+
+/* ---------- interfaces and data flow ---------- */
+.dgm { position: relative; background: var(--bg); border-block: 1px solid var(--rule); }
+.dgm-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; border-bottom: 1px solid var(--rule); }
+.dgm-tab { padding: 13px 0 12px; border: 0; border-bottom: 1px solid transparent; margin-bottom: -1px; background: none; font: 500 11.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.dgm-tab:hover { color: var(--fg); }
+.dgm-tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.dgm-trace { margin-left: auto; padding: 7px 10px; border: 1px solid var(--rule-2); background: none; font: 500 11px/1 var(--mono); letter-spacing: .06em; }
+.dgm-trace:hover { border-color: var(--fg); }
+.dgm-b { display: grid; grid-template-columns: minmax(0, 1fr) 292px; gap: 32px; padding-block: 20px; }
+.dgm-b > * { min-width: 0; }
+#dgm-svg { display: block; width: 100%; height: auto; }
+.gl { font: 500 9.5px var(--mono); letter-spacing: .12em; fill: var(--muted); }
+.gr { stroke: var(--rule); }
+.n { cursor: pointer; outline: none; transition: opacity .12s; }
+.n rect, .n path { fill: var(--bg); stroke: var(--rule-2); }
+.n .hit { stroke: none; }
+.n .t { font: 500 12.5px var(--sans); fill: var(--fg); }
+.n .tb { font-size: 17px; }
+.n .s { font: 400 9.5px var(--mono); fill: var(--muted); }
+.n:hover rect:not(.hit), .n:hover path { stroke: var(--fg); }
+.n:focus-visible rect:not(.hit), .n:focus-visible path, .n.on rect:not(.hit), .n.on path { stroke: var(--accent); }
+.n:focus-visible rect:not(.hit), .n:focus-visible path { stroke-width: 2; }
+.e { transition: opacity .12s; }
+.e path { fill: none; stroke: var(--muted); }
+.e.d path { stroke-dasharray: 3 3; }
+.e.on path { stroke: var(--accent); }
+.e text { font: 400 9.5px var(--mono); fill: var(--fg-2); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; }
+.sel .n, .sel .e { opacity: .2; }
+.sel .n.on, .sel .n.nb, .sel .e.on { opacity: 1; }
+#dgm-dot { fill: var(--accent); }
+.dgm-key { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 12px 0 0; font: 400 10.5px/1.6 var(--mono); color: var(--muted); }
+.dgm-key span { display: inline-flex; align-items: center; gap: 6px; }
+.dgm-key i { width: 16px; height: 10px; border: 1px solid var(--rule-2); }
+.dgm-key .k-p { border-radius: 5px; }
+.dgm-key .k-d { border-right: 0; }
+#dgm-read h4 { margin-bottom: 8px; font-size: 20px; line-height: 1.2; letter-spacing: -.01em; }
+#dgm-read p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--fg-2); }
+#dgm-read dl { margin: 0; border-top: 1px solid var(--rule); }
+#dgm-read dl div { display: grid; grid-template-columns: 4.6em minmax(0, 1fr); gap: 8px; padding-block: 5px; border-bottom: 1px solid var(--rule); }
+#dgm-read dt { font-size: 10px; line-height: 1.9; letter-spacing: .08em; }
+#dgm-read dd { font-size: 13px; line-height: 1.4; color: var(--fg-2); overflow-wrap: anywhere; }
+#dgm-read .code { font: 400 12px/1.45 var(--mono); }
+#dgm-read ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.4; color: var(--muted); }
+#dgm-read ol li { display: grid; grid-template-columns: 4.6em minmax(0, 1fr); gap: 8px; padding-block: 5px; border-bottom: 1px solid var(--rule); }
+#dgm-read ol b { font: 500 11px/1.7 var(--mono); }
+#dgm-read ol li.on { color: var(--fg); }
+#dgm-read ol li.on b { color: var(--accent); }
+@media (max-width: 1100px) {
+  .dgm-b { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  #dgm-read { min-height: 208px; }
+}
+@media (prefers-reduced-motion: reduce) { .n, .e { transition: none; } }
+
+/* ---------- project timeline ---------- */
+.seq { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); column-gap: 16px; }
+.seq li { position: relative; padding-top: 24px; min-width: 0; }
+.seq li::before { content: ""; position: absolute; left: 0; right: -16px; top: 4px; border-top: 1px solid var(--rule-2); }
+.seq li:last-child::before { right: 0; }
+.seq li::after { content: ""; position: absolute; left: 0; top: 0; width: 9px; height: 9px; background: var(--bg); border: 1px solid var(--muted); }
+.seq li[data-s="done"]::after { background: var(--fg); border-color: var(--fg); }
+.seq li[data-s="next"]::after { background: var(--accent); border-color: var(--accent); }
+.seq .n-i { font: 500 11px/1 var(--mono); color: var(--muted); letter-spacing: .1em; }
+.seq b { display: block; margin: 8px 0 4px; font: 500 20px/1.15 var(--sans); letter-spacing: -.01em; }
+.seq span { display: block; color: var(--fg-2); font-size: 13.5px; line-height: 1.4; }
+.seq .loc { margin-top: 10px; font: 400 11.5px/1.4 var(--mono); color: var(--fg); }
+.seq em { display: block; margin-top: 4px; font: normal 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.seq li[data-s="next"] em { color: var(--accent); }
+@media (max-width: 960px) {
+  .seq { grid-template-columns: minmax(0, 1fr); }
+  .seq li { padding: 0 0 20px 24px; }
+  .seq li::before { left: 4px; right: auto; top: 4px; bottom: 0; border-top: 0; border-left: 1px solid var(--rule-2); }
+  .seq li:last-child::before { display: none; }
+  .seq li::after { top: 2px; }
+  .seq b { margin-top: 4px; }
+  .seq .loc { margin-top: 4px; }
+}
+
+/* final integration: kept small, the hardware is the team's work */
+.module-row { margin-top: clamp(72px, 9vw, 128px); padding-top: 24px; border-top: 1px solid var(--rule); row-gap: 20px; }
+.module-text { grid-column: 1 / 3; }
+.module-text .eye { margin-bottom: 10px; }
+.module-text p:last-child { margin: 12px 0 0; max-width: 30em; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
+.module-row figure { grid-column: 3 / 5; margin: 0; max-width: 400px; }
+.module-row img { width: 100%; height: auto; }
+@media (max-width: 860px) { .module-text, .module-row figure { grid-column: 1 / -1; } }
+
+/* C'Space */
+.leofly { width: 132px; height: auto; margin-bottom: 8px; }
+.pair + .pair { margin-top: clamp(40px, 5vw, 72px); }
+.assoc { margin-top: clamp(56px, 7vw, 96px); padding-block: 18px 20px; border-block: 1px solid var(--rule); row-gap: 20px; }
+.assoc p { margin: 6px 0 0; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
+.assoc b { display: block; font: 500 clamp(36px, 4vw, 56px)/1 var(--sans); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.assoc .num .eye { display: block; margin-top: 6px; }
+@media (max-width: 760px) {
+  .assoc { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .assoc > div:first-child { grid-column: 1 / -1; }
+}
+
+/* education */
+.schools > * { grid-column: span 2; min-width: 0; padding-top: 20px; border-top: 1px solid var(--rule); }
+.school .logo { height: 44px; width: auto; margin-bottom: 20px; }
+.school .when { font: 400 12px/1.5 var(--mono); color: var(--fg-2); }
+.school h3 { margin: 6px 0 6px; }
+.school .deg { margin: 0 0 10px; }
+.school ul { margin: 0; padding: 0; list-style: none; color: var(--fg-2); font-size: 15px; }
+.school li { padding-block: 2px; }
+.hs { margin: 40px 0 0; padding-block: 14px; border-block: 1px solid var(--rule); color: var(--fg-2); font-size: 15px; }
+.hs b { color: var(--fg); font-weight: 500; }
+.offclock { margin: 20px 0 0; color: var(--muted); font-size: 14.5px; }
+@media (max-width: 760px) { .schools > * { grid-column: 1 / -1; margin-bottom: 32px; } .hs { margin-top: 8px; } }
+
+/* pilot training: a small aside after education */
+.flying { row-gap: 20px; align-items: end; padding-top: 24px; border-top: 1px solid var(--rule); }
+.fly-pics { grid-column: 1 / 3; display: grid; grid-template-columns: minmax(0, 1.014fr) minmax(0, 1.333fr); gap: 2px; max-width: 560px; }
+.fly-pics figure { margin: 0; min-width: 0; }
+.fly-pics img { width: 100%; height: auto; }
+.fly-pics figcaption { margin-top: 8px; }
+.fly-text { grid-column: 3 / 5; }
+.fly-text p { margin: 10px 0 0; max-width: 32em; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
+.fly-nums { display: flex; gap: 40px; margin-top: 20px; }
+.fly-nums b { display: block; font: 500 clamp(36px, 3.6vw, 52px)/1 var(--sans); letter-spacing: -.03em; }
+.fly-nums small { margin-left: 4px; font: 400 14px/1 var(--mono); color: var(--fg-2); }
+.fly-nums .eye { display: block; margin-top: 6px; }
+@media (max-width: 860px) { .fly-pics, .fly-text { grid-column: 1 / -1; } .fly-text { order: -1; } }
+
+/* contact */
+.contact h2 { grid-column: 1 / -1; font-size: clamp(56px, 8vw, 120px); line-height: .95; letter-spacing: -.04em; margin-block: 16px clamp(28px, 4vw, 48px); }
+.contact .eye { grid-column: 1 / -1; }
+.contact .tx { grid-column: 1 / 3; margin: 0; max-width: 28em; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
+.cbtns { grid-column: 3 / 5; display: grid; gap: 2px; }
+.cbtn { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 22px; font: 500 20px/1 var(--sans); letter-spacing: -.01em; text-decoration: none; }
+.cbtn svg { width: 18px; height: 18px; flex: none; }
+.cbtn.cv { background: var(--accent); color: var(--on-accent); }
+.cbtn.li { background: var(--fg); color: var(--bg); }
+.cbtn:hover { opacity: .9; }
+.mailrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 22px; border: 1px solid var(--rule-2); min-width: 0; }
+.mailrow span { font: 400 14px/1.3 var(--mono); overflow-wrap: anywhere; user-select: all; }
+.copy { flex: none; padding: 9px 12px; border: 1px solid var(--rule-2); background: none; font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.copy:hover { border-color: var(--fg); }
+@media (max-width: 420px) { .mailrow { padding-left: 14px; } .mailrow span { font-size: 12px; } }
+@media (max-width: 860px) { .contact .tx, .cbtns { grid-column: 1 / -1; } .contact .tx { margin-bottom: 32px; } }
+
+footer { border-top: 1px solid var(--rule); }
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 20px 28px; font: 400 12px/1.5 var(--mono); color: var(--muted); }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--fg); }
+</style>
+</head>
+<body>
+<div class="grid-lines" aria-hidden="true"><div class="g4"><i></i><i></i><i></i><i></i></div></div>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top"><i aria-hidden="true"></i><b class="full">Alexandre Rollet</b><b class="short">A. Rollet</b></a>
+    <nav aria-label="Sections">
+      <a href="#star-d">STAR-D</a>
+      <a href="#cspace">C'Space</a>
+      <a href="#education" class="opt">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero wrap">
+  <div class="g4">
+    <div class="hero-l">
+      <p class="eye">Project portfolio</p>
+      <h1>Alexandre Rollet</h1>
+      <p class="lede">
+        Fourth-year aerospace and defence engineering student at ESILV, Paris.
+        I am the Lead Software Engineer for <strong>STAR-D</strong>, a student experiment flying to
+        85&nbsp;km on REXUS&nbsp;38 from Esrange, Sweden, in March&nbsp;2027.
+      </p>
+      <div class="ctas">
+        <a class="btn primary" href="#star-d">Explore STAR-D ↓</a>
+        <a class="btn" href="https://www.linkedin.com/in/alexandre-rollet" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+    <figure class="patch">
+      <img src="assets/stard-patch.webp" width="720" height="720" alt="STAR-D mission patch: a rocket climbing over Europe beneath a microscope, with REXUS 38 and 2025–2027.">
+    </figure>
+  </div>
+  <dl class="g4 status">
+    <div>
+      <dt>Seeking</dt>
+      <dd><span class="ph">4–5 month internship <em>from April 2027</em></span></dd>
+    </div>
+    <div class="focus">
+      <dt>Focus</dt>
+      <dd><span class="ph">Embedded flight software and systems engineering</span></dd>
+    </div>
+    <div>
+      <dt>Languages</dt>
+      <dd><ul class="chips"><li>EN</li><li>FR</li></ul><small>Bilingual</small></dd>
+    </div>
+  </dl>
+</section>
+
+<!-- ================= STAR-D ================= -->
+<section class="block" id="star-d">
+  <div class="wrap">
+    <div class="g4 sec-head">
+      <p class="eye">REXUS 38 · 2025–2027</p>
+      <div style="grid-column: 1 / 3">
+        <h2>STAR-D</h2>
+        <p class="sub">Space Test of Amoeba Response: Dictyostelium</p>
+      </div>
+      <p class="tx">
+        STAR-D studies how microgravity affects phagocytosis in <em>Dictyostelium</em> amoebae.
+        A microfluidic system handles the cells in flight while sensors and a camera record the experiment
+        through the few minutes of weightlessness on a REXUS rocket.
+      </p>
+    </div>
+
+    <div class="g4 orgs">
+      <div>
+        <span class="eye">Programme</span>
+        <span class="prog">REXUS/BEXUS Cycle 17</span>
+        <small>Design and integration reviews passed before ESA, DLR, SSC Space and ZARM experts.</small>
+      </div>
+      <div><b>ESA</b><small>European Space Agency</small></div>
+      <div><b>DLR</b><small>German Aerospace Center</small></div>
+      <div><b>SNSA</b><small>Swedish National Space Agency</small></div>
+    </div>
+
+    <dl class="g4 stats">
+      <div><dt>Apogee</dt><dd>85<small>km</small></dd></div>
+      <div><dt>Sensors + camera</dt><dd>6+1</dd></div>
+      <div><dt>Team</dt><dd>17<small>people</small></dd></div>
+      <div><dt>Launch, Esrange</dt><dd><small>Mar</small>2027</dd></div>
+    </dl>
+
+    <div class="g4 mission">
+      <div>
+        <div class="prose">
+          <p>
+            I am responsible for the <strong>onboard segment</strong>: the software that runs on the experiment from
+            power-on on the launch pad to recovery. It reads <strong>six sensors</strong>, records a <strong>camera</strong>, streams
+            <strong>live telemetry</strong> to the ground station through the rocket's service module, and moves the
+            experiment through its <strong>flight modes</strong>.
+          </p>
+        </div>
+        <div class="langs">
+          <span class="eye">Embedded software</span>
+          <div><b>C</b><small>ESP32 flight computer</small></div>
+          <div><b>Python</b><small>Raspberry Pi, experiment hardware and bulk data</small></div>
+        </div>
+        <div class="role">
+          <span class="eye">Role</span>
+          <h4>Lead Software Engineer</h4>
+          <span class="eye">Data-flow architecture I designed</span>
+          <ol class="chips chain"><li>Acquisition</li><li>Sequencing &amp; logging</li><li>Storage</li><li>Telemetry</li><li>Uplink handling</li></ol>
+        </div>
+        <div class="tiles">
+          <div class="first"><b>1st</b><small>French team selected in 9 years</small></div>
+          <div><span class="eye">Buses</span><ul class="chips"><li>SPI</li><li>I²C</li><li>UART</li><li>RS-422</li></ul></div>
+          <div class="wide"><span class="eye">SED software chapters</span><ul class="chips"><li>Written to ECSS standards</li><li>Defended at each review</li></ul></div>
+        </div>
+      </div>
+
+      <figure class="map">
+        <span class="eye">Where the work happens</span>
+        <svg viewBox="60 30 520 670" role="img" aria-labelledby="map-t">
+          <title id="map-t">Map of Europe with four sites: Paris, where the experiment is built; Oberpfaffenhofen (DLR), design review; Bremen (ZARM), integration tests; Esrange (SSC Space) in Sweden, training week and launch.</title>
+          <path class="land" d="M454.50 11.69h0.01M472.50 11.69h0.01M452.25 19.49h0.01M479.25 19.49h27M436.50 27.28h54M526.50 27.28h0.01M443.25 35.07h126M409.50 42.87h189M407.25 50.66h189M400.50 58.46h9M427.50 58.46h171M407.25 66.25h189M391.50 74.05h207M371.25 81.84h0.01M398.25 81.84h198M382.50 89.63h216M11.25 97.43h9M56.25 97.43h0.01M371.25 97.43h0.01M389.25 97.43h153M560.25 97.43h0.01M578.25 97.43h18M4.50 105.22h54M355.50 105.22h0.01M382.50 105.22h180M2.25 113.02h54M371.25 113.02h207M4.50 120.81h54M373.50 120.81h207M2.25 128.60h63M371.25 128.60h207M4.50 136.40h54M364.50 136.40h225M2.25 144.19h54M362.25 144.19h225M4.50 151.99h27M364.50 151.99h99M490.50 151.99h108M353.25 159.78h90M497.25 159.78h99M355.50 167.58h90M499.50 167.58h99M353.25 175.37h90M488.25 175.37h108M346.50 183.16h99M490.50 183.16h108M344.25 190.96h99M479.25 190.96h117M337.50 198.75h108M481.50 198.75h117M326.25 206.55h117M470.25 206.55h126M319.50 214.34h9M346.50 214.34h90M472.50 214.34h126M308.25 222.14h117M461.25 222.14h135M310.50 229.93h108M463.50 229.93h135M290.25 237.72h126M461.25 237.72h135M301.50 245.52h108M463.50 245.52h135M272.25 253.31h135M470.25 253.31h126M265.50 261.11h144M472.50 261.11h126M263.25 268.90h144M470.25 268.90h126M265.50 276.70h144M472.50 276.70h63M580.50 276.70h18M263.25 284.49h0.01M299.25 284.49h108M470.25 284.49h45M578.25 284.49h18M175.50 292.28h0.01M265.50 292.28h144M481.50 292.28h27M562.50 292.28h36M263.25 300.08h162M452.25 300.08h0.01M497.25 300.08h0.01M560.25 300.08h36M265.50 307.87h171M526.50 307.87h72M263.25 315.67h171M515.25 315.67h81M265.50 323.46h162M508.50 323.46h90M101.25 331.25h0.01M119.25 331.25h0.01M263.25 331.25h171M506.25 331.25h90M94.50 339.05h0.01M112.50 339.05h27M274.50 339.05h45M346.50 339.05h72M490.50 339.05h9M517.50 339.05h81M119.25 346.84h9M263.25 346.84h45M344.25 346.84h63M488.25 346.84h0.01M524.25 346.84h72M94.50 354.64h0.01M112.50 354.64h9M274.50 354.64h27M346.50 354.64h63M526.50 354.64h72M101.25 362.43h54M281.25 362.43h9M344.25 362.43h63M497.25 362.43h0.01M524.25 362.43h72M103.50 370.23h45M346.50 370.23h63M445.50 370.23h0.01M490.50 370.23h18M526.50 370.23h72M92.25 378.02h54M326.25 378.02h0.01M353.25 378.02h54M443.25 378.02h0.01M488.25 378.02h108M94.50 385.81h45M319.50 385.81h18M355.50 385.81h54M481.50 385.81h117M92.25 393.61h45M317.25 393.61h9M362.25 393.61h45M488.25 393.61h108M85.50 401.40h0.01M112.50 401.40h9M301.50 401.40h18M364.50 401.40h54M490.50 401.40h108M56.25 409.20h9M92.25 409.20h0.01M110.25 409.20h27M299.25 409.20h36M362.25 409.20h54M488.25 409.20h108M49.50 416.99h27M103.50 416.99h45M301.50 416.99h18M355.50 416.99h36M490.50 416.99h108M20.25 424.79h9M47.25 424.79h36M101.25 424.79h45M299.25 424.79h18M344.25 424.79h9M371.25 424.79h9M497.25 424.79h99M22.50 432.58h63M121.50 432.58h27M301.50 432.58h9M328.50 432.58h0.01M346.50 432.58h9M373.50 432.58h9M481.50 432.58h117M20.25 440.37h54M119.25 440.37h27M308.25 440.37h18M344.25 440.37h9M398.25 440.37h0.01M479.25 440.37h117M22.50 448.17h45M121.50 448.17h36M310.50 448.17h0.01M355.50 448.17h0.01M436.50 448.17h9M472.50 448.17h126M29.25 455.96h36M128.25 455.96h36M308.25 455.96h9M425.25 455.96h171M22.50 463.76h45M121.50 463.76h45M310.50 463.76h27M364.50 463.76h9M409.50 463.76h189M11.25 471.55h54M110.25 471.55h54M308.25 471.55h27M353.25 471.55h27M398.25 471.55h198M4.50 479.35h63M94.50 479.35h72M301.50 479.35h297M11.25 487.14h45M101.25 487.14h63M263.25 487.14h333M4.50 494.93h18M103.50 494.93h81M256.50 494.93h342M83.25 502.73h108M245.25 502.73h351M94.50 510.52h90M238.50 510.52h360M110.25 518.32h63M236.25 518.32h360M94.50 526.11h72M229.50 526.11h369M83.25 533.90h99M218.25 533.90h0.01M236.25 533.90h360M76.50 541.70h18M121.50 541.70h9M148.50 541.70h18M202.50 541.70h396M191.25 549.49h405M184.50 557.29h414M182.25 565.08h414M130.50 572.88h0.01M166.50 572.88h432M128.25 580.67h9M164.25 580.67h432M76.50 588.46h0.01M94.50 588.46h0.01M130.50 588.46h468M83.25 596.26h27M128.25 596.26h468M76.50 604.05h522M83.25 611.85h513M94.50 619.64h504M110.25 627.44h486M112.50 635.23h486M110.25 643.02h486M112.50 650.82h486M128.25 658.61h468M121.50 666.41h477M119.25 674.20h477M121.50 682.00h477M119.25 689.79h252M398.25 689.79h198M121.50 697.58h234M391.50 697.58h207M119.25 705.38h243M398.25 705.38h0.01M416.25 705.38h180M4.50 713.17h18M112.50 713.17h252M418.50 713.17h180M2.25 720.97h36M110.25 720.97h252M425.25 720.97h171M4.50 728.76h72M112.50 728.76h171M319.50 728.76h45M427.50 728.76h171M2.25 736.55h279M335.25 736.55h36M434.25 736.55h162M4.50 744.35h198M220.50 744.35h45M328.50 744.35h54M454.50 744.35h144M2.25 752.14h189M236.25 752.14h18M335.25 752.14h54M470.25 752.14h126M4.50 759.94h180M310.50 759.94h0.01M337.50 759.94h54M481.50 759.94h117M2.25 767.73h180M344.25 767.73h54M497.25 767.73h99M4.50 775.53h180M301.50 775.53h9M355.50 775.53h45M508.50 775.53h90M2.25 783.32h180M299.25 783.32h9M362.25 783.32h54M515.25 783.32h81M4.50 791.11h162M301.50 791.11h9M373.50 791.11h63M517.50 791.11h81M2.25 798.91h144M308.25 798.91h0.01M380.25 798.91h63M515.25 798.91h81M4.50 806.70h135M400.50 806.70h63M517.50 806.70h54M589.50 806.70h0.01M2.25 814.50h126M299.25 814.50h9M407.25 814.50h72M515.25 814.50h54M4.50 822.29h117M292.50 822.29h18M427.50 822.29h27M472.50 822.29h18M517.50 822.29h63M2.25 830.09h108M299.25 830.09h9M425.25 830.09h27M488.25 830.09h0.01M524.25 830.09h63"></path>
+          <path class="route" d="M191.2 600.3Q263.3 641.5 345.2 627.2"></path>
+          <path class="route" d="M191.2 600.3Q228.8 528.0 303.9 496.4"></path>
+          <path class="route" d="M191.2 600.3Q222.1 307.1 432.8 100.9"></path>
+          <circle cx="191.2" cy="600.3" r="6"></circle>
+          <circle cx="345.2" cy="627.2" r="4.5"></circle>
+          <circle cx="303.9" cy="496.4" r="4.5"></circle>
+          <circle cx="432.8" cy="100.9" r="4.5"></circle>
+          <text class="nm" x="176" y="596" text-anchor="end">Paris</text>
+          <text class="rl" x="176" y="614" text-anchor="end">Build</text>
+          <text class="nm" x="330" y="662">Oberpfaffenhofen<tspan> (DLR)</tspan></text>
+          <text class="rl" x="330" y="680">Design review</text>
+          <text class="nm" x="318" y="490">Bremen<tspan> (ZARM)</tspan></text>
+          <text class="rl" x="318" y="508">Integration tests</text>
+          <text class="nm" x="418" y="96" text-anchor="end">Esrange<tspan> (SSC Space)</tspan></text>
+          <text class="rl" x="418" y="114" text-anchor="end">Training week · Launch</text>
+        </svg>
+        <figcaption>We build the experiment in Paris and travel for each milestone.</figcaption>
+      </figure>
+    </div>
+
+    <div class="g4 sub-head" id="flight-intro">
+      <p class="eye">Flight profile</p>
+      <h3>Scroll to fly</h3>
+      <p class="tx">The plot follows your scroll, and the code panel shows the flight software I wrote for each stage, with comments shortened. The trajectory is a simple model; SODS at T−180 s, LO at T+0 and SOE at T+66 s are the real signal times.</p>
+    </div>
+  </div>
+
+  <!-- Flight: the stage stays pinned while the page scrolls through the flight -->
+  <div class="flight" id="flight">
+    <div class="stage">
+      <div class="console">
+        <div class="plotcol">
+          <div class="ro">
+            <div class="c-met"><span class="eye">MET</span><b id="fl-met">T− 00:30.0</b></div>
+            <div><span class="eye">Mode</span><div class="modes" id="fl-modes"><i>NG</i><i>NF</i><i>NE</i></div></div>
+            <div><span class="eye">RXSM</span><div class="sigs" id="fl-sigs"><i>LO</i><i>SOE</i><i>SODS</i></div></div>
+            <div class="c-3"><span class="eye">Alt km</span><b id="fl-alt">0.0</b></div>
+            <div class="c-3"><span class="eye">Vz m/s</span><b id="fl-vz">+0</b></div>
+            <div class="c-3"><span class="eye">Accel g</span><b id="fl-acc">1.0</b></div>
+            <div class="c-f"><span class="eye">TM frame</span><b><span id="fl-frm">0570</span><small id="fl-crc">CRC OK</small></b></div>
+          </div>
+          <div class="plot" id="fl-plot">
+            <canvas id="fl-canvas" role="img" aria-label="Altitude against mission time from T minus 30 to T plus 290 seconds, climbing to about 85 km, with markers for lift-off, burnout, start of experiment, apogee and end of microgravity, and the RXSM signals underneath."></canvas>
+          </div>
+          <p class="fl-cap"><a class="skip" href="#flight-end">Skip flight ↓</a><b id="fl-phase"></b><span id="fl-text"></span></p>
+        </div>
+
+        <aside class="soft" aria-label="Flight software excerpt for this stage of the flight">
+          <div class="soft-h"><span class="eye">Onboard code</span><div class="tabs" id="fl-tabs"></div></div>
+          <div class="code-meta"><span id="fl-file"></span><span class="lang" id="fl-lang"></span></div>
+          <p class="code-t" id="fl-code-t"></p>
+          <div class="code-body" id="fl-code"></div>
+          <p class="code-src">ESP32-S3 flight firmware in C (ESP-IDF)<br>Pi CM5 imaging and storage in Python</p>
+        </aside>
+      </div>
+    </div>
+  </div>
+  <div id="flight-end"></div>
+
+  <div class="wrap">
+    <div class="g4 sub-head" style="margin-top: clamp(48px, 6vw, 88px)">
+      <p class="eye">What I've built</p>
+      <h3>Interfaces and data flow</h3>
+      <p class="tx">The links my flight software drives, and the data flow I designed to run across them.</p>
+    </div>
+
+    <div class="dgm" id="dgm">
+      <div class="dgm-h">
+        <div role="tablist" aria-label="Diagram" style="display: flex; gap: 20px">
+          <button class="dgm-tab" type="button" role="tab" id="dgm-t-if" aria-selected="true" aria-controls="dgm-panel">Interfaces</button>
+          <button class="dgm-tab" type="button" role="tab" id="dgm-t-df" aria-selected="false" aria-controls="dgm-panel" tabindex="-1">Data flow</button>
+        </div>
+        <button class="dgm-trace" type="button" id="dgm-trace" hidden>Trace a packet</button>
+      </div>
+      <div class="dgm-b" id="dgm-panel" role="tabpanel" aria-labelledby="dgm-t-if">
+        <div>
+          <svg id="dgm-svg" role="group" aria-label="Avionics diagram. Each node is a button that shows its details."></svg>
+          <p class="dgm-key" id="dgm-key" hidden><span><i></i>External entity</span><span><i class="k-p"></i>Process</span><span><i class="k-d"></i>Data store</span></p>
+        </div>
+        <div id="dgm-read" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="g4 sub-head">
+      <p class="eye">Programme</p>
+      <h3>Project timeline</h3>
+      <p class="tx">The programme follows the milestones of a real space project, each one in a different place.</p>
+    </div>
+    <ol class="seq">
+      <li data-s="done"><span class="n-i">01</span><b>Selection</b><span>European call for proposals</span><span class="loc">ESA/ESTEC</span><em>2025 · done</em></li>
+      <li data-s="done"><span class="n-i">02</span><b>PDR</b><span>Preliminary Design Review at Training Week</span><span class="loc">Esrange (SSC Space)</span><em>Jan 2026 · passed</em></li>
+      <li data-s="done"><span class="n-i">03</span><b>CDR</b><span>Critical Design Review</span><span class="loc">Oberpfaffenhofen (DLR)</span><em>Passed</em></li>
+      <li data-s="done"><span class="n-i">04</span><b>IPR</b><span>Integration Progress Review</span><span class="loc">Paris (ESILV)</span><em>Passed</em></li>
+      <li data-s="next"><span class="n-i">05</span><b>EAR</b><span>Experiment Acceptance Review</span><span class="loc">Paris (ESILV)</span><em>Underway</em></li>
+      <li data-s="todo"><span class="n-i">06</span><b>Bench test</b><span>Integration and full test with the service module</span><span class="loc">Bremen (ZARM)</span><em>Upcoming</em></li>
+      <li data-s="todo"><span class="n-i">07</span><b>Launch</b><span>Flight Readiness Review and flight</span><span class="loc">Esrange (SSC Space)</span><em>March 2027</em></li>
+    </ol>
+
+    <div class="g4 module-row">
+      <div class="module-text">
+        <p class="eye">Final integration</p>
+        <h3>The module my software flies in</h3>
+        <p>The STAR-D experiment, integrated in its REXUS module. My contribution is the flight software and data-flow architecture that run it in flight.</p>
+      </div>
+      <figure>
+        <img src="assets/module-final.webp" width="1100" height="959" loading="lazy" alt="The final integrated STAR-D module on a table: a blue anodised REXUS cylinder with machined aluminium experiment hardware and yellow and red wiring visible through its open top and rectangular hatch.">
+      </figure>
+    </div>
+
+    <div class="g4 sub-head">
+      <p class="eye">Esrange · Jan 2026</p>
+      <h3>Training Week</h3>
+      <p class="tx">Lectures, the PDR and a first week with the other Cycle 17 teams.</p>
+    </div>
+  </div>
+
+  <!-- Training Week photos slide sideways as the page scrolls -->
+  <div class="hgal" id="hgal">
+    <div class="hgal-stage">
+      <div class="hgal-track">
+        <figure class="hcard" style="--ar: 1.5">
+          <img src="assets/cycle17-esrange.webp" width="1800" height="1200" loading="lazy" alt="Around a hundred students in winter coats in front of the SSC Space building at Esrange, with a sounding rocket on display behind them.">
+          <figcaption><span class="eye">Esrange · Jan 2026</span><p>REXUS/BEXUS Cycle 17 teams at SSC Space during Training Week.</p></figcaption>
+        </figure>
+        <figure class="hcard" style="--ar: 1.3333">
+          <img src="assets/stard-team-esrange.webp" width="1400" height="1050" loading="lazy" alt="Four members of the STAR-D team standing in the snow in front of the SSC Space sign.">
+          <figcaption><span class="eye">Esrange · Jan 2026</span><p>Part of the STAR-D team at SSC Space.</p></figcaption>
+        </figure>
+        <figure class="hcard" style="--ar: 1.5713">
+          <img src="assets/stw-software-lecture.webp" width="1400" height="891" loading="lazy" alt="A lecture hall lit in red, with a slide titled Software Design for REXUS and BEXUS Experiments.">
+          <figcaption><span class="eye">Training Week · Jan 2026</span><p>Software design lecture for REXUS and BEXUS experiments.</p></figcaption>
+        </figure>
+      </div>
+      <div class="wrap hgal-foot">
+        <span class="hgal-bar"><i></i></span>
+        <span class="eye hgal-count">01 / 03</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= C'SPACE ================= -->
+<section class="block" id="cspace" style="padding-top: 0">
+  <div class="wrap">
+    <div class="g4 sec-head">
+      <p class="eye">C'Space · LéoFly · 2025–2026</p>
+      <div style="grid-column: 1 / 3">
+        <img class="leofly" src="assets/logo-leofly.webp" width="640" height="311" loading="lazy" alt="LéoFly">
+        <h2>Rockets</h2>
+      </div>
+      <p class="tx">
+        Two experimental mini-rockets built with LéoFly, ESILV's student aerospace association, for C'Space,
+        the launch campaign run by CNES and Planète Sciences. Both were qualified by CNES controllers and flew.
+      </p>
+    </div>
+  </div>
+
+  <div class="pair crop">
+    <figure>
+      <img src="assets/zenith1-rail.webp" width="912" height="616" loading="lazy" alt="Alexandre in a Planète Sciences safety vest holding the black Zenith 1 rocket next to its red launch rail.">
+      <figcaption><span class="eye">C'Space 2025</span><h3>Zenith 1</h3><p>Designed the avionics rack in CAD: a compact frame that holds the electronics boards inside a thin-diameter airframe.</p></figcaption>
+    </figure>
+    <figure>
+      <img src="assets/zenith2-hold.webp" width="1600" height="1066" loading="lazy" alt="Alexandre in a C'Space cap holding the black carbon Zenith 2 rocket with its yellow nosecone.">
+      <figcaption><span class="eye">C'Space 2026</span><h3>Zenith 2</h3><p>Technical supervisor. Led a team of 8 students from design to flight; nominal recovery after flight.</p></figcaption>
+    </figure>
+  </div>
+  <div class="pair crop">
+    <figure>
+      <img src="assets/zenith1-liftoff.webp" width="1000" height="1500" loading="lazy" style="object-position: 50% 30%" alt="The Zenith 1 rocket climbing into a clear blue sky on a long white smoke trail, clouds and mountains on the horizon.">
+      <figcaption><span class="eye">2025</span>Zenith 1 in flight.</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/zenith2-rail.webp" width="1400" height="933" loading="lazy" alt="The Zenith 2 rocket with carbon fins and an amber nosecone loaded in its red launch rail.">
+      <figcaption><span class="eye">2026</span>Zenith 2 on the rail.</figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap">
+    <div class="g4 assoc">
+      <div>
+        <span class="eye">LéoFly · Board secretary since April 2026</span>
+        <p>I sit on the board of the association that runs these projects.</p>
+      </div>
+      <div class="num"><b>120</b><span class="eye">Members</span></div>
+      <div class="num"><b>6</b><span class="eye">Projects</span></div>
+      <div class="num"><b>€30k</b><span class="eye">Annual budget</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EDUCATION ================= -->
+<section class="block" id="education" style="padding-top: 0">
+  <div class="wrap">
+    <div class="g4 sec-head">
+      <p class="eye">Paris · Melbourne</p>
+      <h2>Education</h2>
+      <p class="tx">An aerospace engineering degree in Paris, an exchange semester in Melbourne, and an international upbringing that included the UAE and Ghana.</p>
+    </div>
+
+    <div class="g4 schools">
+      <article class="school">
+        <img class="logo" src="assets/logo-esilv.webp" width="192" height="192" loading="lazy" alt="ESILV, De Vinci Engineering School">
+        <div class="when">2023 → now · Paris</div>
+        <h3>ESILV</h3>
+        <p class="deg">Engineering degree, 4th year (Master 1) · Aerospace &amp; Defence major</p>
+        <ul>
+          <li>Orbital mechanics, propulsion, embedded systems</li>
+          <li>Digital Sovereignty &amp; Defence minor</li>
+        </ul>
+      </article>
+      <article class="school">
+        <img class="logo" src="assets/logo-swinburne.webp" width="400" height="202" loading="lazy" alt="Swinburne University of Technology">
+        <div class="when">Jul → Nov 2025 · Melbourne</div>
+        <h3>Swinburne University of Technology</h3>
+        <p class="deg">Exchange semester · 50 credit points</p>
+        <ul>
+          <li>Intelligent Systems, High Distinction</li>
+          <li>Numerical computing, statistics, data analytics</li>
+        </ul>
+      </article>
+    </div>
+    <p class="hs"><b>Institut de La Tour, Paris</b> · Baccalauréat with highest honours, seven years in the English section · 2016–2023</p>
+    <p class="offclock">Off the clock: DJing and collecting vinyl, golf, swimming.</p>
+  </div>
+</section>
+
+<!-- ================= FLYING ================= -->
+<section class="block" id="flying" style="padding-top: 0">
+  <div class="wrap">
+    <div class="g4 flying">
+      <div class="fly-pics">
+        <figure>
+          <img src="assets/flying-hangar.webp" width="720" height="710" loading="lazy" alt="A white light aircraft with red and black stripes in a club hangar, with other light aircraft behind it.">
+          <figcaption class="eye">Hangar</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/flying-cockpit.webp" width="960" height="720" loading="lazy" alt="View from the cockpit of a light aircraft in flight over a wide river and green fields, with the instrument panel in the foreground.">
+          <figcaption class="eye">In flight</figcaption>
+        </figure>
+      </div>
+      <div class="fly-text">
+        <p class="eye">Pilot training</p>
+        <h3 style="margin-top: 10px">Learning to fly</h3>
+        <p>Initial training towards the Light Aircraft Pilot Licence (LAPL) at the Loire-Atlantique flying club, after the BIA, France's national aeronautics certificate.</p>
+        <div class="fly-nums">
+          <div><b>10<small>h</small></b><span class="eye">Flight hours</span></div>
+          <div><b>2023</b><span class="eye">BIA, highest honours</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="block contact" id="contact" style="padding-top: 0">
+  <div class="wrap g4">
+    <p class="eye">Contact</p>
+    <h2>Let's talk</h2>
+    <p class="tx">I'm looking for a 4–5 month internship from April 2027 in flight software, avionics or space systems.</p>
+    <div class="cbtns">
+      <a class="cbtn li" href="https://www.linkedin.com/in/alexandre-rollet" target="_blank" rel="noopener">
+        LinkedIn
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 14 14 6M7 6h7v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+      <div class="mailrow">
+        <span id="email">alexandre.rollet@edu.devinci.fr</span>
+        <button class="copy" type="button" id="copy-email">Copy email</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Alexandre Rollet</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  document.documentElement.lang = 'en';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (id) { return document.getElementById(id); };
+  var clamp = function (x, a, b) { return x < a ? a : x > b ? b : x; };
+  var pad = function (n, w) { n = String(n); while (n.length < w) n = '0' + n; return n; };
+
+  // Highlight the nav link of the section in view
+  var links = document.querySelectorAll('.bar nav a');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id); });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    links.forEach(function (a) {
+      var s = document.querySelector(a.getAttribute('href'));
+      if (s) io.observe(s);
+    });
+  }
+
+  // Copy email
+  var btn = $('copy-email'), email = $('email');
+  btn.addEventListener('click', function () {
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(email);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Selected';
+    }
+    try {
+      navigator.clipboard.writeText(email.textContent).then(function () { btn.textContent = 'Copied'; }, selectIt);
+    } catch (e) { selectIt(); }
+    setTimeout(function () { btn.textContent = 'Copy email'; }, 2000);
+  });
+
+  // Training Week gallery: vertical scroll drives the track sideways; captions appear as each photo arrives
+  (function () {
+    var root = $('hgal');
+    if (!root || reduce) return;
+    var stage = root.querySelector('.hgal-stage'), track = root.querySelector('.hgal-track');
+    var cards = track.querySelectorAll('.hcard'), bar = root.querySelector('.hgal-bar i'), count = root.querySelector('.hgal-count');
+    var LEAD = 80, travel = 0, queued = false;
+    root.classList.add('on');
+    function size() {
+      travel = Math.max(0, track.scrollWidth - stage.clientWidth);
+      root.style.height = (stage.offsetHeight + travel + LEAD * 2) + 'px';
+      update();
+    }
+    function update() {
+      queued = false;
+      var top = parseFloat(getComputedStyle(stage).top) || 0;
+      var x = clamp(top - root.getBoundingClientRect().top - LEAD, 0, travel);
+      track.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
+      bar.style.transform = 'scaleX(' + (travel ? x / travel : 1).toFixed(4) + ')';
+      var vw = stage.clientWidth, best = 0, bestD = Infinity;
+      cards.forEach(function (c, i) {
+        var b = c.getBoundingClientRect(), d = Math.abs(b.left + b.width / 2 - vw / 2);
+        c.classList.toggle('on', b.left < vw * 0.72 && b.right > vw * 0.28);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      count.textContent = '0' + (best + 1) + ' / 0' + cards.length;
+    }
+    window.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', size);
+    size();
+  })();
+
+  // ---------- Flight: a REXUS launch from Esrange, driven by scroll ----------
+  (function () {
+    var root = $('flight'), canvas = $('fl-canvas');
+    if (!root || !canvas.getContext) return;
+    var ctx = canvas.getContext('2d'), stage = root.querySelector('.stage');
+    var lerp = function (a, b, u) { return a + (b - a) * u; };
+
+    // Flight model in km and s. Schematic, apart from SODS at T-180, LO at T+0 and SOE at T+66.
+    var TB = 26, ACC = 0.0453, G = 0.00981, EL = 84 * Math.PI / 180;
+    var sE = Math.sin(EL);
+    var ZB = 0.5 * ACC * TB * TB * sE, VZB = ACC * TB * sE;
+    var T_APO = TB + VZB / G;
+    var DT_R = (VZB + Math.sqrt(VZB * VZB - 2 * G * (20 - ZB))) / G;   // ballistic until back at 20 km
+    var T_R = TB + DT_R, TAU = 20 / (G * DT_R - VZB);
+    var T_START = -30, T_SOE = 66, T_MU_END = 2 * T_APO - T_SOE, T_END = 290;
+
+    function alt(t) {
+      if (t <= 0) return 0;
+      if (t <= TB) return 0.5 * ACC * t * t * sE;
+      if (t <= T_R) { var d = t - TB; return ZB + VZB * d - 0.5 * G * d * d; }
+      return 20 * Math.exp(-(t - T_R) / TAU);
+    }
+    function vel(t) {   // m/s
+      if (t <= 0) return 0;
+      if (t <= TB) return ACC * t * sE * 1000;
+      if (t <= T_R) return (VZB - G * (t - TB)) * 1000;
+      return -alt(t) / TAU * 1000;
+    }
+    function acc(t) {   // sensed, in g
+      if (t <= 0) return 1;
+      if (t <= TB) return (ACC * sE + G) / G;
+      if (t <= T_R) return 0;
+      return alt(t) / (TAU * TAU) / G + 1;
+    }
+
+    // Scroll progress to mission time: more scroll is spent around LO and SOE
+    var KEYS = [[0, T_START], [0.12, 0], [0.22, TB], [0.40, T_SOE], [0.62, T_APO], [0.82, T_MU_END], [1, T_END]];
+    function interp(x, a, b) {
+      for (var i = 1; i < KEYS.length; i++) {
+        if (x <= KEYS[i][a] || i === KEYS.length - 1) {
+          var u = clamp((x - KEYS[i - 1][a]) / (KEYS[i][a] - KEYS[i - 1][a]), 0, 1);
+          return lerp(KEYS[i - 1][b], KEYS[i][b], u);
+        }
+      }
+    }
+    function tOf(p) { return interp(p, 0, 1); }
+    function pOf(t) { return interp(t, 1, 0); }
+
+    var STORY = [
+      [T_START, 'Countdown', 'Data storage has run since SODS at T−180 s. The ground reads the status word for GO/NO-GO.'],
+      [0, 'Lift-off', 'The RXSM lift-off signal arrives. The software enters flight mode and mission time re-anchors at T+0.'],
+      [8, 'Powered ascent', 'Sensors run at 10 Hz. Telemetry goes down at 1 Hz, 32 bytes a frame.'],
+      [TB, 'Coast', 'Motor burnout. Every frame carries a CRC-16 and the ground station drops any that fail.'],
+      [T_SOE, 'Start of experiment', 'SOE arrives at T+66 s. The software enters experiment mode and the sample is injected.'],
+      [80, 'Microgravity', 'Raw video goes to the SSD on its own thread, so a slow write cannot stall the link.'],
+      [T_APO - 6, 'Apogee', 'Top of the flight, about 85 km above Esrange.'],
+      [T_APO + 10, 'Microgravity', 'Weightless on the way down. Logs rotate every 20 s and video every 30 s to bound the loss from a bad write.'],
+      [T_MU_END, 'Re-entry', 'Microgravity ends as the payload falls back into the atmosphere.'],
+      [T_R + 6, 'Descent', 'The payload comes down under parachute. SOE and SODS go off before power cutoff at T+600 s.']
+    ];
+
+    // Excerpts of the STAR-D flight software, one per stage of the flight. Code as in the repository;
+    // comments shortened and lines rewrapped to fit the panel.
+    var ESP = 'C · ESP32-S3', PI = 'PYTHON · PI CM5';
+    var CODE = [
+      { t: T_START, tab: 'PAD', file: 'storage_manager.py', lang: PI, title: 'Test the SSD by writing to it', code: [
+        'def _test_write(self) -> bool:',
+        '    # os.access() can disagree with reality on',
+        '    # a read-only mount or a full disk. The only',
+        '    # reliable test is performing the operation.',
+        '    path = os.path.join(self._root, ".write_test")',
+        '    try:',
+        '        with open(path, "wb") as f:',
+        '            f.write(b"\\x00")',
+        '            f.flush()',
+        '            os.fsync(f.fileno())',
+        '        os.remove(path)',
+        '        return True',
+        '    except OSError:',
+        '        return False'] },
+      { t: 0, tab: 'LO', file: 'state_machine.c', lang: ESP, title: 'Two independent routes to flight', code: [
+        '/* Two independent routes to "we are flying".',
+        '   LO is one wire to one connector pin;',
+        '   launch_detected() is our own accelerometer.',
+        '   Either is sufficient, so a single broken',
+        '   wire no longer costs the flight. */',
+        'out->flight_confirmed = rs422_LO_get()',
+        '                     || launch_detected();',
+        '',
+        '/* mode_next(): checked here and only here */',
+        'case MODE_NG:',
+        '    if (in->flight_confirmed) {',
+        '        return MODE_NF;',
+        '    }'] },
+      { t: TB, tab: 'TM', file: 'crc16.c', lang: ESP, title: 'A CRC-16 on every frame', code: [
+        '/* Init 0xFFFF, not 0x0000: with a zero init a',
+        '   dead transmitter would pass its own check. */',
+        'uint16_t crc16_ccitt(const uint8_t* data,',
+        '                     size_t len) {',
+        '    uint16_t crc = 0xFFFF;',
+        '    for (size_t i = 0; i < len; i++) {',
+        '        crc ^= (uint16_t)data[i] << 8;',
+        '        for (int j = 0; j < 8; j++) {',
+        '            if (crc & 0x8000)',
+        '                crc = (crc << 1) ^ 0x1021;',
+        '            else',
+        '                crc <<= 1;',
+        '        }',
+        '    }',
+        '    return crc;',
+        '}'] },
+      { t: T_SOE, tab: 'SOE', file: 'rs422_interface.c', lang: ESP, title: 'Debounced, order-checked signals', code: [
+        '/* Switch contacts on a long cable in a vibrating',
+        '   rocket: a change is believed only after',
+        '   DEBOUNCE_SAMPLES (5) agreeing samples. */',
+        'debounce(&lo,   read_asserted(PIN_RXSM_LO));',
+        'debounce(&soe,  read_asserted(PIN_RXSM_SOE));',
+        'debounce(&sods, read_asserted(PIN_RXSM_SODS));',
+        '',
+        '/* SOE before LO: wiring fault or noise.',
+        '   Latched, so ground still sees it if the',
+        '   order later looks sane. */',
+        'if (soe.stable && !lo.stable) {',
+        '    error_raise(ERR_BIT_UNEXPECTED_SIGNAL);',
+        '}'] },
+      { t: T_APO, tab: 'REC', file: 'video_writer.py', lang: PI, title: 'Drop a frame, never stall the camera', code: [
+        'def submit(self, frame: Frame) -> bool:',
+        '    # Never blocks: blocking would stall the',
+        '    # sensor pipeline, losing more frames than',
+        '    # it saves. Dropped frames are counted.',
+        '    try:',
+        '        self._queue.put_nowait(frame)',
+        '        return True',
+        '    except queue.Full:',
+        '        self._frames_dropped += 1',
+        '        return False'] },
+      { t: T_MU_END, tab: 'SAFE', file: 'state_machine.c', lang: ESP, title: 'A state machine that heals itself', code: [
+        '/* mode_next() is a pure function, so every',
+        '   transition can be tested on a laptop. */',
+        'switch (current) {',
+        '/* ... SU, T, NG, NF, NE ... */',
+        'default:',
+        '    /* Mode variable corrupted. Fall back to NG:',
+        '       it performs no major operations, and',
+        '       flight_confirmed latches, so NG -> NF -> NE',
+        '       re-runs on the next tick. The state',
+        '       machine heals itself. */',
+        '    error_raise(ERR_BIT_MODE_TRANSITION);',
+        '    return MODE_NG;',
+        '}'] }
+    ];
+
+    // Same algorithm as crc16.c: the readout checks a real CRC over the simulated frame
+    function crc16(b) {
+      var c = 0xFFFF;
+      for (var i = 0; i < b.length; i++) {
+        c ^= b[i] << 8;
+        for (var j = 0; j < 8; j++) c = c & 0x8000 ? ((c << 1) ^ 0x1021) & 0xFFFF : (c << 1) & 0xFFFF;
+      }
+      return c;
+    }
+
+    // ---- text helpers ----
+    function met(t) {
+      var d = Math.round(Math.abs(t) * 10), m = Math.floor(d / 600), s = (d % 600) / 10;
+      return 'T' + (t < 0 ? '−' : '+') + ' ' + pad(m, 2) + ':' + pad(s.toFixed(1), 4);
+    }
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    // Small C/Python highlighter. Block comments can span lines, so the state is carried in `st`.
+    var TOKENS = /(\/\/.*$|#.*$)|("[^"]*")|\b(0x[0-9A-Fa-f]+|\d+)\b|\b(if|else|for|while|return|switch|case|default|static|const|void|int|bool|uint8_t|uint16_t|size_t|true|false|def|try|except|with|as|self|True|False|None)\b|([A-Za-z_]\w*(?=\())/g;
+    var CLS = ['c', 's', 'n', 'k', 'f'];
+    function span(c, s) { return s ? '<span class="t-' + c + '">' + s + '</span>' : ''; }
+    function hlCode(s) {
+      return esc(s).replace(TOKENS, function (m) {
+        for (var i = 1; i <= 5; i++) if (arguments[i]) return span(CLS[i - 1], m);
+        return m;
+      });
+    }
+    // Returns the highlighted line and whether it holds code (not blank, comment or a lone brace)
+    function hlLine(line, st) {
+      var out = '', code = '', i = 0;
+      while (i < line.length) {
+        var e, end;
+        if (st.block) {
+          e = line.indexOf('*/', i); end = e < 0 ? line.length : e + 2;
+          out += span('c', esc(line.slice(i, end))); st.block = e < 0; i = end;
+          continue;
+        }
+        var s = line.indexOf('/*', i), stop = s < 0 ? line.length : s;
+        out += hlCode(line.slice(i, stop)); code += line.slice(i, stop); i = stop;
+        if (s >= 0) {
+          e = line.indexOf('*/', s + 2); end = e < 0 ? line.length : e + 2;
+          out += span('c', esc(line.slice(s, end))); st.block = e < 0; i = end;
+        }
+      }
+      code = code.replace(/#.*$/, '').trim();
+      return { html: out, run: code !== '' && !/^[{}]+;?$/.test(code) };
+    }
+
+    // ---- static UI ----
+    var tabs = CODE.map(function (s) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = s.tab; b.title = s.title;
+      b.addEventListener('click', function () { jump(s.t + 0.2); });
+      $('fl-tabs').appendChild(b);
+      return b;
+    });
+    var modes = [].slice.call($('fl-modes').children), sigs = [].slice.call($('fl-sigs').children);
+
+    // ---- plot ----
+    var W = 1, H = 1, DPR = 1, AL = 38, AR = 10, TOPH = 30, AXH = 18, LH = 15;
+    var FG = '#F3F4F2', MID = '#878C91', DIM = '#54585C', LINE = '#26292C', ACCENT = '#F5B041';
+    var EVENTS = [[0, 'LO', 1], [TB, 'BURNOUT', 0, 1], [T_SOE, 'SOE', 1], [T_APO, 'APOGEE', 0], [T_MU_END, 'END µG', 0]];
+    function size() {
+      var r = canvas.getBoundingClientRect();
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      DPR = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+      AL = W < 480 ? 30 : 38; LH = H < 300 ? 13 : 15;
+    }
+    function X(t) { return AL + (t - T_START) / (T_END - T_START) * (W - AL - AR); }
+    function cr(v) { return Math.round(v) + 0.5; }
+    function ln(x0, y0, x1, y1, c) { ctx.strokeStyle = c; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); }
+    function tx(s, x, y, c, al) { ctx.fillStyle = c; ctx.textAlign = al || 'left'; ctx.fillText(s, x, y); }
+
+    function drawPlot(T) {
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1;
+      ctx.font = '400 10px "IBM Plex Mono", ui-monospace, monospace';
+      ctx.textBaseline = 'middle';
+      var lanes = 4 * LH, yT = TOPH, yB = H - lanes - AXH, cx = cr(X(T));
+      function Y(z) { return yT + (1 - z / 100) * (yB - yT); }
+
+      // axes: 10 km and 10 s ticks, labelled every 20 km and 60 s
+      tx('km', 0, 8, MID);
+      for (var z = 0; z <= 100; z += 10) {
+        var y = cr(Y(z));
+        if (z % 20 === 0) { ln(AL, y, W - AR, y, z ? '#17191B' : LINE); tx(String(z), AL - 8, y, MID, 'right'); }
+        ln(AL - 4, y, AL, y, z % 20 ? LINE : DIM);
+      }
+      ln(cr(AL), yT, cr(AL), yB, LINE);
+      for (var t = T_START; t <= T_END; t += 10) {
+        var x = cr(X(t));
+        ln(x, cr(yB), x, cr(yB) + (t % 60 === 0 ? 5 : 3), t % 60 === 0 ? DIM : LINE);
+        if (t % 60 === 0) tx(t === 0 ? 'T+0' : '+' + t, x, cr(yB) + 12, MID, 'center');
+      }
+
+      // event markers run from their label down through the plot and the signal lanes
+      EVENTS.forEach(function (e) {
+        var x = cr(X(e[0]));
+        ln(x, e[3] ? 25 : 13, x, yB + AXH - 2, e[0] <= T ? '#3A3D40' : '#1F2123');
+      });
+
+      // predicted path, then the flown path (amber through microgravity)
+      function curve(t0, t1, c) {
+        ctx.strokeStyle = c; ctx.beginPath();
+        for (var t = t0; ; t += 1) {
+          var u = Math.min(t, t1);
+          if (t === t0) ctx.moveTo(X(u), Y(alt(u))); else ctx.lineTo(X(u), Y(alt(u)));
+          if (u >= t1) break;
+        }
+        ctx.stroke();
+      }
+      curve(T_START, T_END, DIM);
+      curve(T_START, Math.min(T, T_SOE), FG);
+      if (T > T_SOE) curve(T_SOE, Math.min(T, T_MU_END), ACCENT);
+      if (T > T_MU_END) curve(T_MU_END, T, FG);
+
+      EVENTS.forEach(function (e) {
+        var done = e[0] <= T, c = done ? (e[2] ? ACCENT : FG) : MID, x = cr(X(e[0])), y = cr(Y(alt(e[0])));
+        tx(e[1], x, e[3] ? 20 : 8, c, 'center');
+        ctx.fillStyle = done ? c : '#0A0B0C'; ctx.fillRect(x - 2.5, y - 2.5, 5, 5);
+        ctx.strokeStyle = c; ctx.strokeRect(x - 2.5, y - 2.5, 5, 5);
+      });
+
+      // signal lanes: software mode, then the three RXSM discretes
+      var y0 = yB + AXH;
+      function lane(i, label, tOn) {
+        var yl = y0 + i * LH, hi = cr(yl + 2), lo = cr(yl + LH - 3), xOn = cr(X(tOn));
+        tx(label, 0, yl + LH / 2, MID);
+        function step() {
+          ctx.beginPath();
+          if (tOn <= T_START) { ctx.moveTo(X(T_START), hi); ctx.lineTo(X(T_END), hi); }
+          else { ctx.moveTo(X(T_START), lo); ctx.lineTo(xOn, lo); ctx.lineTo(xOn, hi); ctx.lineTo(X(T_END), hi); }
+          ctx.stroke();
+        }
+        ctx.strokeStyle = DIM; step();
+        ctx.save(); ctx.beginPath(); ctx.rect(0, yl, cx, LH); ctx.clip();
+        ctx.strokeStyle = FG; step();
+        ctx.restore();
+      }
+      tx('MODE', 0, y0 + LH / 2, MID);
+      [[T_START, 0, 'NG'], [0, T_SOE, 'NF'], [T_SOE, T_END, 'NE']].forEach(function (m) {
+        var on = T >= m[0] && (T < m[1] || m[1] === T_END);
+        ln(cr(X(m[0])), y0 + 1, cr(X(m[0])), y0 + LH - 2, DIM);
+        tx(m[2], X(m[0]) + 5, y0 + LH / 2, on ? ACCENT : MID);
+      });
+      lane(1, 'LO', 0);
+      lane(2, 'SOE', T_SOE);
+      lane(3, 'SODS', -180);
+
+      // cursor
+      var yNow = cr(Y(alt(T)));
+      ln(AL, yNow, cx, yNow, '#3A3D40');
+      ln(cx, yT - 2, cx, H, MID);
+      ctx.fillStyle = FG; ctx.fillRect(cx - 2.5, yNow - 2.5, 5, 5);
+    }
+
+    // ---- readouts ----
+    var cache = {}, slot = -1, run = [], cur = -1, modeN = -1, frameN = -1;
+    function set(id, v) { if (cache[id] !== v) { cache[id] = v; $(id).textContent = v; } }
+    function renderCode(i) {
+      var s = CODE[i], st = { block: false }, html = '';
+      run = [];
+      s.code.forEach(function (line, j) {
+        var h = hlLine(line, st);
+        if (h.run) run.push(j);
+        html += '<div class="ln"><i>' + (j + 1) + '</i><code>' + h.html + '</code></div>';
+      });
+      $('fl-code').innerHTML = html;
+      $('fl-code').scrollTop = 0;
+      set('fl-file', s.file); set('fl-lang', s.lang); set('fl-code-t', s.title);
+      tabs.forEach(function (b, n) { b.classList.toggle('on', n === i); });
+      cur = -1;
+    }
+    function hud(T) {
+      set('fl-met', met(T));
+      var st = STORY[0];
+      for (var i = 0; i < STORY.length; i++) if (T >= STORY[i][0]) st = STORY[i];
+      set('fl-phase', st[1]); set('fl-text', st[2]);
+      set('fl-alt', alt(T).toFixed(1));
+      var v = vel(T);
+      set('fl-vz', (v < -0.5 ? '−' : '+') + Math.abs(Math.round(v)));
+      set('fl-acc', acc(T).toFixed(1));
+
+      // NG on the ground, NF from LO, NE from SOE. SOE stays on past this plot: NE runs 474 s, to T+540.
+      var m = T < 0 ? 0 : T < T_SOE ? 1 : 2;
+      if (m !== modeN) { modeN = m; modes.forEach(function (b, n) { b.classList.toggle('on', n === m); }); }
+      sigs[0].classList.toggle('on', T >= 0);
+      sigs[1].classList.toggle('on', T >= T_SOE);
+      sigs[2].classList.add('on');
+
+      // One telemetry frame a second since power-on at T-600
+      var f = Math.floor(T + 600);
+      if (f !== frameN) {
+        frameN = f;
+        var a = Math.round(alt(T) * 100), c = crc16([f >> 8 & 255, f & 255, m, a >> 8 & 255, a & 255]);
+        set('fl-frm', pad(f, 4));
+        set('fl-crc', 'CRC ' + pad(c.toString(16).toUpperCase(), 4) + ' OK');
+      }
+
+      var si = 0;
+      for (i = 0; i < CODE.length; i++) if (T >= CODE[i].t) si = i;
+      if (si !== slot) { slot = si; renderCode(si); }
+      // Step through the lines of code while this stage of the flight lasts
+      var t1 = si + 1 < CODE.length ? CODE[si + 1].t : T_END;
+      var on = run[clamp(Math.floor((T - CODE[si].t) / (t1 - CODE[si].t) * run.length), 0, run.length - 1)];
+      if (on !== cur) {
+        var body = $('fl-code'), rows = body.children;
+        if (cur >= 0) rows[cur].classList.remove('on');
+        rows[on].classList.add('on'); cur = on;
+        if (body.scrollHeight > body.clientHeight) {   // phones: keep the running line in view
+          body.scrollTop = clamp(rows[on].offsetTop - body.clientHeight * 0.4, 0, body.scrollHeight - body.clientHeight);
+        }
+      }
+    }
+
+    // ---- scroll ----
+    function top() { return parseFloat(getComputedStyle(stage).top) || 56; }
+    function range() { return Math.max(1, root.offsetHeight - stage.offsetHeight); }
+    function progress() { return clamp((top() - root.getBoundingClientRect().top) / range(), 0, 1); }
+    function jump(t) {
+      var y = window.scrollY + root.getBoundingClientRect().top - top() + pOf(t) * range() + 1;
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    }
+    canvas.addEventListener('click', function (e) {
+      var r = canvas.getBoundingClientRect();
+      jump(clamp(T_START + (e.clientX - r.left - AL) / (W - AL - AR) * (T_END - T_START), T_START, T_END));
+    });
+
+    var queued = false;
+    function draw() {
+      queued = false;
+      var T = tOf(progress());
+      drawPlot(T);
+      hud(T);
+    }
+    function kick() { if (!queued) { queued = true; requestAnimationFrame(draw); } }
+    window.addEventListener('scroll', function () {
+      var r = root.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) kick();
+    }, { passive: true });
+    if ('ResizeObserver' in window) new ResizeObserver(function () { size(); kick(); }).observe($('fl-plot'));
+    window.addEventListener('resize', function () { size(); kick(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(kick);
+    size();
+    draw();
+  })();
+
+  // ---------- Interfaces and data flow: one interactive diagram, drawn from data ----------
+  (function () {
+    var svg = $('dgm-svg'), read = $('dgm-read'), traceBtn = $('dgm-trace');
+    var narrow = window.matchMedia('(max-width: 759px)');
+
+    // Node: t title, s sub-line, k kind (p process, d store), w and n boxes [x, y, w, h], d details.
+    // Edge: [from, to, wide points, narrow points, wide labels, narrow labels, flags] (2 two-way, d dashed).
+    var DIAGRAMS = {
+      'if': {
+        title: 'Interfaces',
+        intro: 'Every link my flight software drives, from the sensors to the ground station. Hover, tap or tab to a node.',
+        size: { w: [920, 330], n: [358, 478] },
+        groups: {
+          w: [['SENSORS', 0, 178, 10], ['FLIGHT COMPUTERS', 262, 610, 10], ['MICROFLUIDIC ASSEMBLY', 700, 920, 10], ['STORAGE', 700, 920, 136], ['ROCKET', 262, 610, 262], ['GROUND', 700, 920, 262]],
+          n: [['SENSORS', 0, 358, 8], ['FLIGHT COMPUTERS', 192, 358, 180]]
+        },
+        nodes: {
+          lsm: { t: 'LSM6DSM', s: 'Inertial · SPI', w: [0, 30, 178, 40], n: [0, 24, 166, 40], d: [['Part', 'LSM6DSM IMU, ±16 g, ±2000 dps'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Motion data (DA-03). Readings frozen for 20 samples raise a latched fault.'], ['Code', 'imu_driver.c, health_monitor.c']] },
+          abp: { t: 'ABP', s: 'Fluid pressure · SPI', w: [0, 78, 178, 40], n: [0, 70, 166, 40], d: [['Part', 'ABP pressure sensor'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Fluid pressure in the experiment (DA-09).'], ['Code', 'sensors.c, health_monitor.c']] },
+          slf: { t: 'SLF3S', s: 'Fluid flow · I²C', w: [0, 126, 178, 40], n: [0, 116, 166, 40], d: [['Part', 'SLF3S flow sensor, 40 ml/min full scale'], ['Bus', 'I²C'], ['Rate', '10 Hz'], ['Role', 'Fluid flow (DA-10). A CRC failure on the sensor word raises a latched fault.'], ['Code', 'i2c_interface.c, sensors.c']] },
+          pt: { t: 'PT100', s: 'MFC temp · SPI', w: [0, 174, 178, 40], n: [192, 24, 166, 40], d: [['Part', 'PT100 with MAX31865'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Closed-loop temperature control, 21–23 °C (DA-04). No valid reading, heaters off.'], ['Code', 'pt100_driver.c, temperature_control.c']] },
+          ext: { t: 'External BME280', s: 'Environment · SPI', w: [0, 222, 178, 40], n: [192, 70, 166, 40], d: [['Part', 'BME280, outside the pressure vessel'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Environment (DA-02). Pressure is only range-checked on the ground: above about 9 km it reads below the sensor floor.'], ['Code', 'bme_driver.c, health_monitor.c']] },
+          int: { t: 'BME280', s: 'Environment · SPI', w: [0, 270, 178, 40], n: [192, 116, 166, 40], d: [['Part', 'BME280, inside the pressure vessel'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Environment (DA-02). A falling pressure reading indicates a leak.'], ['Code', 'bme_driver.c, health_monitor.c']] },
+          esp: { t: 'ESP32', s: 'Flight computer · C', big: 1, w: [262, 30, 150, 200], n: [0, 196, 150, 56], d: [['Part', 'ESP32-S3, C on ESP-IDF'], ['Bus', 'SPI, I²C, UART, RS-422'], ['Role', 'Owns the mission: mode transitions, sensor reads, telemetry and the 32-bit error word.'], ['Code', 'state_machine.c, error_manager.c, watchdog.c']] },
+          pi: { t: 'RasPi', s: 'Imaging · Python', big: 1, w: [470, 30, 140, 100], n: [208, 196, 150, 56], d: [['Part', 'Raspberry Pi CM5, Python'], ['Bus', 'SPI to the ESP32 at 1 MHz'], ['Rate', 'Status 1 Hz, sensors 10 Hz'], ['Role', 'Drives the experiment hardware, records video and writes logs. Keeps recording if the ESP32 link drops.'], ['Code', '__main__.py, spi_link.py']] },
+          fl: { t: 'Ext. flash', s: 'Buffer · SPI', w: [470, 170, 140, 40], n: [22, 266, 144, 40], d: [['Part', 'W25Q01JV external flash'], ['Bus', 'SPI'], ['Role', 'Temporary storage, so the ESP32 can handle more data if needed (DA-01).']] },
+          stp: { t: 'Stepper motors', s: 'GPIO', w: [700, 30, 220, 40], n: [192, 266, 144, 40], d: [['Part', 'NEMA-8 syringe pump, 28BYJ-48 focus'], ['Bus', 'GPIO'], ['Role', 'Inject particles and focus the microscope during the experiment (DA-13).']] },
+          cam: { t: 'RasPi Camera V2', s: 'SPI', w: [700, 78, 220, 40], n: [192, 314, 144, 40], d: [['Part', 'Camera V2 (IMX219), 1640×1232 raw YUV420'], ['Bus', 'SPI'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Role', 'Microscope video (DA-05). Declared stalled after 20 frames without a new timestamp.'], ['Code', 'camera_control.py, video_writer.py']] },
+          ssd: { t: 'M.2 data SSD', s: 'SPI', w: [700, 154, 220, 40], n: [192, 362, 144, 40], d: [['Part', 'M.2 2230 SSD, 128 GB'], ['Bus', 'SPI'], ['Rate', 'About 127 MB/s of raw video in NE'], ['Role', 'About 60 GB of video plus CSV logs (DA-06). Written with fsync, rotated every 20 to 30 s.'], ['Code', 'storage_manager.py, csv_manager.py']] },
+          rx: { t: 'RXSM', s: 'Rocket · RS-422', w: [262, 282, 120, 40], n: [22, 314, 144, 40], d: [['Part', 'REXUS service module'], ['Bus', 'RS-422'], ['Rate', 'SODS T−180 s, LO T+0, SOE T+66 s'], ['Role', 'Mission signals (DA-07). Five agreeing samples before a change is believed.'], ['Code', 'rs422_interface.c, state_machine.c']] },
+          tcu: { t: 'TCU', s: 'Rocket · UART', w: [470, 282, 140, 40], n: [22, 362, 144, 40], d: [['Part', 'Telemetry central unit'], ['Bus', 'UART, 115200 baud, 8N1'], ['Rate', '32-byte frame at 1 Hz'], ['Role', 'Carries telemetry down and telecommands up.'], ['Code', 'uart_tcu.c, telemetry.c']] },
+          gs: { t: 'Ground station', s: 'Uplink / downlink', w: [700, 282, 220, 40], n: [22, 430, 144, 40], d: [['Bus', 'RF link through the TCU'], ['Rate', 'Budget 0.320 kbit/s each way'], ['Role', 'Reads the status word. Sends WIPE and TEST before launch.']] }
+        },
+        edges: [
+          ['lsm', 'esp', [178, 50, 262, 50], [166, 44, 179, 44, 179, 178, 75, 178, 75, 196]],
+          ['abp', 'esp', [178, 98, 220, 98, 220, 76, 262, 76], [166, 90, 179, 90, 179, 178, 75, 178, 75, 196]],
+          ['slf', 'esp', [178, 146, 220, 146, 220, 102, 262, 102], [166, 136, 179, 136, 179, 178, 75, 178, 75, 196]],
+          ['pt', 'esp', [178, 194, 220, 194, 220, 128, 262, 128], [192, 44, 179, 44, 179, 178, 75, 178, 75, 196]],
+          ['ext', 'esp', [178, 242, 220, 242, 220, 154, 262, 154], [192, 90, 179, 90, 179, 178, 75, 178, 75, 196]],
+          ['int', 'esp', [178, 290, 220, 290, 220, 180, 262, 180], [192, 136, 179, 136, 179, 178, 75, 178, 75, 196]],
+          ['esp', 'pi', [412, 80, 470, 80], [150, 224, 208, 224], [[441, 73, 'SPI', 'm']], [[179, 217, 'SPI', 'm']], '2'],
+          ['esp', 'fl', [412, 190, 470, 190], [10, 252, 10, 286, 22, 286], [[441, 183, 'SPI', 'm']], [], '2'],
+          ['esp', 'rx', [322, 230, 322, 282], [10, 252, 10, 334, 22, 334], [[328, 256, 'RS-422']], [], '2'],
+          ['esp', 'tcu', [392, 230, 392, 248, 540, 248, 540, 282], [10, 252, 10, 382, 22, 382], [[466, 241, 'UART', 'm']], [], '2'],
+          ['tcu', 'gs', [610, 302, 700, 302], [94, 402, 94, 430], [[655, 295, 'UPLINK', 'm'], [655, 315, 'DOWNLINK', 'm']], [[100, 419, 'UPLINK / DOWNLINK']], '2d'],
+          ['pi', 'stp', [610, 50, 700, 50], [348, 252, 348, 286, 336, 286], [[655, 43, 'GPIO', 'm']], []],
+          ['pi', 'cam', [610, 80, 650, 80, 650, 98, 700, 98], [348, 252, 348, 334, 336, 334], [[676, 91, 'SPI', 'm']], []],
+          ['pi', 'ssd', [610, 110, 632, 110, 632, 174, 700, 174], [348, 252, 348, 382, 336, 382], [[666, 167, 'SPI', 'm']], []]
+        ]
+      },
+      df: {
+        title: 'Data flow',
+        intro: 'The data flow I designed: acquisition, sequencing and logging, storage, telemetry and uplink handling. Hover, tap or tab to a node.',
+        size: { w: [940, 396], n: [358, 564] },
+        groups: { w: [], n: [] },
+        nodes: {
+          sen: { t: 'Sensors', w: [0, 80, 110, 44], n: [0, 0, 166, 40], d: [['Part', 'Six sensors on the ESP32'], ['Bus', 'SPI and I²C'], ['Rate', '10 Hz'], ['Data', 'DA-02, 03, 04, 09, 10'], ['Code', 'sensors.c']] },
+          cam: { t: 'Camera V2', w: [0, 170, 110, 44], n: [192, 0, 166, 40], d: [['Part', 'Camera V2 (IMX219) on the Pi'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Data', 'DA-05, microscope imaging'], ['Code', 'camera_control.py']] },
+          rx: { t: 'RXSM', w: [0, 270, 110, 44], n: [258, 140, 100, 40], d: [['Part', 'REXUS service module'], ['Bus', 'RS-422'], ['Rate', 'SODS T−180 s, LO T+0, SOE T+66 s'], ['Data', 'DA-07, signals that start each mission phase'], ['Code', 'rs422_interface.c']] },
+          p1: { t: 'Acquire sensor data', s: 'P1', k: 'p', w: [170, 80, 160, 44], n: [0, 66, 166, 44], d: [['Runs on', 'ESP32'], ['Rate', '10 Hz'], ['Role', 'Builds each snapshot in a local copy and publishes it in one go, so a reader never sees half-old, half-new values.'], ['Code', 'sensors.c']] },
+          p2: { t: 'Acquire imaging', s: 'P2', k: 'p', w: [170, 170, 160, 44], n: [192, 66, 166, 44], d: [['Runs on', 'Raspberry Pi'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Role', 'Capture and writing run on separate threads. A full queue drops and counts a frame, never blocks.'], ['Code', 'camera_control.py, video_writer.py']] },
+          d2: { t: 'Flash buffer', s: 'D2 · ESP32', k: 'd', w: [170, 6, 160, 36], n: [0, 140, 100, 36], d: [['Part', 'W25Q01JV external flash'], ['Data', 'DA-01, temporary storage'], ['Role', 'Takes sensor data on overflow and flushes it back to P3.']] },
+          p3: { t: 'Sequence and log', s: 'P3', s2: 'State + error tracking', k: 'p', w: [400, 80, 150, 234], n: [0, 210, 358, 52], d: [['Runs on', 'ESP32 and Raspberry Pi'], ['Rate', 'CSV logs at 10 Hz'], ['Role', 'Decides the mode, holds the 32-bit error word and keeps the in-memory table the logs and telemetry read from.'], ['Code', 'state_machine.c, error_manager.c, csv_manager.py']] },
+          d1: { t: 'M.2 data SSD', s: 'D1', k: 'd', w: [400, 6, 150, 36], n: [0, 290, 110, 36], d: [['Part', 'M.2 2230 SSD, 128 GB'], ['Data', 'DA-06, mission logs and imaging'], ['Role', 'Logs rotate every 20 s, video every 30 s in NE, to bound the loss from a bad write.'], ['Code', 'storage_manager.py, video_writer.py']] },
+          st: { t: 'Stepper motors', w: [400, 352, 150, 40], n: [248, 290, 110, 40], d: [['Part', 'NEMA-8 syringe pump, 28BYJ-48 focus'], ['Data', 'DA-13, activate drivers'], ['Role', 'Inject particles and focus the microscope during the experiment.']] },
+          p4: { t: 'Build telemetry packet', s: 'P4', k: 'p', w: [610, 80, 170, 44], n: [0, 360, 166, 44], d: [['Runs on', 'ESP32'], ['Rate', '32 bytes at 1 Hz'], ['Data', 'DA-11, CRC-16/CCITT-FALSE'], ['Role', 'Assembled from the in-memory table, never from stored files.'], ['Code', 'telemetry.c, crc16.c']] },
+          tcu: { t: 'TCU', w: [610, 170, 170, 44], n: [60, 440, 238, 40], d: [['Part', 'Telemetry central unit'], ['Bus', 'UART, 115200 baud, 8N1'], ['Data', 'DA-11 in, DA-08 down, DA-12 up'], ['Code', 'uart_tcu.c']] },
+          p5: { t: 'Process uplink', s: 'P5 · WIPE → D1 · TEST → P3', k: 'p', w: [610, 270, 170, 44], n: [192, 360, 166, 44], d: [['Runs on', 'ESP32, forwards to the Pi'], ['Data', 'DA-12, wipe data, test mode, heater override'], ['Role', 'A sequence number makes each command idempotent. Pre-launch only.'], ['Code', 'uart_tcu.c, spi_link.py']] },
+          gs: { t: 'Ground station', w: [830, 170, 110, 44], n: [60, 520, 238, 40], d: [['Rate', 'Budget 0.320 kbit/s each way'], ['Data', 'DA-08 flight status, DA-12 commands'], ['Role', 'Checks each frame against its CRC and reads the status word.']] }
+        },
+        edges: [
+          ['sen', 'p1', [110, 102, 170, 102], [83, 40, 83, 66], [[0, 72, 'DA-02,03,04,09,10']], [[89, 56, 'DA-02,03,04,09,10']]],
+          ['cam', 'p2', [110, 192, 170, 192], [275, 40, 275, 66], [[140, 185, 'DA-05', 'm']], [[281, 56, 'DA-05']]],
+          ['p1', 'd2', [250, 80, 250, 42], [40, 110, 40, 140], [[256, 64, 'overflow · DA-01']], [[46, 128, 'DA-01']]],
+          ['d2', 'p3', [330, 24, 372, 24, 372, 92, 400, 92], [50, 176, 50, 210], [[351, 17, 'flush', 'm']], [[56, 196, 'flush']]],
+          ['p1', 'p3', [330, 108, 400, 108], [130, 110, 130, 210]],
+          ['p2', 'p3', [330, 192, 400, 192], [220, 110, 220, 210]],
+          ['rx', 'p3', [110, 292, 400, 292], [308, 180, 308, 210], [[255, 285, 'LO/SOE/SODS · DA-07', 'm']], [[302, 198, 'DA-07', 'e']]],
+          ['p3', 'd1', [475, 80, 475, 42], [55, 262, 55, 290], [[481, 64, 'write · DA-06']], [[61, 279, 'DA-06']]],
+          ['p3', 'st', [475, 314, 475, 352], [303, 262, 303, 290], [[481, 336, 'activate · DA-13']], [[297, 279, 'DA-13', 'e']]],
+          ['p3', 'p4', [550, 102, 610, 102], [140, 262, 140, 360], [[580, 95, 'DA-11', 'm']], [[146, 345, 'DA-11']]],
+          ['p4', 'tcu', [695, 124, 695, 170], [83, 404, 83, 440]],
+          ['tcu', 'gs', [780, 192, 830, 192], [179, 480, 179, 520], [[805, 184, 'DA-08 →', 'm'], [805, 207, 'DA-12 ←', 'm']], [[185, 503, 'DA-08 ↓  DA-12 ↑']], '2d'],
+          ['tcu', 'p5', [695, 214, 695, 270], [275, 440, 275, 404]],
+          ['p5', 'p3', [610, 292, 550, 292], [220, 360, 220, 262], [[580, 285, 'dispatch', 'm']], [[226, 345, 'dispatch']]]
+        ]
+      }
+    };
+    var TRACE = {
+      nodes: ['sen', 'p1', 'p3', 'p4', 'tcu', 'gs'],
+      steps: [['Sensors', 'Sampled at 10 Hz'], ['P1', 'Snapshot published in one go'], ['P3', 'Table updated with mode and error word'], ['P4', '32-byte frame with a CRC-16'], ['TCU', 'UART at 115200 baud, once a second'], ['Ground', 'Frame checked against its CRC']]
+    };
+
+    var tab = 'if', pinned = null, raf = 0, nodeEls = {}, edgeEls = [];
+    function key() { return narrow.matches ? 'n' : 'w'; }
+
+    function arrow(x0, y0, x1, y1) {   // chevron at (x1, y1), pointing from (x0, y0)
+      var d = Math.hypot(x1 - x0, y1 - y0) || 1, ux = (x1 - x0) / d, uy = (y1 - y0) / d, a = 5, b = 3;
+      return 'M' + (x1 - ux * a - uy * b) + ' ' + (y1 - uy * a + ux * b) + 'L' + x1 + ' ' + y1 + 'L' + (x1 - ux * a + uy * b) + ' ' + (y1 - uy * a - ux * b);
+    }
+    function render() {
+      stopTrace();
+      var D = DIAGRAMS[tab], k = key(), sz = D.size[k], h = '';
+      svg.setAttribute('viewBox', '0 0 ' + sz[0] + ' ' + sz[1]);
+      D.groups[k].forEach(function (g) {
+        h += '<text class="gl" x="' + g[1] + '" y="' + g[3] + '">' + g[0] + '</text><path class="gr" d="M' + g[1] + ' ' + (g[3] + 7.5) + 'H' + g[2] + '"/>';
+      });
+      D.edges.forEach(function (e, i) {
+        var p = e[k === 'w' ? 2 : 3], ls = e[k === 'w' ? 4 : 5] || [], fl = e[6] || '', n = p.length, d = 'M' + p[0] + ' ' + p[1];
+        for (var j = 2; j < n; j += 2) d += 'L' + p[j] + ' ' + p[j + 1];
+        d += arrow(p[n - 4], p[n - 3], p[n - 2], p[n - 1]);
+        if (fl.indexOf('2') >= 0) d += arrow(p[2], p[3], p[0], p[1]);
+        h += '<g class="e' + (fl.indexOf('d') >= 0 ? ' d' : '') + '" data-i="' + i + '"><path d="' + d + '"/>';
+        ls.forEach(function (l) {
+          h += '<text x="' + l[0] + '" y="' + l[1] + '"' + (l[3] ? ' text-anchor="' + (l[3] === 'm' ? 'middle' : 'end') + '"' : '') + '>' + l[2] + '</text>';
+        });
+        h += '</g>';
+      });
+      Object.keys(D.nodes).forEach(function (id) {
+        var n = D.nodes[id], b = n[k], x = b[0], y = b[1], w = b[2], hh = b[3], shape;
+        if (n.k === 'd') shape = '<rect class="hit" x="' + x + '" y="' + y + '" width="' + w + '" height="' + hh + '"/><path d="M' + (x + w) + ' ' + y + 'H' + x + 'V' + (y + hh) + 'H' + (x + w) + '" fill="none"/>';
+        else shape = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + hh + '"' + (n.k === 'p' ? ' rx="14"' : '') + '/>';
+        var ty = y + hh / 2 + (n.s2 ? -8 : n.s ? -2 : 4), big = n.big && hh > 80;
+        if (big) ty = y + 26;
+        h += '<g class="n" tabindex="0" role="button" data-id="' + id + '" aria-label="' + n.t + (n.s ? ', ' + n.s : '') + '">' + shape +
+             '<text class="t' + (big ? ' tb' : '') + '" x="' + (x + 12) + '" y="' + ty + '">' + n.t + '</text>' +
+             (n.s ? '<text class="s" x="' + (x + 12) + '" y="' + (ty + (big ? 16 : 13)) + '">' + n.s + '</text>' : '') +
+             (n.s2 ? '<text class="s" x="' + (x + 12) + '" y="' + (ty + 26) + '">' + n.s2 + '</text>' : '') + '</g>';
+      });
+      svg.innerHTML = h;
+      nodeEls = {};
+      svg.querySelectorAll('.n').forEach(function (g) { nodeEls[g.dataset.id] = g; });
+      edgeEls = [].slice.call(svg.querySelectorAll('.e'));
+      pinned = null;
+      clearSel();
+    }
+
+    function intro() {
+      var D = DIAGRAMS[tab];
+      read.innerHTML = '<h4>' + D.title + '</h4><p>' + D.intro + '</p>';
+    }
+    function clearSel() {
+      svg.classList.remove('sel');
+      Object.keys(nodeEls).forEach(function (id) { nodeEls[id].classList.remove('on', 'nb'); });
+      edgeEls.forEach(function (g) { g.classList.remove('on'); });
+      intro();
+    }
+    function select(id) {
+      var D = DIAGRAMS[tab], n = D.nodes[id], links = [];
+      svg.classList.add('sel');
+      Object.keys(nodeEls).forEach(function (k) { nodeEls[k].classList.remove('on', 'nb'); });
+      nodeEls[id].classList.add('on');
+      D.edges.forEach(function (e, i) {
+        var hit = e[0] === id || e[1] === id, other = e[0] === id ? e[1] : e[0];
+        edgeEls[i].classList.toggle('on', hit);
+        if (!hit) return;
+        nodeEls[other].classList.add('nb');
+        links.push(((e[6] || '').indexOf('2') >= 0 ? '↔ ' : e[0] === id ? '→ ' : '← ') + D.nodes[other].t);
+      });
+      var rows = n.d.map(function (r) {
+        return '<div><dt>' + r[0] + '</dt><dd' + (r[0] === 'Code' ? ' class="code"' : '') + '>' + r[1] + '</dd></div>';
+      }).join('');
+      read.innerHTML = '<h4>' + n.t + '</h4><dl>' + rows + '<div><dt>Links</dt><dd>' + links.join(', ') + '</dd></div></dl>';
+    }
+
+    // Pointer: hover previews, a click or tap pins. Keyboard: focus selects, Escape clears.
+    function nodeOf(el) { var g = el.closest && el.closest('.n'); return g ? g.dataset.id : null; }
+    svg.addEventListener('pointerover', function (e) {
+      if (e.pointerType !== 'mouse' || raf) return;
+      var id = nodeOf(e.target);
+      if (id) { traced = false; select(id); }
+    });
+    svg.addEventListener('pointerleave', function (e) {
+      if (e.pointerType !== 'mouse' || raf) return;
+      if (pinned) select(pinned); else if (!traced) clearSel();
+    });
+    svg.addEventListener('click', function (e) {
+      var id = nodeOf(e.target);
+      stopTrace();
+      pinned = id && pinned !== id ? id : null;
+      if (pinned) select(pinned); else clearSel();
+    });
+    svg.addEventListener('focusin', function (e) {
+      var id = nodeOf(e.target);
+      if (id && e.target.matches(':focus-visible')) { stopTrace(); select(id); }
+    });
+    svg.addEventListener('keydown', function (e) {
+      var id = nodeOf(e.target);
+      if (!id) return;
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pinned = pinned === id ? null : id; select(id); }
+      if (e.key === 'Escape') { pinned = null; clearSel(); e.target.blur(); }
+    });
+
+    // Trace one packet: sensor, P1, P3, P4, TCU, ground. With reduced motion the whole path lights at once.
+    var traced = false, HOP = 380;
+    function edgeBetween(a, b) {
+      var E = DIAGRAMS.df.edges;
+      for (var i = 0; i < E.length; i++) if (E[i][0] === a && E[i][1] === b) return i;
+      return -1;
+    }
+    function along(p, u) {   // point at fraction u of a polyline
+      var total = 0, i, n = p.length;
+      for (i = 2; i < n; i += 2) total += Math.hypot(p[i] - p[i - 2], p[i + 1] - p[i - 1]);
+      var left = u * total;
+      for (i = 2; i < n; i += 2) {
+        var d = Math.hypot(p[i] - p[i - 2], p[i + 1] - p[i - 1]);
+        if (left <= d || i === n - 2) { var f = d ? left / d : 0; return [p[i - 2] + (p[i] - p[i - 2]) * f, p[i - 1] + (p[i + 1] - p[i - 1]) * f]; }
+        left -= d;
+      }
+    }
+    function traceRead(done) {
+      read.innerHTML = '<h4>Telemetry packet</h4><ol>' + TRACE.steps.map(function (s, i) {
+        return '<li' + (i <= done ? ' class="on"' : '') + '><b>' + s[0] + '</b><span>' + s[1] + '</span></li>';
+      }).join('') + '</ol>';
+    }
+    function lightStep(i) {
+      nodeEls[TRACE.nodes[i]].classList.add('on');
+      if (i > 0) edgeEls[edgeBetween(TRACE.nodes[i - 1], TRACE.nodes[i])].classList.add('on');
+      var li = read.querySelectorAll('li')[i];
+      if (li) li.classList.add('on');
+    }
+    function stopTrace() {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0; traced = false;
+      var dot = $('dgm-dot');
+      if (dot) dot.remove();
+    }
+    function runTrace() {
+      stopTrace();
+      pinned = null;
+      clearSel();
+      svg.classList.add('sel');
+      traced = true;
+      traceRead(reduce ? 5 : -1);
+      var last = TRACE.nodes.length - 1, i;
+      if (reduce) { for (i = 0; i <= last; i++) lightStep(i); return; }
+      svg.insertAdjacentHTML('beforeend', '<rect id="dgm-dot" width="6" height="6"/>');
+      var dot = $('dgm-dot'), t0 = performance.now(), k = key() === 'w' ? 2 : 3, lit = -1;
+      function frame(now) {
+        var u = Math.max(0, now - t0) / HOP, seg = Math.floor(u);
+        while (lit < Math.min(seg, last)) lightStep(++lit);
+        if (seg >= last) { dot.remove(); raf = 0; return; }
+        var e = DIAGRAMS.df.edges[edgeBetween(TRACE.nodes[seg], TRACE.nodes[seg + 1])];
+        var q = along(e[k], u - seg);
+        dot.setAttribute('x', q[0] - 3); dot.setAttribute('y', q[1] - 3);
+        raf = requestAnimationFrame(frame);
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    traceBtn.addEventListener('click', runTrace);
+
+    // Tabs
+    var tabEls = { 'if': $('dgm-t-if'), df: $('dgm-t-df') };
+    function setTab(t, focus) {
+      tab = t;
+      Object.keys(tabEls).forEach(function (k) {
+        tabEls[k].setAttribute('aria-selected', k === t ? 'true' : 'false');
+        tabEls[k].tabIndex = k === t ? 0 : -1;
+      });
+      $('dgm-panel').setAttribute('aria-labelledby', tabEls[t].id);
+      traceBtn.hidden = t !== 'df';
+      $('dgm-key').hidden = t !== 'df';
+      render();
+      if (focus) tabEls[t].focus();
+    }
+    Object.keys(tabEls).forEach(function (k) {
+      tabEls[k].addEventListener('click', function () { setTab(k); });
+      tabEls[k].addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); setTab(k === 'if' ? 'df' : 'if', true); }
+      });
+    });
+    if (narrow.addEventListener) narrow.addEventListener('change', render);
+    render();
+  })();
+})();
+</script>
+</body>
+</html>
