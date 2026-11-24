@@ -106,6 +106,8 @@ dd { margin: 0; }
 .btn:hover { border-color: var(--fg); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+.btn.btn-lt { background: var(--soft); border-color: var(--soft); color: var(--on-accent); }
+.btn.btn-lt:hover { background: var(--fg); border-color: var(--fg); }
 @media (max-width: 900px) {
   .hero-l { grid-column: 1 / -1; }
   .patch { grid-column: 1 / -1; width: 160px; margin-top: 28px; }
@@ -113,33 +115,41 @@ dd { margin: 0; }
 @media (max-width: 640px) { .status { grid-template-columns: repeat(2, minmax(0, 1fr)); } .status .focus { order: 1; } }
 
 /* ---------- photos ---------- */
-/* Training Week: the photos run sideways while the page scrolls down; without script they scroll natively */
-.hgal { position: relative; }
-.hgal-stage { display: flex; flex-direction: column; justify-content: center; gap: 16px; }
-.hgal-track {
-  display: flex; gap: 2px; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding-inline: max(var(--gut), calc((100vw - var(--wrap)) / 2 + var(--gut)));
-}
-.hgal.on .hgal-stage {
-  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h)); overflow: hidden;
+/* Kiruna: the three photos side by side, pinned with the heading for a short scroll while the auroras behind them move;
+   on narrow screens nothing is pinned and the photos follow one another. The auroras sit on their own canvas behind,
+   held on the screen while the section passes and faded at its edges */
+.kiruna { position: relative; z-index: 0; margin-top: clamp(24px, 3vw, 48px); }
+.build { z-index: 1; }                                        /* the auroras start behind the end of the module section */
+.kiruna > * { position: relative; z-index: 1; }
+.kiruna > .aurora-box { position: absolute; z-index: 0; inset: -46vh 0 -10vh; pointer-events: none; }
+.aurora {
+  display: none; position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h)); width: 100%;
   height: calc(100vh - var(--bar-h)); height: calc(100dvh - var(--bar-h));
+  -webkit-mask-image: linear-gradient(transparent, #000 8%, #000 86%, transparent); mask-image: linear-gradient(transparent, #000 8%, #000 86%, transparent);
 }
-.hgal-track::after { content: ""; flex: none; width: max(var(--gut), calc((100vw - var(--wrap)) / 2 + var(--gut)) - 2px); }   /* end gutter; padding alone is not counted in the scroll width */
-.hgal.on .hgal-track { overflow: visible; will-change: transform; scroll-snap-type: none; }
-.hcard { flex: none; position: relative; margin: 0; height: min(68vh, 620px); aspect-ratio: var(--ar); background: var(--rule); scroll-snap-align: center; }
-.hcard img { width: 100%; height: 100%; object-fit: cover; }
-.hcard figcaption { position: absolute; left: 0; bottom: 0; max-width: min(380px, 100%); padding: 12px 16px 14px; background: var(--bg); }
-.hcard figcaption p { margin: 4px 0 0; font-size: 14.5px; line-height: 1.4; }
-.hgal.on .hcard figcaption { opacity: 0; transform: translateY(8px); transition: opacity .45s ease, transform .45s ease; }
-.hgal.on .hcard.on figcaption { opacity: 1; transform: none; }
-.hgal-foot { display: flex; align-items: center; gap: 16px; width: 100%; }
-.hgal-bar { flex: 1; height: 1px; background: var(--rule-2); }
-.hgal-bar i { display: block; height: 100%; background: var(--fg); transform-origin: left; transform: scaleX(0); }
-.hgal-count { font-variant-numeric: tabular-nums; }
-@media (max-width: 760px) {
-  .hcard { height: min(52vh, 420px, calc(86vw / var(--ar))); }
-  .hcard figcaption { padding: 10px 12px 12px; }
-  .hcard figcaption p { font-size: 13.5px; }
+.aurora.on { display: block; }
+.kiruna .sub-head .tx { color: var(--fg); }
+.kiruna .sub-head { margin: 0 0 10px; text-shadow: 0 0 14px rgba(35, 32, 40, .75); }   /* sits right above the photos, inside the pinned view */
+.hgal-stage > .wrap { width: 100%; }
+
+.hgal { position: relative; }
+.hgal-stage { display: flex; flex-direction: column; justify-content: center; gap: 16px; padding-block: 40px; }
+.hgal-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 28px); }
+.hcard { position: relative; min-width: 0; margin: 0; }
+.hcard img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
+.hcard figcaption { position: absolute; left: 0; bottom: 0; max-width: min(380px, 100%); padding: 10px 14px 12px; background: var(--bg); }
+.hcard figcaption p { margin: 0; font-size: 14.5px; line-height: 1.4; }
+@media (min-width: 861px) and (prefers-reduced-motion: no-preference) {
+  .hgal { height: calc(170vh - var(--bar-h)); height: calc(170dvh - var(--bar-h)); }
+  .hgal-stage {
+    position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h)); padding-block: 0;
+    height: calc(100vh - var(--bar-h)); height: calc(100dvh - var(--bar-h));
+  }
+}
+@media (max-width: 860px) {
+  .hgal-stage { gap: 28px; }
+  .hgal-stage > .hgal-track { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-inline: 0; }
+  .hcard figcaption { position: static; max-width: none; padding: 12px var(--gut) 0; background: none; text-shadow: 0 0 14px rgba(35, 32, 40, .9); }
 }
 .pair { display: grid; grid-template-columns: var(--a, 1fr) var(--b, 1fr); gap: 2px; }
 .pair figure { margin: 0; min-width: 0; }
@@ -160,14 +170,18 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .sec-head h2 { grid-column: 1 / 3; }
 .sec-head .sub { margin: 14px 0 0; font-size: 17px; color: var(--fg-2); }
 .sec-head .tx { grid-column: 3 / 5; margin: 0; align-self: end; max-width: 36em; font-size: 17px; line-height: 1.5; color: var(--fg-2); }
-@media (max-width: 900px) { .sec-head h2, .sec-head .tx { grid-column: 1 / -1; } }
+.sec-head .intro { grid-column: 3 / 5; align-self: end; }
+.esa { display: flex; align-items: center; gap: 16px; margin-top: 24px; }
+.esa .btn { flex: none; }
+.esa span { max-width: 21em; font-size: 15px; line-height: 1.4; color: var(--fg); }
+@media (max-width: 900px) { .sec-head h2, .sec-head .tx, .sec-head .intro { grid-column: 1 / -1; } }
 
 .sub-head { row-gap: 10px; margin: clamp(72px, 9vw, 128px) 0 28px; }
 .sub-head .eye, .sub-head h3 { grid-column: 1 / 3; }
 .sub-head .tx { grid-column: 3 / 5; grid-row: 1 / 3; margin: 0; align-self: end; max-width: 36em; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
 @media (max-width: 900px) { .sub-head .eye, .sub-head h3, .sub-head .tx { grid-column: 1 / -1; grid-row: auto; } }
 
-/* programme partners, shown as the big names they are */
+/* program partners, shown as the big names they are */
 .orgs { padding-block: 16px 22px; border-top: 1px solid var(--rule); row-gap: 20px; }
 .orgs > div { min-width: 0; }
 .orgs .prog { display: block; margin-top: 4px; font-size: 19px; line-height: 1.3; }
@@ -183,7 +197,9 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .stats dt { display: block; }
 .stats dd { margin-top: 6px; font: 500 clamp(52px, 6.4vw, 96px)/1 var(--sans); letter-spacing: -.04em; white-space: nowrap; }
 .stats small { font: 400 clamp(13px, 1.2vw, 16px)/1 var(--mono); letter-spacing: 0; color: var(--fg-2); }
-.stats small:last-child { margin-left: 6px; }
+.stats small:last-child, .stats .cnt + small { margin-left: 6px; }
+.stats .est { color: var(--muted); }
+@media (max-width: 640px) { .stats .est { font-size: 11px; letter-spacing: -.02em; } }
 .stats small:first-child { margin-right: 6px; }
 @media (max-width: 760px) {
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -201,7 +217,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .langs b { display: block; font: 500 clamp(48px, 5.4vw, 80px)/1 var(--sans); letter-spacing: -.04em; color: var(--soft); }
 .langs small { display: block; margin-top: 6px; font: 400 12.5px/1.4 var(--mono); color: var(--fg-2); }
 .role { padding-block: 12px 16px; border-bottom: 1px solid var(--rule); }
-.role h4 { margin: 2px 0 14px; font-size: 22px; line-height: 1.2; letter-spacing: -.01em; }
+.role h4 { margin: 2px 0 14px; font-size: 22px; line-height: 1.2; letter-spacing: -.01em; color: var(--soft); }
 .role p { margin: 6px 0 0; max-width: 34em; font-size: 16px; line-height: 1.45; }
 .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; }
 .tiles > * { min-width: 0; margin: 0; padding-block: 12px 14px; border-bottom: 1px solid var(--rule); }
@@ -349,7 +365,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 @media (prefers-reduced-motion: reduce) { .n, .e { transition: none; } }
 
 /* ---------- project timeline ---------- */
-.seq { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); column-gap: 16px; }
+.seq { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: 16px; }
 .seq li { position: relative; padding-top: 24px; min-width: 0; }
 .seq li::before { content: ""; position: absolute; left: 0; right: -16px; top: 4px; border-top: 1px solid var(--rule-2); }
 .seq li:last-child::before { right: 0; }
@@ -362,7 +378,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .seq .loc { margin-top: 10px; font: 400 11.5px/1.4 var(--mono); color: var(--fg); }
 .seq em { display: block; margin-top: 4px; font: normal 400 13px/1.3 var(--sans); color: var(--muted); }
 .seq li[data-s="next"] em { color: var(--soft); }
-@media (max-width: 960px) {
+@media (max-width: 1090px) {
   .seq { grid-template-columns: minmax(0, 1fr); }
   .seq li { padding: 0 0 20px 24px; }
   .seq li::before { left: 4px; right: auto; top: 4px; bottom: 0; border-top: 0; border-left: 1px solid var(--rule-2); }
@@ -438,9 +454,11 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .school .deg { margin: 0 0 10px; }
 .school ul { margin: 0; padding: 0; list-style: none; color: var(--fg-2); font-size: 15px; }
 .school li { padding-block: 2px; }
-.hs { margin: 40px 0 0; padding-block: 14px; border-block: 1px solid var(--rule); color: var(--fg-2); font-size: 15px; }
+.hs { display: flex; align-items: center; gap: 18px; margin: 40px 0 0; padding-block: 14px; border-block: 1px solid var(--rule); color: var(--fg-2); font-size: 15px; }
+.hs img { flex: none; width: 56px; height: 56px; }
+.hs p { margin: 0; }
 .hs b { color: var(--fg); font-weight: 500; }
-.offclock { margin: 20px 0 0; color: var(--muted); font-size: 14.5px; }
+.offclock { margin: 40px 0 0; padding-block: 14px; border-block: 1px solid var(--rule); color: var(--fg-2); font-size: 15px; }
 @media (max-width: 760px) { .schools > * { grid-column: 1 / -1; margin-bottom: 32px; } .hs { margin-top: 8px; } }
 
 /* pilot training: a small aside after education */
@@ -448,7 +466,6 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .fly-pics { grid-column: 1 / 3; display: grid; grid-template-columns: minmax(0, 1.014fr) minmax(0, 1.333fr); gap: 2px; max-width: 560px; }
 .fly-pics figure { margin: 0; min-width: 0; }
 .fly-pics img { width: 100%; height: auto; }
-.fly-pics figcaption { margin-top: 8px; }
 .fly-text { grid-column: 3 / 5; }
 .fly-text p { margin: 10px 0 0; max-width: 32em; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
 .fly-nums { display: flex; gap: 40px; margin-top: 20px; }
@@ -458,11 +475,15 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 @media (max-width: 860px) { .fly-pics, .fly-text { grid-column: 1 / -1; } .fly-text { order: -1; } }
 
 /* contact */
-.contact h2 { grid-column: 1 / -1; font-size: clamp(56px, 8vw, 120px); line-height: .95; letter-spacing: -.04em; margin-block: 16px clamp(28px, 4vw, 48px); }
+/* title left and text right on the same line, then the three boxes side by side across the full width */
+.contact .talk { align-items: end; row-gap: 20px; }
+.contact h2 { grid-column: 1 / 3; font-size: clamp(56px, 7vw, 108px); line-height: .95; letter-spacing: -.04em; }
 .contact .eye { grid-column: 1 / -1; }
-.contact .tx { grid-column: 1 / 3; margin: 0; max-width: 28em; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
-.cbtns { grid-column: 3 / 5; display: grid; gap: 2px; }
-.cbtn { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 22px; font: 500 20px/1 var(--sans); letter-spacing: -.01em; text-decoration: none; }
+.contact .tx { grid-column: 3 / 5; margin: 0; max-width: 28em; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
+.cbtns { display: flex; gap: 2px; margin-top: clamp(32px, 4vw, 56px); }
+.cbtns > * { flex: 1 1 0; }
+.cbtns > .mailrow { flex: 1.5 1 0; }
+.cbtn { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 30px 22px; font: 500 20px/1 var(--sans); letter-spacing: -.01em; text-decoration: none; }
 .cbtn.cv { background: var(--accent); color: var(--on-accent); }
 .cbtn.li { background: var(--fg); color: var(--bg); }
 .cbtn:hover { opacity: .9; }
@@ -470,8 +491,8 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .mailrow span { font: 400 14px/1.3 var(--mono); overflow-wrap: anywhere; user-select: all; }
 .copy { flex: none; padding: 9px 12px; border: 1px solid var(--rule-2); background: none; font: 500 13px/1 var(--sans); }
 .copy:hover { border-color: var(--fg); }
-@media (max-width: 420px) { .mailrow { padding-left: 14px; } .mailrow span { font-size: 12px; } }
-@media (max-width: 860px) { .contact .tx, .cbtns { grid-column: 1 / -1; } .contact .tx { margin-bottom: 32px; } }
+@media (max-width: 420px) { .mailrow { padding-left: 14px; gap: 8px; } .mailrow span { font-size: 11.5px; letter-spacing: -.02em; } .copy { padding: 9px 10px; font-size: 12px; } }
+@media (max-width: 860px) { .contact h2, .contact .tx { grid-column: 1 / -1; } .cbtns { flex-direction: column; } .cbtns > *, .cbtns > .mailrow { flex: none; } .cbtn { padding-block: 24px; } }
 
 footer { border-top: 1px solid var(--rule); }
 footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 20px 28px; font: 400 12px/1.5 var(--mono); color: var(--muted); }
@@ -504,6 +525,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 /* scroll reveals outside the module section: the same golden-edged wipe; the contact boxes sharpen into focus */
 .flow-on { width: fit-content; max-width: 100%; }
 .sec-head .tx { --flow-ink: var(--fg-2); }
+.flow-on b { color: inherit; }
 .cnt { display: inline-block; font-variant-numeric: tabular-nums; }
 </style>
 </head>
@@ -514,7 +536,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
   <div class="wrap">
     <a class="brand" href="#top"><b class="full">Project Portfolio</b><b class="short">Portfolio</b></a>
     <nav aria-label="Sections">
-      <a href="#star-d">STAR-D</a>
+      <a href="#star-d">REXUS</a>
       <a href="#cspace">C'Space</a>
       <a href="#education" class="opt">Education</a>
       <a href="#contact">Contact</a>
@@ -531,9 +553,9 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     <div class="hero-l">
       <h1>Alexandre Rollet</h1>
       <p class="lede">
-        Fourth-year aerospace and defence engineering student at ESILV, Paris.
+        Fourth-year aerospace and defense engineering student at ESILV, Paris.
         I am the Lead Software Engineer for <strong>STAR-D</strong>, a student experiment flying to
-        85&nbsp;km on REXUS&nbsp;38 from Esrange, Sweden, in March&nbsp;2027.
+        85&nbsp;km on a REXUS&nbsp;38 sounding rocket from Esrange, Sweden, in March&nbsp;2027.
       </p>
       <div class="ctas">
         <a class="btn primary" href="#star-d">Explore STAR-D</a>
@@ -566,19 +588,25 @@ html.has-cur, html.has-cur * { cursor: none !important; }
   <div class="wrap">
     <div class="g4 sec-head">
       <div style="grid-column: 1 / 3">
-        <h2>STAR-D</h2>
+        <h2 data-flow="0" data-flow-load>STAR-D</h2>
         <p class="sub">Space Test of Amoeba Response: Dictyostelium</p>
       </div>
-      <p class="tx">
-        STAR-D studies how microgravity affects phagocytosis in <em>Dictyostelium</em> amoebae.
-        A microfluidic system handles the cells in flight while sensors and a camera record the experiment
-        through the few minutes of weightlessness on a REXUS rocket.
-      </p>
+      <div class="intro">
+        <p class="tx">
+          STAR-D studies how microgravity affects phagocytosis in <em>Dictyostelium</em> amoebae.
+          A microfluidic system handles the cells in flight while sensors and a camera record the experiment
+          through the few minutes of weightlessness on a REXUS rocket.
+        </p>
+        <div class="esa">
+          <a class="btn btn-lt" href="https://education.esa.int/meet-the-rexus-team-star-d/" target="_blank" rel="noopener" aria-describedby="esa-t">ESA article</a>
+          <span id="esa-t">Read about our experiment on the ESA Academy website</span>
+        </div>
+      </div>
     </div>
 
     <div class="g4 orgs">
       <div>
-        <span class="eye">Programme</span>
+        <span class="eye">Program</span>
         <span class="prog">REXUS/BEXUS Cycle 17</span>
         <small>Design and integration reviews passed before ESA, DLR, SSC Space and ZARM experts.</small>
       </div>
@@ -588,7 +616,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     </div>
 
     <dl class="g4 stats">
-      <div><dt>Apogee</dt><dd><span class="cnt" data-to="85">85</span><small>km</small></dd></div>
+      <div><dt>Apogee</dt><dd><span class="cnt" data-to="85">85</span><small>km</small><small class="est">estimate</small></dd></div>
       <div><dt>Sensors + camera</dt><dd><span class="cnt" data-to="6">6</span>+<span class="cnt" data-to="1">1</span></dd></div>
       <div><dt>Team</dt><dd><span class="cnt" data-to="17">17</span><small>people</small></dd></div>
       <div><dt>Launch, Esrange</dt><dd><small>Mar</small>2027</dd></div>
@@ -616,15 +644,14 @@ html.has-cur, html.has-cur * { cursor: none !important; }
           <p>Acquisition, sequencing and logging, storage, telemetry and uplink handling.</p>
         </div>
         <div class="tiles">
-          <div class="first"><b>1st</b><span>French team selected<br>in 9 years</span></div>
-          <div><span class="eye">Interfaces</span><ul class="chips"><li>SPI</li><li>I²C</li><li>UART</li><li>RS-422</li></ul></div>
+          <div class="first wide"><b>1st</b><span>French team selected<br>in 9 years</span></div>
           <p class="wide doc"><strong>Student Experiment Documentation</strong> written to ECSS standards and defended at each review.</p>
         </div>
       </div>
 
       <figure class="map">
         <svg viewBox="0 40 520 700" role="img" aria-labelledby="map-t">
-          <title id="map-t">Satellite map of Europe with four sites: Paris, where the experiment is built; Oberpfaffenhofen (DLR), design review; Bremen (ZARM), integration tests; Esrange (SSC Space) in Sweden, training week and launch.</title>
+          <title id="map-t">Satellite map of Europe with four sites: Paris, where the experiment is built; Oberpfaffenhofen (DLR), design review and bench tests; Bremen (ZARM), Integration Testing Week; Esrange (SSC Space) in Sweden, training week and launch.</title>
           <defs>
             <radialGradient id="map-fade-g" cx=".46" cy=".5" r=".62"><stop offset=".72" stop-color="#FAFDF6"></stop><stop offset="1" stop-color="#FAFDF6" stop-opacity="0"></stop></radialGradient>
             <mask id="map-fade"><rect x="0" y="40" width="520" height="700" fill="url(#map-fade-g)"></rect></mask>
@@ -640,9 +667,9 @@ html.has-cur, html.has-cur * { cursor: none !important; }
           <text class="nm" x="145" y="550" text-anchor="end">Paris</text>
           <text class="rl" x="145" y="568" text-anchor="end">Build</text>
           <text class="nm" x="256" y="602">Oberpfaffenhofen<tspan> (DLR)</tspan></text>
-          <text class="rl" x="256" y="620">Design review</text>
+          <text class="rl" x="256" y="620">Design review · Bench tests</text>
           <text class="nm" x="253" y="467">Bremen<tspan> (ZARM)</tspan></text>
-          <text class="rl" x="253" y="485">Integration tests</text>
+          <text class="rl" x="253" y="485">Integration Testing Week</text>
           <text class="nm" x="377" y="87" text-anchor="end">Esrange<tspan> (SSC Space)</tspan></text>
           <text class="rl" x="377" y="105" text-anchor="end">Training week · Launch</text>
         </svg>
@@ -708,7 +735,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 
     <div class="g4 sub-head">
       <h3>Project timeline</h3>
-      <p class="tx">The programme follows the milestones of a real space project, each one in a different place.</p>
+      <p class="tx">The program follows the milestones of a real space project, each one in a different place.</p>
     </div>
     <ol class="seq">
       <li data-s="done"><span class="n-i">01</span><b>Selection</b><span>European call for proposals</span><span class="loc">ESA/ESTEC</span><em>2025 · done</em></li>
@@ -716,8 +743,9 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       <li data-s="done"><span class="n-i">03</span><b>CDR</b><span>Critical Design Review</span><span class="loc">Oberpfaffenhofen (DLR)</span><em>Passed</em></li>
       <li data-s="done"><span class="n-i">04</span><b>IPR</b><span>Integration Progress Review</span><span class="loc">Paris (ESILV)</span><em>Passed</em></li>
       <li data-s="next"><span class="n-i">05</span><b>EAR</b><span>Experiment Acceptance Review</span><span class="loc">Paris (ESILV)</span><em>Underway</em></li>
-      <li data-s="todo"><span class="n-i">06</span><b>Bench test</b><span>Integration and full test with the service module</span><span class="loc">Bremen (ZARM)</span><em>Upcoming</em></li>
-      <li data-s="todo"><span class="n-i">07</span><b>Launch</b><span>Flight Readiness Review and flight</span><span class="loc">Esrange (SSC Space)</span><em>March 2027</em></li>
+      <li data-s="todo"><span class="n-i">06</span><b>ITW</b><span>Integration Testing Week</span><span class="loc">Bremen (ZARM)</span><em>Upcoming</em></li>
+      <li data-s="todo"><span class="n-i">07</span><b>Bench test</b><span>Full test with the service module</span><span class="loc">Oberpfaffenhofen (DLR)</span><em>January 2027</em></li>
+      <li data-s="todo"><span class="n-i">08</span><b>Launch</b><span>Flight Readiness Review and flight</span><span class="loc">Esrange (SSC Space)</span><em>March 2027</em></li>
     </ol>
 
   </div>
@@ -747,35 +775,33 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     </svg>
   </div>
 
-  <div class="wrap">
-    <div class="g4 sub-head">
-      <h3>Training Week</h3>
-      <p class="tx">Esrange, January 2026. Lectures, the PDR and a first week with the other Cycle 17 teams.</p>
-    </div>
-  </div>
-
-  <!-- Training Week photos slide sideways as the page scrolls -->
+  <!-- Kiruna: auroras behind the heading and three photos, pinned together for a short scroll; on phones the photos follow one by one -->
+  <div class="kiruna" id="kiruna">
+  <div class="aurora-box" aria-hidden="true"><canvas class="aurora" id="aurora"></canvas></div>
   <div class="hgal" id="hgal">
     <div class="hgal-stage">
-      <div class="hgal-track">
-        <figure class="hcard" style="--ar: 1.5">
+      <div class="wrap">
+        <div class="g4 sub-head">
+          <h3>Kiruna, Esrange Space Center</h3>
+          <p class="tx">January 2026: aerospace engineering lectures, the PDR and a first week with the other Cycle 17 teams.</p>
+        </div>
+      </div>
+      <div class="wrap hgal-track">
+        <figure class="hcard">
           <img src="assets/cycle17-esrange.webp" width="1800" height="1200" loading="lazy" alt="Around a hundred students in winter coats in front of the SSC Space building at Esrange, with a sounding rocket on display behind them.">
           <figcaption><p>REXUS/BEXUS Cycle 17 teams at SSC Space during Training Week.</p></figcaption>
         </figure>
-        <figure class="hcard" style="--ar: 1.3333">
-          <img src="assets/stard-team-esrange.webp" width="1400" height="1050" loading="lazy" alt="Four members of the STAR-D team standing in the snow in front of the SSC Space sign.">
+        <figure class="hcard">
+          <img src="assets/stard-team-esrange.webp" width="1400" height="1050" loading="lazy" style="object-position: 50% 15%" alt="Four members of the STAR-D team standing in the snow in front of the SSC Space sign.">
           <figcaption><p>Part of the STAR-D team at SSC Space.</p></figcaption>
         </figure>
-        <figure class="hcard" style="--ar: 1.5713">
-          <img src="assets/stw-software-lecture.webp" width="1400" height="891" loading="lazy" alt="A lecture hall lit in red, with a slide titled Software Design for REXUS and BEXUS Experiments.">
-          <figcaption><p>Software design lecture for REXUS and BEXUS experiments.</p></figcaption>
+        <figure class="hcard">
+          <img src="assets/system-engineering-course.webp" width="1320" height="880" loading="lazy" alt="A speaker in front of a slide titled System Engineering with the ESA logo, seen from the back of a full lecture hall with orange doors.">
+          <figcaption><p>System Engineering course (Image: ESA credit)</p></figcaption>
         </figure>
       </div>
-      <div class="wrap hgal-foot">
-        <span class="hgal-bar"><i></i></span>
-        <span class="eye hgal-count">01 / 03</span>
-      </div>
     </div>
+  </div>
   </div>
 </section>
 
@@ -829,37 +855,39 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 </section>
 
 <!-- ================= EDUCATION ================= -->
-<section class="block" id="education" style="padding-top: 0">
+<section class="block" id="education" data-flow-early style="padding-top: 0">
   <div class="wrap">
     <div class="g4 sec-head">
-      <h2>Education</h2>
-      <p class="tx">An aerospace engineering degree in Paris, an exchange semester in Melbourne, and an international upbringing that included the UAE and Ghana.</p>
+      <h2 data-flow="0">Education</h2>
+      <p class="tx" data-flow=".18">An aerospace engineering degree in Paris, an exchange semester in Melbourne, and an international upbringing that included the UAE and Ghana.</p>
     </div>
 
     <div class="g4 schools">
       <article class="school">
         <img class="logo" src="assets/logo-esilv.webp" width="192" height="192" loading="lazy" alt="ESILV, De Vinci Engineering School">
-        <div class="when">2023 – now · Paris</div>
-        <h3>ESILV</h3>
-        <p class="deg">Engineering degree, 4th year (Master 1) · Aerospace &amp; Defence major</p>
+        <div class="when" data-flow="0">2023 – now · Paris</div>
+        <h3 data-flow=".05">ESILV</h3>
+        <p class="deg" data-flow=".12">Engineering degree, 4th year (Master 1) · Aerospace &amp; Defense major</p>
         <ul>
-          <li>Orbital mechanics, propulsion, embedded systems</li>
-          <li>Digital Sovereignty &amp; Defence minor</li>
+          <li data-flow=".19">Orbital mechanics, spacecraft propulsion, satellite communications, fluid mechanics</li>
+          <li data-flow=".26">Digital Sovereignty &amp; Defense minor</li>
         </ul>
       </article>
       <article class="school">
         <img class="logo" src="assets/logo-swinburne.webp" width="400" height="202" loading="lazy" alt="Swinburne University of Technology">
-        <div class="when">Jul – Nov 2025 · Melbourne</div>
-        <h3>Swinburne University of Technology</h3>
-        <p class="deg">Exchange semester · 50 credit points</p>
+        <div class="when" data-flow="0">Jul – Nov 2025 · Melbourne</div>
+        <h3 data-flow=".05">Swinburne University of Technology</h3>
+        <p class="deg" data-flow=".12">Exchange semester</p>
         <ul>
-          <li>Intelligent Systems, High Distinction</li>
-          <li>Numerical computing, statistics, data analytics</li>
+          <li data-flow=".19">Intelligent Systems, High Distinction</li>
+          <li data-flow=".26">Numerical computing, statistics, data analytics</li>
         </ul>
       </article>
     </div>
-    <p class="hs"><b>Institut de La Tour, Paris</b> · Baccalauréat with highest honours, seven years in the English section · 2016–2023</p>
-    <p class="offclock">Off the clock: DJing and collecting vinyl, golf, swimming.</p>
+    <div class="hs">
+      <img src="assets/logo-latour.webp" width="192" height="192" loading="lazy" alt="Institut de La Tour">
+      <p data-flow=".08"><b>Institut de La Tour, Paris</b> · Baccalauréat with highest honours, seven years in the English section · 2016–2023</p>
+    </div>
   </div>
 </section>
 
@@ -870,11 +898,9 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       <div class="fly-pics">
         <figure>
           <img src="assets/flying-hangar.webp" width="720" height="710" loading="lazy" alt="A white light aircraft with red and black stripes in a club hangar, with other light aircraft behind it.">
-          <figcaption class="eye">Hangar</figcaption>
         </figure>
         <figure>
           <img src="assets/flying-cockpit.webp" width="960" height="720" loading="lazy" alt="View from the cockpit of a light aircraft in flight over a wide river and green fields, with the instrument panel in the foreground.">
-          <figcaption class="eye">In flight</figcaption>
         </figure>
       </div>
       <div class="fly-text">
@@ -886,14 +912,17 @@ html.has-cur, html.has-cur * { cursor: none !important; }
         </div>
       </div>
     </div>
+    <p class="offclock">Off the clock: DJing and collecting vinyl, golf, swimming.</p>
   </div>
 </section>
 
 <!-- ================= CONTACT ================= -->
 <section class="block contact" id="contact">
-  <div class="wrap g4">
-    <h2 data-flow="0" data-lift>Let's talk</h2>
-    <p class="tx" data-flow=".2">I'm looking for a 4–5 month internship from April 2027 in flight software, avionics or space systems.</p>
+  <div class="wrap">
+    <div class="g4 talk">
+      <h2 data-flow="0" data-lift>Let's talk</h2>
+      <p class="tx" data-flow=".2">I'm looking for a 4–5 month internship from April 2027 in flight software, avionics or space systems.</p>
+    </div>
     <div class="cbtns" data-blur>
       <a class="cbtn li" href="https://www.linkedin.com/in/alexandre-rollet" target="_blank" rel="noopener">
         LinkedIn
@@ -1001,38 +1030,6 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     } catch (e) { selectIt(); }
     setTimeout(function () { btn.textContent = 'Copy email'; }, 2000);
   });
-
-  // Training Week gallery: vertical scroll drives the track sideways; captions appear as each photo arrives
-  (function () {
-    var root = $('hgal');
-    if (!root || reduce) return;
-    var stage = root.querySelector('.hgal-stage'), track = root.querySelector('.hgal-track');
-    var cards = track.querySelectorAll('.hcard'), bar = root.querySelector('.hgal-bar i'), count = root.querySelector('.hgal-count');
-    var LEAD = 80, travel = 0, queued = false;
-    root.classList.add('on');
-    function size() {
-      travel = Math.max(0, track.scrollWidth - stage.clientWidth);
-      root.style.height = (stage.offsetHeight + travel + LEAD * 2) + 'px';
-      update();
-    }
-    function update() {
-      queued = false;
-      var top = parseFloat(getComputedStyle(stage).top) || 0;
-      var x = clamp(top - root.getBoundingClientRect().top - LEAD, 0, travel);
-      track.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
-      bar.style.transform = 'scaleX(' + (travel ? x / travel : 1).toFixed(4) + ')';
-      var vw = stage.clientWidth, best = 0, bestD = Infinity;
-      cards.forEach(function (c, i) {
-        var b = c.getBoundingClientRect(), d = Math.abs(b.left + b.width / 2 - vw / 2);
-        c.classList.toggle('on', b.left < vw * 0.72 && b.right > vw * 0.28);
-        if (d < bestD) { bestD = d; best = i; }
-      });
-      count.textContent = '0' + (best + 1) + ' / 0' + cards.length;
-    }
-    window.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
-    window.addEventListener('resize', size);
-    size();
-  })();
 
   // ---------- Flight: a REXUS launch from Esrange, driven by scroll ----------
   (function () {
@@ -1958,6 +1955,8 @@ html.has-cur, html.has-cur * { cursor: none !important; }
   })();
   // Scroll reveals: headings and text marked data-flow wipe in with the golden edge and liquid ripple used for the
   // module phrases (data-flow holds a delay); data-lift also rises; children of data-blur go from blurred to sharp.
+  // Inside data-flow-early they start sooner and take less scroll. data-flow-load is for a title near the first screen: if
+  // it is in plain view on arrival it plays by itself, otherwise it starts from where it rests, so it is never half-drawn.
   (function () {
     var flows = [].slice.call(document.querySelectorAll('[data-flow]')), blurs = [].slice.call(document.querySelectorAll('[data-blur]'));
     if (reduce || !(flows.length || blurs.length)) return;
@@ -1972,20 +1971,32 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       var d = document.createElementNS(NS, 'feDisplacementMap');
       d.setAttribute('in', 'SourceGraphic'); d.setAttribute('scale', '0'); d.setAttribute('xChannelSelector', 'R'); d.setAttribute('yChannelSelector', 'G');
       f.appendChild(t); f.appendChild(d); defs.appendChild(f);
-      el._dm = d; el._id = id; el._s = -1; el._delay = parseFloat(el.getAttribute('data-flow')) || 0;
+      el._dm = d; el._id = id; el._s = -1; el._delay = parseFloat(el.getAttribute('data-flow')) || 0; el._k = parseFloat(getComputedStyle(el).fontSize) < 17 ? 6 : 14;   // a gentler ripple on small text
+      var early = !!el.closest('[data-flow-early]'); el._from = early ? 1 : .96; el._len = early ? .27 : .45; el._load = el.hasAttribute('data-flow-load'); el._auto = -1;
+      if (!getComputedStyle(el).getPropertyValue('--flow-ink').trim()) el.style.setProperty('--flow-ink', getComputedStyle(el).color);
       el.classList.add('flow-on');
     });
     var kids = [];
     blurs.forEach(function (b) { [].forEach.call(b.children, function (c, i) { kids.push([b, c, i]); }); });
+    function play(el) {
+      var t0 = 0;
+      requestAnimationFrame(function step(now) { if (!t0) t0 = now + 300; el._auto = clamp((now - t0) / 1300, 0, 1); upd(); if (el._auto < 1) requestAnimationFrame(step); });
+    }
     function upd() {
       var vh = window.innerHeight || 1;
       var atEnd = (window.scrollY || 0) + vh >= document.documentElement.scrollHeight - 4;   // nothing left half-revealed at the page end
       flows.forEach(function (el) {
         var r = el.getBoundingClientRect();
-        var e = atEnd ? 1 : ease(clamp((vh * .96 - r.top) / (vh * .45) - el._delay, 0, 1));
+        var from = vh * el._from, e;
+        if (el._load) {
+          var rest = r.top + (window.scrollY || 0);                        // where it sits before any scrolling
+          if (el._auto < 0 && rest < vh * .78) { el._auto = 0; play(el); }
+          from = Math.min(from, rest - 24);
+        }
+        e = atEnd ? 1 : el._auto >= 0 ? ease(el._auto) : ease(clamp((from - r.top) / (vh * el._len) - el._delay, 0, 1));
         el.style.setProperty('--a', (-12 + 145 * e).toFixed(2) + '%');
         if (el.hasAttribute('data-lift')) el.style.transform = 'translateY(' + ((1 - e) * 36).toFixed(1) + 'px)';
-        var s = Math.round(14 * Math.sin(Math.PI * e) * 10) / 10;
+        var s = Math.round(el._k * Math.sin(Math.PI * e) * 10) / 10;
         if (s !== el._s) { el._s = s; el._dm.setAttribute('scale', s); el.style.filter = s > .2 ? 'url(#' + el._id + ')' : 'none'; }
       });
       kids.forEach(function (k) {
@@ -2024,13 +2035,14 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     upd();
   })();
 
-  // ---------- Rockets: each picture condenses out of golden dust, the same fuzz as the module ----------
+  // ---------- Pictures: each one condenses out of golden dust, the same fuzz as the module ----------
   // One shared WebGL canvas draws whichever pictures are mid-reveal and is copied into a 2D canvas laid over each one.
   // The dust belt comes down from the top, which is the part that scrolls in first: grains gather, settle on the
   // picture's own lines, and the picture fills in grain by grain behind them, in step with the scroll (both ways).
   // Once finished the canvas hides and the plain <img> is shown; without WebGL, or with reduced motion, it always is.
   (function () {
-    var imgs = [].slice.call(document.querySelectorAll('#cspace .pair img'));
+    // the Rockets pictures, and on narrow screens the Kiruna photos too, where they also follow one by one
+    var imgs = [].slice.call(document.querySelectorAll('#cspace .pair img' + (window.innerWidth <= 860 ? ', #hgal .hcard img' : '')));
     if (!imgs.length || reduce) return;
     var gcv = document.createElement('canvas'), gl = null;
     try { gl = gcv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, preserveDrawingBuffer: true }); } catch (e) {}
@@ -2178,6 +2190,126 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
     gcv.addEventListener('webglcontextlost', function () { items.forEach(function (it) { if (it.ready) { it.ready = false; it.im.style.opacity = ''; it.cv.style.display = 'none'; } }); });
+  })();
+
+  // ---------- Auroras over Kiruna, behind the photos ----------
+  // Two passes. The first draws the auroras' footprint seen from above into a tiling texture: thin folded sheets with
+  // rays along them, slowly warping. The second looks up at it from the ground: each ray crosses the stack of altitudes
+  // the light comes from (about 100 km for the sharp lower edge, 300 km for the faint top) and adds up what it meets,
+  // green and teal low down, violet high up, a pink fringe under the brightest folds. Scrolling through the photos
+  // pans across them and drives the folding; on their own they only drift.
+  (function () {
+    var root = $('kiruna'), cv = $('aurora'), hg = $('hgal');
+    if (!root || !cv || !hg) return;
+    var gl = null;
+    try { gl = cv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, powerPreference: 'high-performance' }); } catch (e) {}
+    if (!gl) return;
+    var hp = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT);
+    if (!hp || hp.precision < 20) return;
+    var phone = window.innerWidth < 700, STEPS = phone ? 44 : 64;
+    var VS = 'attribute vec2 a; varying vec2 v; void main(){ v = a * .5 + .5; gl_Position = vec4(a, 0., 1.); }';
+    var FOOT = ['precision highp float; varying vec2 v; uniform float uT;',
+      // value noise that repeats every 8 units, so the texture tiles
+      'float h(vec2 p){ vec3 q = fract(vec3(p.xyx) * .1031); q += dot(q, q.yzx + 33.33); return fract((q.x + q.y) * q.z); }',
+      'float n(vec2 p, float per){ vec2 i = floor(p), f = fract(p); f = f * f * f * (f * (f * 6. - 15.) + 10.);',
+      '  vec2 j = mod(i, per), k = mod(i + 1., per); return mix(mix(h(j), h(vec2(k.x, j.y)), f.x), mix(h(vec2(j.x, k.y)), h(k), f.x), f.y); }',
+      'void main(){ vec2 p = v * 8.; float t = uT;',
+      '  vec2 q = p + 1.7 * (vec2(n(p + vec2(t * .21, 1.3), 8.), n(p + vec2(4.1, -t * .17), 8.)) - .5);',
+      '  q += .62 * (vec2(n(q * 2. + vec2(-t * .33, 2.), 16.), n(q * 2. + vec2(7., t * .29), 16.)) - .5);',
+      '  q += .17 * (vec2(n(q * 5. + vec2(t * .5, 3.), 40.), n(q * 5. + vec2(9., -t * .46), 40.)) - .5);',
+      '  float a = 1. - abs(2. * n(q * vec2(.5, 1.) + vec2(0., t * .05), 8.) - 1.), b = 1. - abs(2. * n(q * vec2(.5, 1.5) + vec2(3., 5. - t * .04), 24.) - 1.);',
+      '  float ray = .55 * n(q * vec2(10., 10.) + t * .4, 80.) + .30 * n(q * 24. - t * .5, 192.) + .15 * n(q * 48., 384.);',
+      '  float patchy = smoothstep(.22, .72, n(p * .5 + vec2(t * .06, 0.), 4.));',
+      '  float sheet = pow(a, 17.) + .55 * pow(b, 26.);',
+      '  float s = sheet * (.22 + 1.25 * smoothstep(.28, .78, ray)) * (.25 + .9 * patchy);',
+      '  gl_FragColor = vec4(min(1., s * .8), min(1., pow(a, 4.) * patchy * .7), n(q * 3. + 2., 24.), 1.); }'].join('\n');
+    var SKY = ['precision highp float; varying vec2 v; uniform sampler2D uF; uniform vec2 uR; uniform float uT, uQ, uA;',
+      'float h(vec2 p){ vec3 q = fract(vec3(p.xyx) * .1031); q += dot(q, q.yzx + 33.33); return fract((q.x + q.y) * q.z); }',
+      'void main(){',
+      '  vec2 s = v * 2. - 1.; float asp = uR.x / uR.y;',
+      '  vec3 rd = normalize(vec3(s.x * max(asp, .9) * .62, s.y * .50 + .66, 1.));',
+      '  float jit = h(gl_FragCoord.xy + fract(uT * 7.) * 61.); vec2 pan = vec2(uQ * 2.6 + uT * .012, uQ * .5 + uT * .02);',
+      '  vec3 acc = vec3(0.); float N = float(' + STEPS + ');',
+      '  for (int i = 0; i < ' + STEPS + '; i++) {',
+      '    float a = (float(i) + jit) / N, al = .95 + 1.75 * a * (.45 + .55 * a);',
+      '    vec2 p = rd.xz * (al / rd.y); float far = dot(p, p);',
+      '    vec4 f = texture2D(uF, (p + pan) / 8.);',
+      '    float lift = mix(1.5, 4.6, f.b), prof = smoothstep(0., .05, a) * exp(-a * lift);',
+      '    vec3 c = mix(vec3(.16, 1., .36), vec3(.06, .80, .58), smoothstep(.05, .40, a));',
+      '    c = mix(c, vec3(.34, .30, .86), smoothstep(.26, .72, a)); c = mix(c, vec3(.78, .26, .62), smoothstep(.62, 1., a) * .7);',
+      '    c += vec3(.95, .30, .55) * (1. - smoothstep(.0, .09, a)) * f.r * .55;',
+      '    acc += c * (f.r * prof + f.g * .05 * exp(-a * 2.)) * exp(-far * .022);',
+      '  }',
+      '  acc *= 6.4 / N;',
+      '  float lo = smoothstep(.0, .16, rd.y);',
+      '  vec3 col = 1. - exp(-acc * 3.0 * lo);',
+      '  col = mix(col, vec3(dot(col, vec3(.3, .59, .11))), -.10);',                     // a little more saturation in the mid-tones
+      '  col *= 1. + (h(gl_FragCoord.xy * 1.7 + 3.1) - .5) * .13;',                       // fine grain, like a long exposure
+      '  col = clamp(col, 0., 1.) * uA;',
+      '  gl_FragColor = vec4(col, clamp(max(col.g, max(col.r, col.b)) * .55, 0., 1.)); }'].join('\n');
+    function program(fs) {
+      var p = gl.createProgram();
+      for (var i = 0; i < 2; i++) {
+        var o = gl.createShader(i ? gl.FRAGMENT_SHADER : gl.VERTEX_SHADER); gl.shaderSource(o, i ? fs : VS); gl.compileShader(o);
+        if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) return null;
+        gl.attachShader(p, o);
+      }
+      gl.bindAttribLocation(p, 0, 'a'); gl.linkProgram(p);
+      return gl.getProgramParameter(p, gl.LINK_STATUS) ? p : null;
+    }
+    var foot = program(FOOT), sky = program(SKY);
+    if (!foot || !sky) return;
+    var U = {}; ['uT'].forEach(function (n) { U['f' + n] = gl.getUniformLocation(foot, n); });
+    ['uF', 'uR', 'uT', 'uQ', 'uA'].forEach(function (n) { U[n] = gl.getUniformLocation(sky, n); });
+    var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    var FS = phone ? 512 : 1024, tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, FS, FS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.REPEAT], [gl.TEXTURE_WRAP_T, gl.REPEAT]].forEach(function (q) { gl.texParameteri(gl.TEXTURE_2D, q[0], q[1]); });
+    var fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) return;
+
+    var scale = phone ? .8 : .75, clock = 0, last = 0, raf = 0, visible = false, qT = 0, q = 0, aT = 0, A = 0, odd = 0, slow = 0, seen = 0, footT = -9;
+    cv.classList.add('on');
+    function size() {
+      var w = cv.clientWidth, hh = cv.clientHeight, k = Math.min(scale, 1280 / Math.max(1, w));
+      var W = Math.max(2, Math.round(w * k)), Hh = Math.max(2, Math.round(hh * k));
+      if (cv.width !== W || cv.height !== Hh) { cv.width = W; cv.height = Hh; }
+    }
+    function measure() {
+      var vh = window.innerHeight || 1, r = root.getBoundingClientRect(), g = hg.getBoundingClientRect();
+      qT = clamp((vh * .5 - g.top) / Math.max(1, g.height), -.4, 1.4);                       // how far through the photos
+      var sm = function (u) { u = clamp(u, 0, 1); return u * u * (3 - 2 * u); };
+      aT = sm((vh * .72 - r.top) / (vh * .48)) * sm((r.bottom - vh * .10) / (vh * .62));
+    }
+    function draw() {
+      var T = clock * .34 + q * 5.2;                                                         // scrolling folds the curtains
+      if (Math.abs(T - footT) > .0015) {
+        footT = T; gl.bindFramebuffer(gl.FRAMEBUFFER, fb); gl.viewport(0, 0, FS, FS); gl.useProgram(foot); gl.uniform1f(U.fuT, T + 11); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, cv.width, cv.height); gl.useProgram(sky);
+      gl.uniform1i(U.uF, 0); gl.uniform2f(U.uR, cv.width, cv.height); gl.uniform1f(U.uT, clock); gl.uniform1f(U.uQ, q); gl.uniform1f(U.uA, A);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+    function frame(now) {
+      raf = 0;
+      var raw = last ? now - last : 0, dt = Math.min(.05, raw / 1000); last = now;
+      if (!reduce) clock += dt;
+      var k = 1 - Math.pow(.9, dt * 60 || 1), moving = Math.abs(qT - q) > .0008 || Math.abs(aT - A) > .004;
+      q += (qT - q) * k; A += (aT - A) * k;
+      // half rate while only drifting; if the machine cannot keep up, draw fewer pixels
+      odd ^= 1;
+      if (moving || odd) draw();
+      if (raw > 0 && raw < 250) { seen++; if (raw > 26) slow++; if (seen >= 50) { if (slow > 22 && scale > .36) { scale *= .78; size(); } seen = slow = 0; } }
+      if (visible && (!reduce || moving)) raf = requestAnimationFrame(frame); else last = 0;
+    }
+    function kick() { if (!raf && visible) { last = 0; raf = requestAnimationFrame(frame); } }
+    function onScroll() { measure(); kick(); }
+    size(); measure(); q = qT; A = aT;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function () { size(); measure(); draw(); kick(); });
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) { size(); measure(); draw(); kick(); } }, { rootMargin: '10% 0px' }).observe(root);
+    else { visible = true; kick(); }
   })();
 })();
 </script>
