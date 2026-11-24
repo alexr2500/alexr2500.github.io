@@ -22,7 +22,7 @@
   --grid: rgba(250, 253, 246, .05);
   --accent: #DDD92A;                   /* Golden Glow */
   --accent-2: #EAE151;                 /* Banana Cream, hover */
-  --soft: #EEEFA8;                     /* Vanilla Custard, quiet highlights */
+  --soft: #EEEFA8;                     /* Vanilla Custard: item titles, figures, active marks (Golden Glow is kept for section titles) */
   --on-accent: #232028;
   /* SF Pro cannot be hosted (Apple licence): Apple devices render it as the system font, everything else gets Inter */
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Inter", "Segoe UI", system-ui, sans-serif;
@@ -145,10 +145,11 @@ dd { margin: 0; }
 .pair figure { margin: 0; min-width: 0; }
 .pair img { width: 100%; height: auto; }
 .pair.crop img { aspect-ratio: 3 / 2; object-fit: cover; }
+.fuzz { position: absolute; display: none; pointer-events: none; }
 .pair figcaption { padding: 12px var(--gut) 0; font-size: 14px; line-height: 1.45; color: var(--fg-2); }
 .pair figure:first-child figcaption { padding-left: max(var(--gut), calc((100vw - var(--wrap)) / 2 + var(--gut))); }
 .pair figcaption .eye { display: block; margin-bottom: 4px; }
-.pair figcaption h3 { margin-bottom: 8px; color: var(--fg); }
+.pair figcaption h3 { margin-bottom: 8px; color: var(--soft); }
 .pair figcaption p { margin: 0; max-width: 34em; }
 @media (max-width: 640px) { .pair { grid-template-columns: 1fr; gap: 20px; } }
 
@@ -197,7 +198,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .langs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); margin-top: 12px; padding-block: 12px 16px; border-block: 1px solid var(--rule); }
 .langs .eye { grid-column: 1 / -1; margin-bottom: 8px; }
 .langs > div { min-width: 0; }
-.langs b { display: block; font: 500 clamp(48px, 5.4vw, 80px)/1 var(--sans); letter-spacing: -.04em; color: var(--accent); }
+.langs b { display: block; font: 500 clamp(48px, 5.4vw, 80px)/1 var(--sans); letter-spacing: -.04em; color: var(--soft); }
 .langs small { display: block; margin-top: 6px; font: 400 12.5px/1.4 var(--mono); color: var(--fg-2); }
 .role { padding-block: 12px 16px; border-bottom: 1px solid var(--rule); }
 .role h4 { margin: 2px 0 14px; font-size: 22px; line-height: 1.2; letter-spacing: -.01em; }
@@ -214,12 +215,12 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 @media (max-width: 640px) { .tiles { grid-template-columns: minmax(0, 1fr); } }
 .map { grid-column: 3 / 5; justify-self: center; width: 100%; margin: 0; max-width: 420px; }
 .map svg { display: block; width: 100%; height: auto; margin-top: 10px; }
-.map .route { fill: none; stroke: var(--fg); stroke-width: 1.4; stroke-dasharray: 3 5; }
+.map .route { fill: none; stroke: var(--fg); stroke-width: 2; stroke-dasharray: 4 5; filter: drop-shadow(0 0 1px var(--bg)) drop-shadow(0 0 1.5px var(--bg)) drop-shadow(0 0 2px var(--bg)); }   /* dark casing, so it reads on the light land */
 .map circle { fill: var(--fg); stroke: var(--bg); stroke-width: 2; }
-.map text { paint-order: stroke; stroke: var(--bg); stroke-width: 6px; stroke-linejoin: round; }
+.map text { paint-order: stroke; stroke: var(--bg); stroke-width: 7px; stroke-linejoin: round; }
 .map .nm { font: 500 20px var(--sans); fill: var(--fg); }
-.map .nm tspan { font-weight: 400; fill: var(--fg-2); }
-.map .rl { font: 400 15px var(--sans); fill: var(--muted); }
+.map .nm tspan { font-weight: 400; fill: #FAFDF6; }
+.map .rl { font: 400 15px var(--sans); fill: #FAFDF6; }
 .map figcaption { margin-top: 8px; font-size: 14px; color: var(--fg-2); }
 @media (max-width: 900px) { .mission > div, .map { grid-column: 1 / -1; } }
 
@@ -245,7 +246,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .legend li { display: flex; align-items: center; gap: 8px; padding-block: 2px; }
 .legend i { flex: none; width: 3.8em; padding: 3px 5px; font: 500 11px/1 var(--mono); font-style: normal; }
 .legend li.on { color: var(--fg); }
-.legend li.on i { background: var(--accent); color: var(--on-accent); }
+.legend li.on i { background: var(--soft); color: var(--on-accent); }
 .plot { position: relative; min-height: 0; margin-block: 10px; }
 .plot canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
 .fl-cap { height: 3.9em; margin: 0; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 14px; line-height: 1.4; color: var(--fg-2); }
@@ -354,13 +355,13 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .seq li:last-child::before { right: 0; }
 .seq li::after { content: ""; position: absolute; left: 0; top: 0; width: 9px; height: 9px; background: var(--bg); border: 1px solid var(--muted); border-radius: 50%; }
 .seq li[data-s="done"]::after { background: var(--fg); border-color: var(--fg); }
-.seq li[data-s="next"]::after { background: var(--accent); border-color: var(--accent); }
+.seq li[data-s="next"]::after { background: var(--soft); border-color: var(--soft); }
 .seq .n-i { font: 400 12px/1 var(--mono); color: var(--muted); }
 .seq b { display: block; margin: 8px 0 4px; font: 500 20px/1.15 var(--sans); letter-spacing: -.01em; }
 .seq span { display: block; color: var(--fg-2); font-size: 13.5px; line-height: 1.4; }
 .seq .loc { margin-top: 10px; font: 400 11.5px/1.4 var(--mono); color: var(--fg); }
 .seq em { display: block; margin-top: 4px; font: normal 400 13px/1.3 var(--sans); color: var(--muted); }
-.seq li[data-s="next"] em { color: var(--accent); }
+.seq li[data-s="next"] em { color: var(--soft); }
 @media (max-width: 960px) {
   .seq { grid-template-columns: minmax(0, 1fr); }
   .seq li { padding: 0 0 20px 24px; }
@@ -407,13 +408,22 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
   .build.on .build-in { grid-template-rows: auto minmax(0, 1fr); align-items: stretch; row-gap: 8px; }
   .build-p { font-size: 15px; margin-top: 10px; }
 }
+/* phones held upright: title, module and paragraph sit together in the middle of the screen, the paragraph (which only
+   appears at the end) under the module, so it no longer keeps an empty slot between the title and the module */
+@media (max-width: 640px) and (orientation: portrait) {
+  .build.on .build-in { grid-template-rows: auto auto auto; align-content: center; row-gap: 0; }
+  .build.on .build-text { display: contents; }
+  .build.on .phr { order: 1; align-items: end; }
+  .build.on .build-vis { order: 2; height: min(calc((100vw - 32px) * .8546), 46vh); height: min(calc((100vw - 32px) * .8546), 46dvh); margin-top: 8px; }
+  .build.on .build-p { order: 3; margin-top: 12px; }
+}
 
 /* C'Space */
 .leofly { width: 132px; height: auto; margin-bottom: 8px; }
 .pair + .pair { margin-top: clamp(40px, 5vw, 72px); }
 .assoc { margin-top: clamp(56px, 7vw, 96px); padding-block: 18px 20px; border-block: 1px solid var(--rule); row-gap: 20px; }
 .assoc p { margin: 6px 0 0; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
-.assoc b { display: block; font: 500 clamp(36px, 4vw, 56px)/1 var(--sans); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.assoc b { display: block; font: 500 clamp(36px, 4vw, 56px)/1 var(--sans); letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: var(--soft); }
 .assoc .num .eye { display: block; margin-top: 6px; }
 @media (max-width: 760px) {
   .assoc { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -424,7 +434,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .schools > * { grid-column: span 2; min-width: 0; padding-top: 20px; border-top: 1px solid var(--rule); }
 .school .logo { height: 44px; width: auto; margin-bottom: 20px; }
 .school .when { font: 400 12px/1.5 var(--mono); color: var(--fg-2); }
-.school h3 { margin: 6px 0 6px; }
+.school h3 { margin: 6px 0 6px; color: var(--soft); }
 .school .deg { margin: 0 0 10px; }
 .school ul { margin: 0; padding: 0; list-style: none; color: var(--fg-2); font-size: 15px; }
 .school li { padding-block: 2px; }
@@ -581,7 +591,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       <div><dt>Apogee</dt><dd><span class="cnt" data-to="85">85</span><small>km</small></dd></div>
       <div><dt>Sensors + camera</dt><dd><span class="cnt" data-to="6">6</span>+<span class="cnt" data-to="1">1</span></dd></div>
       <div><dt>Team</dt><dd><span class="cnt" data-to="17">17</span><small>people</small></dd></div>
-      <div><dt>Launch, Esrange</dt><dd><small>Mar</small><span class="cnt" data-to="2027">2027</span></dd></div>
+      <div><dt>Launch, Esrange</dt><dd><small>Mar</small>2027</dd></div>
     </dl>
 
     <div class="g4 mission">
@@ -642,7 +652,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 
     <div class="g4 sub-head" id="flight-intro">
       <h3>Flight profile</h3>
-      <p class="tx">The plot follows your scroll, and the code panel shows the flight software I wrote for each stage, with comments shortened. The trajectory is a simple model; SODS at T−180 s, LO at T+0 and SOE at T+66 s are the real signal times.</p>
+      <p class="tx">The plot follows your scroll, and the code panel shows the flight software I wrote for each stage, with comments shortened. The trajectory is a simple model.</p>
     </div>
   </div>
 
@@ -811,9 +821,9 @@ html.has-cur, html.has-cur * { cursor: none !important; }
         <span class="eye">LéoFly · Board secretary since April 2026</span>
         <p>I sit on the board of the association that runs these projects.</p>
       </div>
-      <div class="num"><b>120</b><span class="eye">Members</span></div>
-      <div class="num"><b>6</b><span class="eye">Projects</span></div>
-      <div class="num"><b>€30k</b><span class="eye">Annual budget</span></div>
+      <div class="num"><b><span class="cnt" data-to="120">120</span></b><span class="eye">Members</span></div>
+      <div class="num"><b><span class="cnt" data-to="6">6</span></b><span class="eye">Projects</span></div>
+      <div class="num"><b>€<span class="cnt" data-to="30">30</span>k</b><span class="eye">Annual budget</span></div>
     </div>
   </div>
 </section>
@@ -1640,17 +1650,27 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 
     var VS = 'attribute vec2 aPos; varying vec2 vUv;' +
       'void main(){ vUv = vec2(aPos.x * .5 + .5, .5 - aPos.y * .5); gl_Position = vec4(aPos, 0., 1.); }';
+    // Shared by both shaders: value noise and the fuzz's clock. field() is 0..1, low at the bottom; a spot of the CAD lets
+    // go at gone() and the same spot of the module appears at land(), so an uneven belt of dust rises through the object
+    // with the CAD's mesh still above it and the module's already below. k runs 0..1 over the fuzz.
+    var NOISE = [
+      'float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }',
+      'float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
+      '  return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }',
+      'float field(vec2 u){ return clamp(.30 * vn(u * vec2(3.2, 3.) + 7.) + .16 * vn(u * 9. + 3.) + .66 * (1. - u.y) - .06, 0., 1.); }',
+      'float gone(vec2 u){ return .04 + .56 * field(u); }',
+      'float land(vec2 u){ return gone(u) + .20; }',
+      'float fuzz(float p){ return clamp((p - .34) / .32, 0., 1.); }'
+    ].join('\n');
     var FS = [
       'precision highp float;',
       'varying vec2 vUv;',
-      'uniform sampler2D uCad, uMod, uFlow;',
+      'uniform sampler2D uCad, uMod;',
       'uniform vec2 uTexel, uRes;',
       'uniform float uP, uT;',
       // palette: Golden Glow, Banana Cream, Vanilla Custard, Porcelain
       'const vec3 GOLD = vec3(.867, .851, .165), BANANA = vec3(.918, .882, .318), VANILLA = vec3(.933, .937, .659), PORC = vec3(.98, .992, .965);',
-      'float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }',
-      'float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
-      '  return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }',
+      NOISE,
       'float fbm(vec2 p){ float v = 0., a = .5; for (int i = 0; i < 4; i++) { v += a * vn(p); p *= 2.03; a *= .5; } return v; }',
       'float lum(vec3 c){ return dot(c, vec3(.299, .587, .114)); }',
       'float L(vec4 s){ return lum(s.rgb) * s.a + s.a * .6; }',
@@ -1680,45 +1700,51 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       '  return vec4(c * I, clamp(I, 0., 1.)); }',
       'vec4 over(vec4 top, vec4 bot){ return top + bot * (1. - top.a); }',
       'vec4 addg(vec4 base, vec4 g){ return vec4(base.rgb + g.rgb, clamp(base.a + g.a * (1. - base.a), 0., 1.)); }',
-      // Both pictures are shown as they are: the whole CAD render, and the photo (moved and scaled only). The photo
-      // was taken from a little lower and closer, so the two do not quite superpose; uFlow holds that difference as two
-      // smooth offset fields (rg: from a point of the CAD to the same point of the photo; ba: the reverse), in frame px
-      // around 128. They are only used while the module is a golden wireframe: as m runs 0 -> 1 the CAD's mesh flows
-      // into the photo's shape while the module's mesh, flowing the other way, takes its place along a front rising
-      // from the bottom; then the photo fills in, undistorted. m is 0 for the solid CAD and 1 for the solid photo.
+      // Neither picture is ever warped. 1. a scan turns the CAD into its golden mesh; 2. the fuzz: the mesh lets go grain
+      // by grain, scattering as frosted glass would, while the grains program carries the dust across and the module's
+      // mesh condenses out of it; 3. the photo fills the mesh in from the bottom along a grainy front.
       'void main(){',
-      '  vec2 uv = vUv; float p = uP;',
-      '  vec4 fl = texture2D(uFlow, uv);',
-      '  float m = smoothstep(.32, .58, p);',
-      '  vec2 uvC = uv + m * (fl.ba * 255. - 128.) / vec2(1100., 940.);',
-      '  vec2 uvP = uv + (1. - m) * (fl.rg * 255. - 128.) / vec2(1100., 940.);',
-      '  vec4 mo = texture2D(uMod, uvP), cad = texture2D(uCad, uvC);',
+      '  vec2 uv = vUv; float p = uP, k = fuzz(p);',
+      '  vec2 cell = floor(uv * uRes / 1.5); float gr = h21(cell), ga = h21(cell + 31.7) * 6.2832; vec2 gd = vec2(cos(ga), sin(ga)) * uTexel;',
       '  float n = fbm(uv * 5. + vec2(0., uT * .04));',
       '  float kB = smoothstep(.10, .32, p), fB = mix(-.2, 1.2, kB);',
       '  float sB = uv.y + (n - .5) * .18;',
       '  float meshed = smoothstep(fB + .012, fB - .012, sB);',
       '  float bandB = exp(-abs(sB - fB) * 38.) * step(.001, kB) * step(kB, .999);',
-      '  float kM = smoothstep(.36, .58, p), fM = mix(1.15, -.15, kM);',
-      '  float sM = uv.y + (n - .5) * .14;',
-      '  float modVis = smoothstep(fM - .03, fM + .03, sM);',
-      '  float bandM = exp(-abs(sM - fM) * 40.) * step(.001, kM) * step(kM, .999);',
-      '  float kD = smoothstep(.60, .82, p), fD = mix(1.2, -.2, kD);',
-      '  float sD = uv.y + (n - .5) * .2;',
-      '  float real = smoothstep(fD - .012, fD + .012, sD);',
-      '  float bandD = exp(-abs(sD - fD) * 36.) * step(.001, kD) * step(kD, .999);',
-      '  float rim = 1. - smoothstep(.82, .94, p);',
-      '  vec4 col = vec4(cad.rgb * cad.a, cad.a) * (1. - meshed);',
-      '  if (kB > 0. && modVis < .999) {',
-      '    col = addg(col, holo(uCad, uvC) * meshed * (1. - modVis));',
-      '    col = addg(col, vec4(VANILLA, 1.) * bandB * clamp(cad.a + halo(uCad, uvC) * .6, 0., 1.) * .9);',
+      '  vec4 col = vec4(0.);',
+      '  if (k < .80) {',
+      '    vec4 cad = texture2D(uCad, uv);',
+      '    col = vec4(cad.rgb * cad.a, cad.a) * (1. - meshed);',
+      '    if (kB > 0.) {',
+      '      float dt = k - gone(uv);',
+      '      float keep = 1. - smoothstep(-.02, .02, dt + (gr - .5) * .15);',
+      '      float loose = smoothstep(-.14, .06, dt) * step(.001, k);',
+      '      if (keep > 0.) col = addg(col, holo(uCad, uv + gd * loose * 16.) * meshed * keep * (1. + loose * .7));',
+      '      if (bandB > .01) col = addg(col, vec4(VANILLA, 1.) * bandB * clamp(cad.a + halo(uCad, uv) * .6, 0., 1.) * .9);',
+      '    }',
       '  }',
-      '  if (kM > 0.) {',
-      '    vec4 realC = vec4(mo.rgb * mo.a, mo.a) * real;',
-      '    col = over(realC, col * (1. - real * mo.a));',
-      '    col = addg(col, holo(uMod, uvP) * modVis * mix(1., .22 * rim, real));',
-      '    float hm = halo(uMod, uvP);',
-      '    col = addg(col, vec4(VANILLA, 1.) * bandM * clamp(max(mo.a, cad.a) + hm * .5, 0., 1.) * .8);',
-      '    col = addg(col, vec4(PORC, 1.) * bandD * clamp(mo.a + hm * .5, 0., 1.) * .85);',
+      '  if (k > .1) {',
+      '    float kD = smoothstep(.67, .86, p), fD = mix(1.25, -.25, kD);',
+      '    float sD = uv.y + (n - .5) * .18 + (gr - .5) * .11;',
+      '    float real = smoothstep(fD - .015, fD + .015, sD) * step(.001, kD);',
+      '    float near = exp(-abs(uv.y + (n - .5) * .18 - fD) * 13.) * step(.001, kD) * step(kD, .999);',
+      '    vec4 mo = texture2D(uMod, uv + gd * near * 7.);',
+      '    float rim = 1. - smoothstep(.86, .95, p);',
+      '    float dt = k - land(uv);',
+      '    float on = smoothstep(-.02, .02, dt + (gr - .5) * .17);',
+      '    float settle = 1. - smoothstep(-.02, .14, dt);',
+      '    col = over(vec4(mo.rgb * mo.a, mo.a) * real, col);',
+      '    float tr = on * mix(1., .22 * rim, real);',
+      '    if (tr > .002) col = addg(col, holo(uMod, uv + gd * settle * 16.) * tr * (1. + settle * .7));',
+      '    if (near > .01) col = addg(col, vec4(VANILLA, 1.) * near * gr * clamp(mo.a, 0., 1.) * .42);',
+      '  }',
+      // a thin luminous dust haze that binds the two shapes while the grains are in the air
+      '  float air = smoothstep(.0, .06, k - gone(uv) + .05) * (1. - smoothstep(-.06, .10, k - land(uv)));',
+      '  if (air > .01) {',
+      '    float h = 0.; vec2 o = uTexel * 14.;',
+      '    for (int i = 0; i < 6; i++) { float a = float(i) * 1.0472 + ga * .16; vec2 q = uv + vec2(cos(a), sin(a)) * o; h += mix(texture2D(uCad, q).a, texture2D(uMod, q).a, smoothstep(.25, .75, k)); }',
+      '    float d = fbm(uv * 26. + vec2(uT * .05, -uT * .12)); d = .35 + .65 * smoothstep(.3, .75, d);',
+      '    col = addg(col, vec4(GOLD, .6) * (h / 6.) * d * air * .13);',
       '  }',
       '  gl_FragColor = col;',
       '}'
@@ -1737,8 +1763,8 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     var aPos = gl.getAttribLocation(prog, 'aPos'); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
     var U = {};
-    ['uCad', 'uMod', 'uFlow', 'uTexel', 'uRes', 'uP', 'uT'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
-    gl.uniform1i(U.uCad, 0); gl.uniform1i(U.uMod, 1); gl.uniform1i(U.uFlow, 2);
+    ['uCad', 'uMod', 'uTexel', 'uRes', 'uP', 'uT'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    gl.uniform1i(U.uCad, 0); gl.uniform1i(U.uMod, 1);
     gl.uniform2f(U.uTexel, 1 / 1100, 1 / 940);
 
     function tex(unit, img) {
@@ -1751,33 +1777,64 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     }
 
-    // The two offset fields between the CAD and the photo: thin-plate splines fitted offline on points both pictures
-    // show (rim, hatch corners and screws, slots, the box, the outline). Evaluated here once, at a fifth of the frame
-    // resolution, into an RGBA texture: 1 frame px per step around 128.
-    var FLOW = {"a":{"p":[0.24122,0.49356,0.64512,0.56622,0.63966,0.8164,0.2709,0.74122,0.43232,0.5539,0.43232,0.8164,0.64778,0.6904,0.30856,0.5084,0.41622,0.5364,0.53732,0.54732,0.65856,0.53556,0.6692,0.6001,0.6692,0.6862,0.6692,0.76712,0.65856,0.8248,0.33544,0.79232,0.2912,0.46024,0.3682,0.48558,0.45836,0.5014,0.553,0.5042,0.6482,0.4958,0.73584,0.4762,0.8134,0.4468,0.4578,0.4601,0.553,0.4636,0.6482,0.4559,0.553,0.07958,0.46088,0.20558,0.71498,0.23582,0.3703,0.3369,0.64442,0.37918,0.1442,0.2648,0.182206,0.177825,0.289103,0.107148,0.44486,0.066012,0.54985,0.059,0.65484,0.066012,0.810597,0.107148,0.917494,0.177825,0.9555,0.2648,0.898059,0.754121,0.814212,0.823633,0.682598,0.867917,0.5593,0.8794,0.436002,0.867917,0.304388,0.823633,0.220541,0.754121,0.15785,0.37085,0.946575,0.37085,0.1715,0.4769,0.93765,0.4769,0.18515,0.58295,0.928725,0.58295],"x":[-0.579085,-0.401237,0.555445,-0.879656,0.267976,0.078746,-0.38259,-0.074469,-0.155928,0.117523,0.273963,0.051481,0.24182,0.115921,0.684814,-0.557135,-0.321588,-0.084865,0.048113,0.385664,-0.006489,0.226187,0.704466,0.154671,-0.832503,0.234855,0.232503,0.261315,-0.47401,0.313903,-0.216597,-0.15785,-0.011923,-0.026511,-0.123348,-0.161384,0.028259,0.057666,0.012533,0.233221,0.032628,-0.112108,-0.720427,-0.360681,0.098342,0.578535,0.530999,0.076243,-0.160046,0.366146,-0.295844,0.379398,-0.247063,0.085891,-0.148011,-0.026533],"y":[-0.878007,-0.27458,-0.232334,-0.701585,-0.165049,-0.415009,-0.333882,0.2772,0.508883,0.265134,0.349771,0.096811,0.311601,0.178458,-0.147737,-0.067038,-0.276348,-0.153563,0.1565,0.186619,0.090076,0.089696,-0.600318,-0.233273,-0.283659,-0.180831,0.040857,-0.067654,-0.037929,-0.119304,-0.166154,-0.533902,0.124991,0.166092,0.097365,0.044379,0.081312,0.152632,0.133177,-0.484202,-0.048413,-0.033548,0.129272,0.145546,0.28766,0.293886,0.288239,0.290611,0.272312,0.539809,0.283023,0.4096,0.142807,0.083804,-0.028175,-0.085708]},"b":{"p":[0.226824,0.485606,0.653886,0.554339,0.646601,0.822906,0.261896,0.745422,0.429126,0.5405,0.430361,0.818187,0.652782,0.687467,0.291588,0.500835,0.406181,0.528901,0.543584,0.537871,0.676407,0.527699,0.682055,0.596609,0.679934,0.691585,0.67463,0.776401,0.662507,0.834113,0.326842,0.801689,0.272689,0.445805,0.353333,0.466644,0.45432,0.485697,0.560323,0.488617,0.662033,0.479686,0.756922,0.462305,0.831406,0.432297,0.454098,0.435671,0.543139,0.437819,0.661822,0.432203,0.5504,0.163909,0.467529,0.233637,0.694954,0.255689,0.373567,0.32597,0.643083,0.355974,0.149944,0.296141,0.186523,0.23574,0.289942,0.186329,0.440823,0.157167,0.542589,0.151858,0.644399,0.156262,0.795533,0.18408,0.899388,0.232569,0.936503,0.292643,0.844904,0.780514,0.77061,0.845117,0.653724,0.886584,0.5441,0.897688,0.434381,0.887559,0.317131,0.847134,0.242265,0.783194,0.168122,0.402873,0.918371,0.399537,0.186301,0.509605,0.900239,0.50643,0.20448,0.616337,0.882107,0.613323],"x":[0.772613,0.405704,-0.54566,1.059318,-0.243787,-0.046694,0.427755,0.161179,0.135258,-0.060953,-0.262359,-0.139976,-0.33517,-0.148747,-0.764952,0.686157,0.350337,0.056363,-0.058634,-0.305854,0.07275,-0.291036,-1.011448,-0.132212,0.707387,-0.18172,-0.24589,-0.385571,0.633338,-0.322327,0.100028,0.170732,0.00737,0.018001,0.223735,0.204006,-0.121245,-0.039304,0.017913,-0.266276,0.01401,0.286711,0.725823,0.221328,-0.081208,-0.492137,-0.80818,-0.281034,0.431607,-0.576001,0.457303,-0.443541,0.245191,-0.100275,0.172768,0.032482],"y":[1.173142,0.222946,0.211833,0.896437,0.154447,0.284131,0.265299,-0.138045,-0.458207,-0.259041,-0.294014,-0.026401,-0.221429,-0.144906,0.152683,0.161791,0.363851,0.050856,-0.199858,-0.205762,-0.146102,-0.023432,0.922398,0.13374,0.200865,0.082241,-0.126812,0.527614,0.365297,0.392538,0.368956,0.724481,-0.163494,-0.362701,-0.395163,-0.191298,-0.285381,-0.367954,-0.182705,0.672523,0.046327,-0.00029,-0.149005,-0.101669,-0.172433,-0.23098,-0.510479,-0.608632,-0.559543,-0.836539,-0.439188,-0.450284,-0.122647,-0.116622,0.025467,0.132642]}};
-    function flowTex() {
-      var fw = 220, fh = 188, d = new Uint8Array(fw * fh * 4), K = 1000;
-      function ev(f, x, y, out) {
-        var P = f.p, n = P.length / 2, X = f.x, Y = f.y, dx = X[n] + X[n + 1] * x + X[n + 2] * y, dy = Y[n] + Y[n + 1] * x + Y[n + 2] * y;
-        for (var i = 0; i < n; i++) {
-          var ex = x - P[2 * i], ey = y - P[2 * i + 1], r2 = ex * ex + ey * ey;
-          if (r2 > 1e-12) { var u = .5 * r2 * Math.log(r2); dx += X[i] * u; dy += Y[i] * u; }
+    // The grains: points sampled on the CAD's lines and on the module's, paired so that dust keeps to its part of the
+    // object (sorted by x, then by y within each strip), drifting between the two on a slow curl of noise.
+    var PVS = ['precision highp float;', 'attribute vec4 aAB; attribute vec2 aR; uniform float uP, uT, uPx; varying float vA; varying vec3 vC;', NOISE,
+      'float pot(vec2 q){ return vn(q); }',
+      'vec2 curl(vec2 q){ float e = .12; return vec2(pot(q + vec2(0., e)) - pot(q - vec2(0., e)), pot(q - vec2(e, 0.)) - pot(q + vec2(e, 0.))) / (2. * e); }',
+      'void main(){',
+      '  float k = fuzz(uP), a = gone(aAB.xy) + (aR.x - .5) * .10, b = land(aAB.zw) + (aR.y - .5) * .12;',
+      '  float t = clamp((k - a) / max(.08, b - a), 0., 1.), e = t * t * t * (t * (t * 6. - 15.) + 10.), bell = sin(3.14159 * t);',
+      '  vec2 q = mix(aAB.xy, aAB.zw, e);',
+      '  q += curl(q * 3.2 + vec2(uT * .05, t * 1.3)) * .010 * bell + curl(q * 14. + aR * .6 - uT * .08) * .010 * bell;',
+      '  q += vec2(cos(aR.x * 43.), sin(aR.x * 43.)) * pow(fract(aR.y * 5.17), 2.2) * .030 * bell - vec2(0., .012 * bell);',
+      '  float big = step(.972, fract(aR.x * 7.31 + aR.y * 3.7));',
+      '  vA = smoothstep(0., .05, k - a) * (1. - smoothstep(0., .10, k - b)) * (.50 + .30 * sin(uT * (1.5 + 3. * aR.x) + aR.y * 40.)) * mix(.9, .22, big);',
+      '  vC = mix(mix(vec3(.867, .851, .165), vec3(.933, .937, .659), aR.y), vec3(.98, .992, .965), step(.93, aR.x));',
+      '  gl_Position = vec4(q.x * 2. - 1., 1. - q.y * 2., 0., 1.);',
+      '  gl_PointSize = (vA <= .003) ? 0. : uPx * mix(1.2 + 1.5 * aR.x * aR.x, 6.5, big);',
+      '}'].join('\n');
+    var PFS = ['precision mediump float; varying float vA; varying vec3 vC;',
+      'void main(){ if (vA <= .003) discard; float d = length(gl_PointCoord - .5) * 2., a = (1. - smoothstep(.15, 1., d)) * vA; gl_FragColor = vec4(vC * a, a * .45); }'].join('\n');
+    var pp = null, pbuf = null, PU = {}, PN = 0;
+    function grains(imgA, imgB) {
+      var pv = sh(gl.VERTEX_SHADER, PVS), pf = sh(gl.FRAGMENT_SHADER, PFS);
+      if (!pv || !pf) return;
+      var pr = gl.createProgram(); gl.attachShader(pr, pv); gl.attachShader(pr, pf);
+      gl.bindAttribLocation(pr, 0, 'aAB'); gl.bindAttribLocation(pr, 1, 'aR'); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+      var N = window.innerWidth < 700 ? 15000 : 34000, gw = 275, gh = 235, seed = 11;
+      function rnd() { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+      function sample(img) {
+        var c = document.createElement('canvas'); c.width = gw; c.height = gh;
+        var x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0, gw, gh);
+        var d = x.getImageData(0, 0, gw, gh).data, v = new Float32Array(gw * gh), cum = new Float32Array(gw * gh), sum = 0, i, j, o;
+        for (i = 0; i < gw * gh; i++) v[i] = (d[4 * i] * .299 + d[4 * i + 1] * .587 + d[4 * i + 2] * .114) * d[4 * i + 3] / 65025 + .6 * d[4 * i + 3] / 255;
+        for (j = 1; j < gh - 1; j++) for (i = 1; i < gw - 1; i++) {
+          o = j * gw + i;
+          var g = Math.abs(v[o + 1] - v[o - 1]) + Math.abs(v[o + gw] - v[o - gw]);
+          sum += d[4 * o + 3] > 60 ? .05 + Math.min(1, g * 1.6) : 0; cum[o] = sum;
         }
-        out[0] = dx * K; out[1] = dy * K;
+        for (i = 1; i < gw * gh; i++) if (cum[i] < cum[i - 1]) cum[i] = cum[i - 1];
+        var P = [];
+        for (i = 0; i < N; i++) {
+          var r = rnd() * sum, lo = 0, hi = gw * gh - 1;
+          while (lo < hi) { var m = (lo + hi) >> 1; if (cum[m] < r) lo = m + 1; else hi = m; }
+          P.push([((lo % gw) + rnd()) / gw, (Math.floor(lo / gw) + rnd()) / gh]);
+        }
+        P.sort(function (a, b) { return a[0] - b[0]; });
+        var out = [], step = Math.ceil(N / 150);
+        for (i = 0; i < N; i += step) out = out.concat(P.slice(i, i + step).sort(function (a, b) { return a[1] - b[1]; }));
+        return out;
       }
-      var a = [0, 0], b = [0, 0], q = function (v) { return Math.max(0, Math.min(255, Math.round(128 + v))); };
-      for (var j = 0; j < fh; j++) for (var i = 0; i < fw; i++) {
-        var x = (i + .5) * 5 / K, y = (j + .5) * 5 / K, o = (j * fw + i) * 4;
-        ev(FLOW.a, x, y, a); ev(FLOW.b, x, y, b);
-        d[o] = q(a[0]); d[o + 1] = q(a[1]); d[o + 2] = q(b[0]); d[o + 3] = q(b[1]);
-      }
-      var t = gl.createTexture(); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, t);
-      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, fw, fh, 0, gl.RGBA, gl.UNSIGNED_BYTE, d);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      var A, B;
+      try { A = sample(imgA); B = sample(imgB); } catch (e) { return; }
+      var f = new Float32Array(N * 6);
+      for (var i = 0; i < N; i++) { f[6 * i] = A[i][0]; f[6 * i + 1] = A[i][1]; f[6 * i + 2] = B[i][0]; f[6 * i + 3] = B[i][1]; f[6 * i + 4] = rnd(); f[6 * i + 5] = rnd(); }
+      pbuf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, pbuf); gl.bufferData(gl.ARRAY_BUFFER, f, gl.STATIC_DRAW);
+      ['uP', 'uT', 'uPx'].forEach(function (n) { PU[n] = gl.getUniformLocation(pr, n); });
+      PN = N; pp = pr;
     }
-    flowTex();
 
     // phrases: a gradient wipe with a golden leading edge, plus a liquid displacement while each one moves
     var PH = [$('ph-1'), $('ph-2'), $('ph-3')], para = $('build-p');
@@ -1820,10 +1877,19 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       target = progress();
     }
     function draw() {
+      gl.useProgram(prog); gl.disable(gl.BLEND);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
       gl.uniform1f(U.uP, shown); gl.uniform1f(U.uT, clock);
       gl.uniform2f(U.uRes, canvas.width, canvas.height);
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (!pp || shown < .33 || shown > .70) return;
+      gl.useProgram(pp); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pbuf);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 24, 0);
+      gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 2, gl.FLOAT, false, 24, 16);
+      gl.uniform1f(PU.uP, shown); gl.uniform1f(PU.uT, clock); gl.uniform1f(PU.uPx, canvas.width / 620);
+      gl.drawArrays(gl.POINTS, 0, PN);
     }
     function frame(now) {
       raf = 0;
@@ -1842,6 +1908,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       im.onload = function () {
         tex(i, im);
         if (++loaded < 2) return;
+        grains(imgs[0], imgs[1]);
         root.classList.add('on');
         size(); shown = target; text(shown); draw();
         window.addEventListener('scroll', function () { target = progress(); kick(); }, { passive: true });
@@ -1955,6 +2022,162 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       upd();
     });
     upd();
+  })();
+
+  // ---------- Rockets: each picture condenses out of golden dust, the same fuzz as the module ----------
+  // One shared WebGL canvas draws whichever pictures are mid-reveal and is copied into a 2D canvas laid over each one.
+  // The dust belt comes down from the top, which is the part that scrolls in first: grains gather, settle on the
+  // picture's own lines, and the picture fills in grain by grain behind them, in step with the scroll (both ways).
+  // Once finished the canvas hides and the plain <img> is shown; without WebGL, or with reduced motion, it always is.
+  (function () {
+    var imgs = [].slice.call(document.querySelectorAll('#cspace .pair img'));
+    if (!imgs.length || reduce) return;
+    var gcv = document.createElement('canvas'), gl = null;
+    try { gl = gcv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, preserveDrawingBuffer: true }); } catch (e) {}
+    if (!gl) return;
+    var NOISE = [
+      'float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }',
+      'float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
+      '  return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }',
+      'uniform float uSeed;',
+      'float field(vec2 u){ return clamp(.30 * vn(u * vec2(3.6, 2.6) + 7. + uSeed) + .14 * vn(u * vec2(12., 8.) + 3. + uSeed) + .62 * u.y - .03, 0., 1.); }',
+      'float land(vec2 u){ return .20 + .50 * field(u); }'
+    ].join('\n');
+    var VS = 'attribute vec2 aPos; varying vec2 vUv; void main(){ vUv = vec2(aPos.x * .5 + .5, .5 - aPos.y * .5); gl_Position = vec4(aPos, 0., 1.); }';
+    var FS = ['precision highp float; varying vec2 vUv; uniform sampler2D uImg; uniform vec4 uCover; uniform vec2 uRes; uniform float uP, uT;', NOISE,
+      'const vec3 GOLD = vec3(.867, .851, .165), VANILLA = vec3(.933, .937, .659);',
+      'vec3 tx(vec2 u){ return texture2D(uImg, uCover.xy + u * uCover.zw).rgb; }',
+      'float L(vec2 u){ return dot(tx(u), vec3(.299, .587, .114)); }',
+      'float edge(vec2 u){ vec2 o = 1.4 / uRes;',
+      '  float a = L(u + o * vec2(-1., -1.)), b = L(u + o * vec2(0., -1.)), c = L(u + o * vec2(1., -1.)), d = L(u + o * vec2(-1., 0.)), f = L(u + o * vec2(1., 0.)), g = L(u + o * vec2(-1., 1.)), h = L(u + o * vec2(0., 1.)), k = L(u + o);',
+      '  return length(vec2(c + 2. * f + k - a - 2. * d - g, g + 2. * h + k - a - 2. * b - c)); }',
+      'void main(){ vec2 u = vUv; float k = uP;',
+      '  vec2 cell = floor(u * uRes / 1.5); float gr = h21(cell + uSeed), ga = h21(cell + 31.7) * 6.2832; vec2 gd = vec2(cos(ga), sin(ga)) / uRes;',
+      '  float dt = k - land(u);',
+      '  float lines = smoothstep(-.02, .02, dt + (gr - .5) * .13);',                 // the golden lines condense,
+      '  float real = smoothstep(-.02, .02, dt - .13 + (gr - .5) * .16);',            // then the picture behind them
+      '  float settle = 1. - smoothstep(-.02, .20, dt);',
+      '  vec4 col = vec4(tx(u + gd * settle * 14.), 1.) * real;',
+      '  if (lines > .002 && dt < .42) {',
+      '    vec2 ul = u + gd * settle * 12.; float e = clamp(edge(ul) * 1.5, 0., 1.), fade = 1. - smoothstep(.10, .40, dt);',
+      '    float I = (e + .05) * lines * fade; col.rgb += mix(GOLD, VANILLA, e * .65) * I; col.a = clamp(col.a + I * (1. - col.a), 0., 1.);',
+      '  }',
+      '  float air = smoothstep(-.20, -.04, dt) * (1. - smoothstep(0., .16, dt));',
+      '  if (air > .01) { float d = vn(u * vec2(40., 27.) + vec2(uT * .3, -uT * .5)) * .6 + vn(u * vec2(90., 60.) - uT * .4) * .4; float I = smoothstep(.3, .8, d) * air * .16; col.rgb += GOLD * I; col.a = clamp(col.a + I * .6 * (1. - col.a), 0., 1.); }',
+      '  gl_FragColor = col; }'].join('\n');
+    var PVS = ['precision highp float; attribute vec4 aAB; attribute vec2 aR; attribute vec3 aC; uniform float uP, uT, uPx; varying float vA; varying vec3 vC;', NOISE,
+      'vec2 curl(vec2 q){ float e = .12; return vec2(vn(q + vec2(0., e)) - vn(q - vec2(0., e)), vn(q - vec2(e, 0.)) - vn(q + vec2(e, 0.))) / (2. * e); }',
+      'void main(){',
+      '  float b = land(aAB.zw) + (aR.y - .5) * .10, a = b - .20 - .10 * aR.x, t = clamp((uP - a) / (b - a), 0., 1.);',
+      '  float e = 1. - pow(1. - t, 2.6), left = 1. - e;',
+      '  vec2 q = mix(aAB.xy, aAB.zw, e) + curl(aAB.zw * 9. + aR * .7 - uT * .10) * .018 * left;',
+      '  float big = step(.975, fract(aR.x * 7.31 + aR.y * 3.7));',
+      '  vA = smoothstep(0., .25, t) * step(.0001, t) * (1. - smoothstep(.02, .16, uP - b)) * (.52 + .30 * sin(uT * (1.5 + 3. * aR.x) + aR.y * 40.)) * mix(1., .2, big);',
+      '  vec3 gold = mix(vec3(.867, .851, .165), vec3(.933, .937, .659), aR.y);',
+      '  vC = mix(gold, aC, smoothstep(.0, .12, uP - b) * .7);',
+      '  gl_Position = vec4(q.x * 2. - 1., 1. - q.y * 2., 0., 1.);',
+      '  gl_PointSize = vA <= .003 ? 0. : uPx * mix(1.2 + 1.6 * aR.x * aR.x, 6., big); }'].join('\n');
+    var PFS = 'precision mediump float; varying float vA; varying vec3 vC; void main(){ if (vA <= .003) discard; float d = length(gl_PointCoord - .5) * 2., a = (1. - smoothstep(.15, 1., d)) * vA; gl_FragColor = vec4(vC * a, a * .45); }';
+    function sh(type, s) { var o = gl.createShader(type); gl.shaderSource(o, s); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; }
+    function program(v, f, names, attrs) {
+      var a = sh(gl.VERTEX_SHADER, v), b = sh(gl.FRAGMENT_SHADER, f); if (!a || !b) return null;
+      var p = gl.createProgram(); gl.attachShader(p, a); gl.attachShader(p, b);
+      attrs.forEach(function (n, i) { gl.bindAttribLocation(p, i, n); }); gl.linkProgram(p);
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) return null;
+      var U = {}; names.forEach(function (n) { U[n] = gl.getUniformLocation(p, n); }); return { p: p, U: U };
+    }
+    var pic = program(VS, FS, ['uImg', 'uCover', 'uRes', 'uP', 'uT', 'uSeed'], ['aPos']), dust = program(PVS, PFS, ['uP', 'uT', 'uPx', 'uSeed'], ['aAB', 'aR', 'aC']);
+    if (!pic || !dust) return;
+    var quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+    var items = imgs.map(function (im, n) { return { im: im, n: n, ready: false, target: 0, shown: 0, live: false, state: '' }; }), clock = 0, last = 0, raf = 0;
+    function posPct(v, d) { var m = /(-?[\d.]+)%/.exec(v || ''); return m ? parseFloat(m[1]) / 100 : d; }
+    // object-fit: cover, as the part of the source (x, y, w, h in 0..1) that the box shows
+    function cover(it) {
+      var im = it.im, ar = im.naturalWidth / im.naturalHeight, br = im.clientWidth / Math.max(1, im.clientHeight), op = getComputedStyle(im).objectPosition.split(' ');
+      var w = br > ar ? 1 : br / ar, h = br > ar ? ar / br : 1;
+      return [(1 - w) * posPct(op[0], .5), (1 - h) * posPct(op[1], .5), w, h];
+    }
+    function setup(it) {
+      var im = it.im, fig = im.parentNode, gw = 240, gh = 160, seed = 31 + it.n * 97, i, j, o;
+      function rnd() { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+      it.cov = cover(it);
+      var c = document.createElement('canvas'); c.width = gw; c.height = gh;
+      var x = c.getContext('2d', { willReadFrequently: true }), d, f;
+      var N = window.innerWidth < 700 ? 6000 : 15000;
+      try {
+        x.drawImage(im, it.cov[0] * im.naturalWidth, it.cov[1] * im.naturalHeight, it.cov[2] * im.naturalWidth, it.cov[3] * im.naturalHeight, 0, 0, gw, gh);
+        d = x.getImageData(0, 0, gw, gh).data;
+        var v = new Float32Array(gw * gh), cum = new Float32Array(gw * gh), sum = 0;
+        for (i = 0; i < gw * gh; i++) v[i] = (d[4 * i] * .299 + d[4 * i + 1] * .587 + d[4 * i + 2] * .114) / 255;
+        for (j = 1; j < gh - 1; j++) for (i = 1; i < gw - 1; i++) { o = j * gw + i; sum += .07 + Math.min(1, (Math.abs(v[o + 1] - v[o - 1]) + Math.abs(v[o + gw] - v[o - gw])) * 1.7); cum[o] = sum; }
+        for (i = 1; i < gw * gh; i++) if (cum[i] < cum[i - 1]) cum[i] = cum[i - 1];
+        f = new Float32Array(N * 9);
+        for (i = 0; i < N; i++) {
+          var r = rnd() * sum, lo = 0, hi = gw * gh - 1;
+          while (lo < hi) { var m = (lo + hi) >> 1; if (cum[m] < r) lo = m + 1; else hi = m; }
+          var bx = ((lo % gw) + rnd()) / gw, by = (Math.floor(lo / gw) + rnd()) / gh, an = rnd() * 6.2832, rr = .02 + .11 * Math.pow(rnd(), 1.6);
+          f.set([bx + Math.cos(an) * rr, by + Math.sin(an) * rr * 1.5 + .05, bx, by, rnd(), rnd(), d[4 * lo] / 255, d[4 * lo + 1] / 255, d[4 * lo + 2] / 255], 9 * i);
+        }
+        it.tex = gl.createTexture(); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, it.tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, im);
+      } catch (e) { return; }
+      [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]].forEach(function (q) { gl.texParameteri(gl.TEXTURE_2D, q[0], q[1]); });
+      it.buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, it.buf); gl.bufferData(gl.ARRAY_BUFFER, f, gl.STATIC_DRAW); it.N = N;
+      it.cv = document.createElement('canvas'); it.cv.className = 'fuzz'; it.cv.setAttribute('aria-hidden', 'true');
+      fig.style.position = 'relative'; fig.insertBefore(it.cv, im.nextSibling); it.ctx = it.cv.getContext('2d');
+      size(it); measure(it); it.shown = it.target; it.ready = true; it.state = ''; paint(it); kick();
+    }
+    function size(it) {
+      var im = it.im, dpr = Math.min(1.5, window.devicePixelRatio || 1), w = Math.max(2, Math.round(Math.min(1400, im.clientWidth * dpr))), h = Math.max(2, Math.round(w * im.clientHeight / Math.max(1, im.clientWidth)));
+      it.cv.style.left = im.offsetLeft + 'px'; it.cv.style.top = im.offsetTop + 'px'; it.cv.style.width = im.clientWidth + 'px'; it.cv.style.height = im.clientHeight + 'px';
+      it.cv.width = it.w = w; it.cv.height = it.h = h; it.cov = cover(it);
+      if (gcv.width < w || gcv.height < h) { gcv.width = Math.max(gcv.width, w); gcv.height = Math.max(gcv.height, h); }
+    }
+    function measure(it) {
+      var r = it.im.getBoundingClientRect(), vh = window.innerHeight || 1;
+      it.target = clamp((vh * .98 - r.top) / (r.height * .5 + vh * .36), 0, 1);
+      it.live = r.bottom > -60 && r.top < vh + 60;
+    }
+    function paint(it) {
+      var st = it.shown >= .9995 ? 'done' : 'dust';
+      if (st !== it.state) { it.state = st; it.im.style.opacity = st === 'done' ? '' : '0'; it.cv.style.display = st === 'done' ? 'none' : 'block'; }
+      if (st === 'done') return;
+      gl.viewport(0, gcv.height - it.h, it.w, it.h); gl.enable(gl.SCISSOR_TEST); gl.scissor(0, gcv.height - it.h, it.w, it.h);
+      gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.useProgram(pic.p); gl.disable(gl.BLEND); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, it.tex);
+      gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.disableVertexAttribArray(1); gl.disableVertexAttribArray(2);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      gl.uniform1i(pic.U.uImg, 0); gl.uniform4fv(pic.U.uCover, it.cov); gl.uniform2f(pic.U.uRes, it.w, it.h); gl.uniform1f(pic.U.uP, it.shown); gl.uniform1f(pic.U.uT, clock); gl.uniform1f(pic.U.uSeed, it.n * 5.3);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      gl.useProgram(dust.p); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.bindBuffer(gl.ARRAY_BUFFER, it.buf);
+      gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 36, 0); gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 2, gl.FLOAT, false, 36, 16); gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 3, gl.FLOAT, false, 36, 24);
+      gl.uniform1f(dust.U.uP, it.shown); gl.uniform1f(dust.U.uT, clock); gl.uniform1f(dust.U.uPx, Math.max(1, it.w / 760)); gl.uniform1f(dust.U.uSeed, it.n * 5.3);
+      gl.drawArrays(gl.POINTS, 0, it.N);
+      it.ctx.clearRect(0, 0, it.w, it.h); it.ctx.drawImage(gcv, 0, 0, it.w, it.h, 0, 0, it.w, it.h);
+    }
+    function frame(now) {
+      raf = 0;
+      var dt = last ? Math.min(.05, (now - last) / 1000) : 0, again = false; last = now; clock += dt;
+      items.forEach(function (it) {
+        if (!it.ready) return;
+        it.shown += (it.target - it.shown) * (1 - Math.pow(.86, dt * 60 || 1));
+        if (Math.abs(it.target - it.shown) < .0006) it.shown = it.target;
+        if (!it.live) it.shown = it.target;                       // off screen: no need to animate
+        if (it.live || it.state !== (it.shown >= .9995 ? 'done' : 'dust')) paint(it);
+        if (it.live && it.shown < .9995 && it.shown > 0) again = true;
+        if (it.shown !== it.target) again = true;
+      });
+      if (again) raf = requestAnimationFrame(frame); else last = 0;
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+    function onScroll() { items.forEach(function (it) { if (it.ready) measure(it); }); kick(); }
+    function onResize() { items.forEach(function (it) { if (it.ready) { size(it); measure(it); it.state = ''; paint(it); } }); kick(); }
+    items.forEach(function (it) { if (it.im.complete && it.im.naturalWidth) setup(it); else it.im.addEventListener('load', function () { setup(it); }, { once: true }); });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+    gcv.addEventListener('webglcontextlost', function () { items.forEach(function (it) { if (it.ready) { it.ready = false; it.im.style.opacity = ''; it.cv.style.display = 'none'; } }); });
   })();
 })();
 </script>
