@@ -8,20 +8,24 @@
 <meta name="description" content="Alexandre Rollet, aerospace engineering student at ESILV. Lead Software Engineer for STAR-D, a student experiment flying on REXUS 38 in March 2027.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap">
 <style>
 /* Layout: a four-column engineering grid with hairlines centred in its gutters. Type and data sit on it; photos run edge to edge. */
 :root {
-  --bg: #0A0B0C;
-  --fg: #F3F4F2;
-  --fg-2: #B4B8BB;
-  --muted: #878C91;
-  --rule: #26292C;
-  --rule-2: #3D4145;
-  --grid: #15171A;
-  --accent: #F5B041;     /* the amber ring of the STAR-D patch */
-  --on-accent: #140E02;
-  --sans: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* palette: Shadow Grey #2D2A32 (page ground darkened to #232028), Golden Glow #DDD92A, Banana Cream #EAE151, Vanilla Custard #EEEFA8, Porcelain #FAFDF6; every colour below is one of these */
+  --bg: #232028;                       /* Shadow Grey, a step darker */
+  --fg: #FAFDF6;                       /* Porcelain */
+  --fg-2: rgba(250, 253, 246, .74);    /* Porcelain, softened for secondary text */
+  --muted: rgba(250, 253, 246, .56);   /* Porcelain, labels */
+  --rule: rgba(250, 253, 246, .13);    /* Porcelain hairline */
+  --rule-2: rgba(250, 253, 246, .26);
+  --grid: rgba(250, 253, 246, .05);
+  --accent: #DDD92A;                   /* Golden Glow */
+  --accent-2: #EAE151;                 /* Banana Cream, hover */
+  --soft: #EEEFA8;                     /* Vanilla Custard, quiet highlights */
+  --on-accent: #232028;
+  /* SF Pro cannot be hosted (Apple licence): Apple devices render it as the system font, everything else gets Inter */
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Inter", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --wrap: 1376px;
   --gut: 16px;
@@ -48,24 +52,20 @@ button { font: inherit; color: inherit; cursor: pointer; border-radius: 0; }
   padding-right: max(var(--gut), env(safe-area-inset-right, 0px));
 }
 .g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); }
-.grid-lines { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-.grid-lines .g4 { height: 100%; width: min(100% - 2 * var(--gut), var(--wrap) - 2 * var(--gut)); margin-inline: auto; }
-.grid-lines i { position: relative; left: -12px; border-left: 1px solid var(--grid); }
-.grid-lines i:first-child { border: 0; }
-@media (max-width: 900px) { .grid-lines { display: none; } }
+/* background: the hero stars, now one faint field behind the whole page, with a little depth on scroll */
+.sky { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
 
-.eye { margin: 0; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.eye { margin: 0; font: 400 13.5px/1.4 var(--sans); color: var(--muted); }
 h1, h2, h3, h4 { margin: 0; font-weight: 500; text-wrap: balance; }
 h1 { font-size: clamp(48px, 7vw, 104px); line-height: .95; letter-spacing: -.04em; }
-h2 { font-size: clamp(44px, 5.4vw, 80px); line-height: .95; letter-spacing: -.035em; }
+h2 { font-size: clamp(44px, 5.4vw, 80px); line-height: .95; letter-spacing: -.035em; color: var(--accent); --flow-ink: var(--accent); }
 h3 { font-size: clamp(28px, 2.8vw, 38px); line-height: 1.1; letter-spacing: -.02em; }
 
 /* ---------- top bar ---------- */
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--rule); }
 .bar .wrap { display: flex; align-items: center; gap: 24px; height: var(--bar-h); }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.brand b { font: 500 15px/1 var(--sans); white-space: nowrap; }
-.brand i { width: 7px; height: 7px; background: var(--accent); }
+.brand b { font: 500 15px/1 var(--sans); white-space: nowrap; color: var(--accent); }
 .bar nav { display: flex; gap: 22px; margin-left: auto; }
 .bar nav a { padding-block: 6px; font: 400 14px/1 var(--sans); color: var(--fg-2); text-decoration: none; white-space: nowrap; border-bottom: 1px solid transparent; }
 .bar nav a:hover { color: var(--fg); }
@@ -79,13 +79,15 @@ h3 { font-size: clamp(28px, 2.8vw, 38px); line-height: 1.1; letter-spacing: -.02
 }
 
 /* ---------- hero ---------- */
-.hero { padding-block: clamp(40px, 5vw, 72px) 0; }
+/* opaque, so the page grid stops behind the opening; the stars are the FrameSat field */
+.hero { position: relative; padding-block: clamp(40px, 5vw, 72px) 0; }
+.hero-in { position: relative; }
 .hero-l { grid-column: 1 / 4; min-width: 0; }
 .hero-l .eye { margin-bottom: 16px; }
 .patch { grid-column: 4; margin: 0; }
 .patch img { width: 100%; height: auto; }
 .lede { margin: 20px 0 24px; max-width: 32em; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
-dt { font: 500 11px/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+dt { font: 400 13.5px/1.6 var(--sans); color: var(--muted); }
 dd { margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0; padding: 0; list-style: none; font: 500 12px/1 var(--mono); color: var(--fg); }
 .chips li { padding: 6px 8px; border: 1px solid var(--rule-2); }
@@ -95,7 +97,7 @@ dd { margin: 0; }
 .status .focus { grid-column: span 2; }
 .status small { display: block; margin-top: 8px; font-size: 13.5px; line-height: 1.35; color: var(--fg-2); }
 .status .ph { display: block; margin-top: 4px; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.3; letter-spacing: -.01em; }
-.status .ph em { display: block; font-style: normal; color: var(--accent); }
+.status .ph em { display: block; font-style: normal; color: var(--soft); }
 .ctas { display: flex; flex-wrap: wrap; gap: 8px; }
 .btn {
   display: inline-block; padding: 12px 18px; border: 1px solid var(--rule-2);
@@ -103,6 +105,7 @@ dd { margin: 0; }
 }
 .btn:hover { border-color: var(--fg); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
 @media (max-width: 900px) {
   .hero-l { grid-column: 1 / -1; }
   .patch { grid-column: 1 / -1; width: 160px; margin-top: 28px; }
@@ -195,26 +198,28 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .langs .eye { grid-column: 1 / -1; margin-bottom: 8px; }
 .langs > div { min-width: 0; }
 .langs b { display: block; font: 500 clamp(48px, 5.4vw, 80px)/1 var(--sans); letter-spacing: -.04em; color: var(--accent); }
-.langs small, .first small { display: block; margin-top: 6px; font: 400 12.5px/1.4 var(--mono); color: var(--fg-2); }
+.langs small { display: block; margin-top: 6px; font: 400 12.5px/1.4 var(--mono); color: var(--fg-2); }
 .role { padding-block: 12px 16px; border-bottom: 1px solid var(--rule); }
 .role h4 { margin: 2px 0 14px; font-size: 22px; line-height: 1.2; letter-spacing: -.01em; }
-.chain { row-gap: 6px; font-size: 11px; }
-.chain li + li { position: relative; margin-left: 14px; }
-.chain li + li::before { content: "→"; position: absolute; left: -16px; top: 6px; color: var(--muted); }
-.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); }
-.tiles > div { min-width: 0; padding-block: 12px 14px; border-bottom: 1px solid var(--rule); }
-.first b { display: block; font: 500 clamp(52px, 6.4vw, 96px)/1 var(--sans); letter-spacing: -.04em; }
-.first small { max-width: 16em; font-size: 13.5px; }
+.role p { margin: 6px 0 0; max-width: 34em; font-size: 16px; line-height: 1.45; }
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; }
+.tiles > * { min-width: 0; margin: 0; padding-block: 12px 14px; border-bottom: 1px solid var(--rule); }
+/* the selection reads as one line: big ordinal, then what it means */
+.first { display: flex; align-items: center; gap: 14px; }
+.first b { font: 500 clamp(44px, 4.4vw, 60px)/.9 var(--sans); letter-spacing: -.04em; }
+.first span { font-size: 15px; line-height: 1.3; }
 .tiles .wide { grid-column: 1 / -1; }
-.map { grid-column: 3 / 5; margin: 0; max-width: 420px; }
+.tiles .doc { font-size: 15px; line-height: 1.5; color: var(--fg-2); }
+.tiles .doc strong { color: var(--fg); }
+@media (max-width: 640px) { .tiles { grid-template-columns: minmax(0, 1fr); } }
+.map { grid-column: 3 / 5; justify-self: center; width: 100%; margin: 0; max-width: 420px; }
 .map svg { display: block; width: 100%; height: auto; margin-top: 10px; }
-.map .land { fill: none; stroke: #4A4E52; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0 9; }
-.map .route { fill: none; stroke: var(--fg-2); stroke-width: 1.2; stroke-dasharray: 3 5; }
-.map circle { fill: var(--accent); }
+.map .route { fill: none; stroke: var(--fg); stroke-width: 1.4; stroke-dasharray: 3 5; }
+.map circle { fill: var(--fg); stroke: var(--bg); stroke-width: 2; }
 .map text { paint-order: stroke; stroke: var(--bg); stroke-width: 6px; stroke-linejoin: round; }
 .map .nm { font: 500 20px var(--sans); fill: var(--fg); }
 .map .nm tspan { font-weight: 400; fill: var(--fg-2); }
-.map .rl { font: 500 14px var(--mono); letter-spacing: .04em; fill: var(--muted); text-transform: uppercase; }
+.map .rl { font: 400 15px var(--sans); fill: var(--muted); }
 .map figcaption { margin-top: 8px; font-size: 14px; color: var(--fg-2); }
 @media (max-width: 900px) { .mission > div, .map { grid-column: 1 / -1; } }
 
@@ -228,67 +233,61 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 }
 .console { height: 100%; max-width: calc(var(--wrap) - 2 * var(--gut)); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr) 448px; column-gap: 24px; }
 .plotcol { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-width: 0; min-height: 0; }
-.ro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 16px; border-top: 1px solid var(--rule); }
-.ro > div { min-width: 0; padding-block: 8px 9px; border-bottom: 1px solid var(--rule); }
-.ro .eye { display: block; font-size: 10px; letter-spacing: .1em; }
-.ro b { display: block; margin-top: 3px; font: 400 21px/1.15 var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ro .c-met { grid-column: span 2; }
-.ro .c-met b { font-size: clamp(26px, 2.8vw, 36px); letter-spacing: -.02em; }
-.ro small { margin-left: 8px; font: 400 11px/1 var(--mono); color: var(--fg-2); }
-.modes, .sigs { display: flex; gap: 2px; margin-top: 5px; font: 500 12px/1 var(--mono); color: var(--muted); }
-.modes i, .sigs i { font-style: normal; padding: 4px 6px; }
-.modes i.on { background: var(--accent); color: var(--on-accent); }
-.sigs { gap: 10px; }
-.sigs i { display: flex; align-items: center; gap: 5px; padding: 4px 0; }
-.sigs i::before { content: ""; width: 7px; height: 7px; border: 1px solid var(--rule-2); }
-.sigs i.on { color: var(--fg); }
-.sigs i.on::before { background: var(--accent); border-color: var(--accent); }
+.ro {
+  display: grid; grid-template-columns: max-content max-content minmax(0, 1fr) minmax(0, 1.2fr); column-gap: 28px;
+  border-block: 1px solid var(--rule);
+}
+.ro > div { min-width: 0; padding-block: 8px 10px; }
+.ro .eye { display: block; font-size: 12.5px; }
+.ro b { display: block; margin-top: 4px; font: 400 clamp(24px, 2.6vw, 34px)/1.1 var(--mono); letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* mode and RXSM signals: each code on its own line with its meaning; the active ones light up */
+.legend { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.2; color: var(--muted); }
+.legend li { display: flex; align-items: center; gap: 8px; padding-block: 2px; }
+.legend i { flex: none; width: 3.8em; padding: 3px 5px; font: 500 11px/1 var(--mono); font-style: normal; }
+.legend li.on { color: var(--fg); }
+.legend li.on i { background: var(--accent); color: var(--on-accent); }
 .plot { position: relative; min-height: 0; margin-block: 10px; }
 .plot canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
 .fl-cap { height: 3.9em; margin: 0; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 14px; line-height: 1.4; color: var(--fg-2); }
 .fl-cap b { font-weight: 500; color: var(--fg); margin-right: 6px; }
-.skip { float: right; margin-left: 16px; font: 500 11px/1.8 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+.skip { float: right; margin-left: 16px; font: 500 13px/1.5 var(--sans); color: var(--accent); white-space: nowrap; }
 
-.soft { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding-left: 24px; border-left: 1px solid var(--rule); }
-.soft-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 8px; border-bottom: 1px solid var(--rule); }
-.code-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 16px 0 6px; font: 400 12px/1.2 var(--mono); color: var(--fg-2); }
-.code-meta .lang { font-size: 10px; letter-spacing: .1em; color: var(--muted); white-space: nowrap; }
+.soft { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding: 12px 0 0 24px; border-left: 1px solid var(--rule); }
+.code-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 6px; font: 400 12px/1.2 var(--mono); color: var(--fg-2); }
+.code-meta .lang { font: 400 12px/1.2 var(--sans); color: var(--muted); white-space: nowrap; }
 .code-t { margin: 0 0 14px; font: 500 20px/1.2 var(--sans); letter-spacing: -.01em; }
-.tabs { display: flex; gap: 2px; }
-.tabs button { padding: 5px 6px; border: 0; background: none; font: 500 10px/1 var(--mono); letter-spacing: .06em; color: var(--muted); }
-.tabs button:hover { color: var(--fg); }
-.tabs button.on { color: var(--on-accent); background: var(--accent); }
 .code-body { position: relative; flex: 0 1 auto; min-height: 0; overflow: hidden; padding-block: 8px; border-block: 1px solid var(--rule); font: 400 11.5px/1.75 var(--mono); }
-.code-src { margin: auto 0 0; padding-top: 12px; font: 400 10.5px/1.6 var(--mono); color: var(--muted); }
 .ln { display: flex; gap: 10px; padding-right: 4px; white-space: pre; }
 .ln i { flex: none; width: 20px; text-align: right; font-style: normal; color: var(--rule-2); }
 .ln code { font: inherit; color: var(--fg-2); }
-.ln.on { background: #1A1C1E; box-shadow: inset 1px 0 var(--accent); }
+.ln.on { background: rgba(250, 253, 246, .07); box-shadow: inset 1px 0 var(--accent); }
 .ln.on i { color: var(--accent); }
 .t-k, .t-f { color: var(--fg); } .t-n { color: var(--accent); } .t-c { color: var(--muted); }
 
-@media (max-width: 1100px) { .console { grid-template-columns: minmax(0, 1fr) 420px; column-gap: 16px; } .soft { padding-left: 16px; } .ro .c-met b { font-size: 26px; } .ro b { font-size: 17px; } .ro small { margin-left: 5px; font-size: 10px; } .sigs { gap: 7px; font-size: 11px; } }
+@media (max-width: 1100px) {
+  .console { grid-template-columns: minmax(0, 1fr) 420px; column-gap: 16px; }
+  .soft { padding-left: 16px; }
+  .ro { column-gap: 16px; }
+  .ro b { font-size: 24px; }
+  .legend { font-size: 11.5px; }
+}
 @media (max-width: 960px) {
   .console { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
-  .soft { padding-left: 0; border-left: 0; }
-  .code-meta { margin: 8px 0 2px; }
+  .soft { padding: 8px 0 0; border-left: 0; }
+  .code-meta { margin: 0 0 2px; }
   .code-t { margin-bottom: 6px; font-size: 15px; }
   .code-body { flex: none; height: 142px; padding-block: 4px; font-size: 11px; line-height: 1.6; }
-  .code-src { display: none; }
-  .ro { grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 10px; }
-  .ro > div { grid-column: span 3; padding-block: 5px 6px; }
-  .ro .c-met { grid-column: span 3; }
-  .ro .c-f { order: 1; }
-  .ro .c-3 { grid-column: span 2; order: 2; }
-  .ro b { font-size: 15px; margin-top: 1px; }
-  .ro .c-met b { font-size: 20px; }
-  .ro .eye { font-size: 9.5px; }
-  .modes, .sigs { margin-top: 3px; font-size: 11px; }
+  .ro { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 12px; }
+  .ro > div { padding-block: 5px 6px; }
+  .ro b { font-size: 20px; margin-top: 1px; }
+  .ro .eye { font-size: 11.5px; }
+  .legend { margin-top: 3px; font-size: 11px; }
+  .legend li { gap: 6px; padding-block: 1px; }
+  .legend i { font-size: 10px; padding: 2px 4px; }
   .fl-cap { height: 4.6em; font-size: 12.5px; padding-top: 5px; }
   .plot { margin-block: 6px; }
 }
 @media (max-width: 640px) {
-  .tabs button { padding: 4px 5px; }
   .code-meta { font-size: 10.5px; }
   .code-body { font-size: 10px; line-height: 1.7; }
   .ln { padding: 0 2px 0 6px; }
@@ -299,15 +298,15 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 /* ---------- interfaces and data flow ---------- */
 .dgm { position: relative; background: var(--bg); border-block: 1px solid var(--rule); }
 .dgm-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; border-bottom: 1px solid var(--rule); }
-.dgm-tab { padding: 13px 0 12px; border: 0; border-bottom: 1px solid transparent; margin-bottom: -1px; background: none; font: 500 11.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.dgm-tab { padding: 13px 0 12px; border: 0; border-bottom: 1px solid transparent; margin-bottom: -1px; background: none; font: 500 15px/1 var(--sans); color: var(--muted); }
 .dgm-tab:hover { color: var(--fg); }
 .dgm-tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
-.dgm-trace { margin-left: auto; padding: 7px 10px; border: 1px solid var(--rule-2); background: none; font: 500 11px/1 var(--mono); letter-spacing: .06em; }
+.dgm-trace { margin-left: auto; padding: 8px 12px; border: 1px solid var(--rule-2); background: none; font: 500 13px/1 var(--sans); }
 .dgm-trace:hover { border-color: var(--fg); }
 .dgm-b { display: grid; grid-template-columns: minmax(0, 1fr) 292px; gap: 32px; padding-block: 20px; }
 .dgm-b > * { min-width: 0; }
 #dgm-svg { display: block; width: 100%; height: auto; }
-.gl { font: 500 9.5px var(--mono); letter-spacing: .12em; fill: var(--muted); }
+.gl { font: 500 11.5px var(--sans); fill: var(--muted); }
 .gr { stroke: var(--rule); }
 .n { cursor: pointer; outline: none; transition: opacity .12s; }
 .n rect, .n path { fill: var(--bg); stroke: var(--rule-2); }
@@ -335,9 +334,8 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 #dgm-read p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--fg-2); }
 #dgm-read dl { margin: 0; border-top: 1px solid var(--rule); }
 #dgm-read dl div { display: grid; grid-template-columns: 4.6em minmax(0, 1fr); gap: 8px; padding-block: 5px; border-bottom: 1px solid var(--rule); }
-#dgm-read dt { font-size: 10px; line-height: 1.9; letter-spacing: .08em; }
+#dgm-read dt { font-size: 12.5px; line-height: 1.5; }
 #dgm-read dd { font-size: 13px; line-height: 1.4; color: var(--fg-2); overflow-wrap: anywhere; }
-#dgm-read .code { font: 400 12px/1.45 var(--mono); }
 #dgm-read ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.4; color: var(--muted); }
 #dgm-read ol li { display: grid; grid-template-columns: 4.6em minmax(0, 1fr); gap: 8px; padding-block: 5px; border-bottom: 1px solid var(--rule); }
 #dgm-read ol b { font: 500 11px/1.7 var(--mono); }
@@ -354,14 +352,14 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .seq li { position: relative; padding-top: 24px; min-width: 0; }
 .seq li::before { content: ""; position: absolute; left: 0; right: -16px; top: 4px; border-top: 1px solid var(--rule-2); }
 .seq li:last-child::before { right: 0; }
-.seq li::after { content: ""; position: absolute; left: 0; top: 0; width: 9px; height: 9px; background: var(--bg); border: 1px solid var(--muted); }
+.seq li::after { content: ""; position: absolute; left: 0; top: 0; width: 9px; height: 9px; background: var(--bg); border: 1px solid var(--muted); border-radius: 50%; }
 .seq li[data-s="done"]::after { background: var(--fg); border-color: var(--fg); }
 .seq li[data-s="next"]::after { background: var(--accent); border-color: var(--accent); }
-.seq .n-i { font: 500 11px/1 var(--mono); color: var(--muted); letter-spacing: .1em; }
+.seq .n-i { font: 400 12px/1 var(--mono); color: var(--muted); }
 .seq b { display: block; margin: 8px 0 4px; font: 500 20px/1.15 var(--sans); letter-spacing: -.01em; }
 .seq span { display: block; color: var(--fg-2); font-size: 13.5px; line-height: 1.4; }
 .seq .loc { margin-top: 10px; font: 400 11.5px/1.4 var(--mono); color: var(--fg); }
-.seq em { display: block; margin-top: 4px; font: normal 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.seq em { display: block; margin-top: 4px; font: normal 400 13px/1.3 var(--sans); color: var(--muted); }
 .seq li[data-s="next"] em { color: var(--accent); }
 @media (max-width: 960px) {
   .seq { grid-template-columns: minmax(0, 1fr); }
@@ -373,14 +371,42 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
   .seq .loc { margin-top: 4px; }
 }
 
-/* final integration: kept small, the hardware is the team's work */
-.module-row { margin-top: clamp(72px, 9vw, 128px); padding-top: 24px; border-top: 1px solid var(--rule); row-gap: 20px; }
-.module-text { grid-column: 1 / 3; }
-.module-text .eye { margin-bottom: 10px; }
-.module-text p:last-child { margin: 12px 0 0; max-width: 30em; font-size: 15px; line-height: 1.5; color: var(--fg-2); }
-.module-row figure { grid-column: 3 / 5; margin: 0; max-width: 400px; }
-.module-row img { width: 100%; height: auto; }
-@media (max-width: 860px) { .module-text, .module-row figure { grid-column: 1 / -1; } }
+/* ---------- final integration: the CAD becomes a golden mesh, then the real module builds itself, driven by scroll ---------- */
+/* static by default (heading, text, photo); script with WebGL pins the stage and plays the sequence */
+.build { position: relative; margin-top: clamp(72px, 9vw, 128px); }
+.build-stage { padding-block: 24px 0; }
+.build-in { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--gap); align-items: center; }
+.build-text { min-width: 0; }
+.phr { display: grid; }
+.phr > * { grid-area: 1 / 1; }
+.ph-x { margin: 0; justify-self: start; font: 500 clamp(34px, 4.2vw, 64px)/1.04 var(--sans); letter-spacing: -.035em; text-wrap: balance; padding-bottom: .08em; }
+.ph-x.pre { display: none; }
+.build-p { margin: 20px 0 0; max-width: 30em; font-size: 16px; line-height: 1.5; color: var(--fg-2); }
+.build-vis { position: relative; min-width: 0; }
+.build-vis img { display: block; width: 100%; max-width: 640px; height: auto; margin-inline: auto; }
+.build-vis canvas { display: none; }
+.flow-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.build.on { height: 400vh; }
+.build.on .build-stage {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--bar-h));
+  height: calc(100vh - var(--bar-h)); height: calc(100dvh - var(--bar-h)); padding-block: 16px;
+}
+.build.on .build-in { height: 100%; }
+.build.on .build-vis { height: 100%; display: flex; align-items: center; justify-content: center; }
+.build.on .build-vis img { display: none; }
+.build.on .build-vis canvas { display: block; }
+.build.on .ph-x.pre { display: block; }
+/* the wipe: transparent, a golden edge, the text, a golden edge, transparent; --b and --a move the two edges */
+.build.on .ph-x, .flow-on {
+  --a: 133%; --b: -45%;
+  background-image: linear-gradient(100deg, transparent calc(var(--b) - 8%), var(--accent) var(--b), var(--soft) calc(var(--b) + 6%), var(--flow-ink, var(--fg)) calc(var(--b) + 16%), var(--flow-ink, var(--fg)) calc(var(--a) - 18%), var(--soft) calc(var(--a) - 8%), var(--accent) calc(var(--a) - 2%), transparent calc(var(--a) + 6%));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+@media (max-width: 860px) {
+  .build-in { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
+  .build.on .build-in { grid-template-rows: auto minmax(0, 1fr); align-items: stretch; row-gap: 8px; }
+  .build-p { font-size: 15px; margin-top: 10px; }
+}
 
 /* C'Space */
 .leofly { width: 132px; height: auto; margin-bottom: 8px; }
@@ -427,13 +453,12 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .contact .tx { grid-column: 1 / 3; margin: 0; max-width: 28em; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
 .cbtns { grid-column: 3 / 5; display: grid; gap: 2px; }
 .cbtn { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 22px; font: 500 20px/1 var(--sans); letter-spacing: -.01em; text-decoration: none; }
-.cbtn svg { width: 18px; height: 18px; flex: none; }
 .cbtn.cv { background: var(--accent); color: var(--on-accent); }
 .cbtn.li { background: var(--fg); color: var(--bg); }
 .cbtn:hover { opacity: .9; }
 .mailrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 22px; border: 1px solid var(--rule-2); min-width: 0; }
 .mailrow span { font: 400 14px/1.3 var(--mono); overflow-wrap: anywhere; user-select: all; }
-.copy { flex: none; padding: 9px 12px; border: 1px solid var(--rule-2); background: none; font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.copy { flex: none; padding: 9px 12px; border: 1px solid var(--rule-2); background: none; font: 500 13px/1 var(--sans); }
 .copy:hover { border-color: var(--fg); }
 @media (max-width: 420px) { .mailrow { padding-left: 14px; } .mailrow span { font-size: 12px; } }
 @media (max-width: 860px) { .contact .tx, .cbtns { grid-column: 1 / -1; } .contact .tx { margin-bottom: 32px; } }
@@ -442,14 +467,42 @@ footer { border-top: 1px solid var(--rule); }
 footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 20px 28px; font: 400 12px/1.5 var(--mono); color: var(--muted); }
 footer a { text-decoration: none; }
 footer a:hover { color: var(--fg); }
+
+/* ---------- Pulse Glass cursor: a precise dot and a trailing glass lens that breathes; mouse and trackpad only ---------- */
+.cur { position: fixed; left: 0; top: 0; z-index: 100; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.cur.on { opacity: 1; }
+.cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--fg); box-shadow: 0 0 0 1px rgba(35, 32, 40, .5); }
+.cur-ring { width: 38px; height: 38px; margin: -19px 0 0 -19px; transition: opacity .25s, width .25s, height .25s, margin .25s; }
+.cur-ring i {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid rgba(250, 253, 246, .42);
+  background: radial-gradient(circle at 32% 28%, rgba(250, 253, 246, .24), rgba(250, 253, 246, .05) 55%, rgba(250, 253, 246, .02));
+  -webkit-backdrop-filter: blur(2.5px) saturate(1.6); backdrop-filter: blur(2.5px) saturate(1.6);
+  box-shadow: inset 0 1px 1px rgba(250, 253, 246, .4), 0 6px 16px rgba(35, 32, 40, .45);
+  animation: cur-pulse 2.6s ease-in-out infinite;
+  transition: transform .2s, border-color .25s, background .25s;
+}
+.cur-ring::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(221, 217, 42, .55); animation: cur-wave 2.6s ease-out infinite; }
+@keyframes cur-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+@keyframes cur-wave { 0% { transform: scale(1); opacity: .55; } 65%, 100% { transform: scale(1.75); opacity: 0; } }
+.cur-ring.hot { width: 58px; height: 58px; margin: -29px 0 0 -29px; }
+.cur-ring.hot i { border-color: rgba(221, 217, 42, .8); background: radial-gradient(circle at 32% 28%, rgba(238, 239, 168, .28), rgba(221, 217, 42, .09) 60%); }
+.cur-ring.down i { transform: scale(.82); animation: none; }
+html.has-cur, html.has-cur * { cursor: none !important; }
+@media (prefers-reduced-motion: reduce) { .cur-ring i, .cur-ring::after { animation: none; } }
+
+/* scroll reveals outside the module section: the same golden-edged wipe; the contact boxes sharpen into focus */
+.flow-on { width: fit-content; max-width: 100%; }
+.sec-head .tx { --flow-ink: var(--fg-2); }
+.cnt { display: inline-block; font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
-<div class="grid-lines" aria-hidden="true"><div class="g4"><i></i><i></i><i></i><i></i></div></div>
+<canvas class="sky" aria-hidden="true"></canvas>
 
 <header class="bar">
   <div class="wrap">
-    <a class="brand" href="#top"><i aria-hidden="true"></i><b class="full">Alexandre Rollet</b><b class="short">A. Rollet</b></a>
+    <a class="brand" href="#top"><b class="full">Project Portfolio</b><b class="short">Portfolio</b></a>
     <nav aria-label="Sections">
       <a href="#star-d">STAR-D</a>
       <a href="#cspace">C'Space</a>
@@ -462,10 +515,10 @@ footer a:hover { color: var(--fg); }
 <main id="top">
 
 <!-- ================= HERO ================= -->
-<section class="hero wrap">
+<section class="hero">
+  <div class="wrap hero-in">
   <div class="g4">
     <div class="hero-l">
-      <p class="eye">Project portfolio</p>
       <h1>Alexandre Rollet</h1>
       <p class="lede">
         Fourth-year aerospace and defence engineering student at ESILV, Paris.
@@ -473,8 +526,8 @@ footer a:hover { color: var(--fg); }
         85&nbsp;km on REXUS&nbsp;38 from Esrange, Sweden, in March&nbsp;2027.
       </p>
       <div class="ctas">
-        <a class="btn primary" href="#star-d">Explore STAR-D ↓</a>
-        <a class="btn" href="https://www.linkedin.com/in/alexandre-rollet" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn primary" href="#star-d">Explore STAR-D</a>
+        <a class="btn" href="https://www.linkedin.com/in/alexandre-rollet" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
     <figure class="patch">
@@ -495,13 +548,13 @@ footer a:hover { color: var(--fg); }
       <dd><ul class="chips"><li>EN</li><li>FR</li></ul><small>Bilingual</small></dd>
     </div>
   </dl>
+  </div>
 </section>
 
 <!-- ================= STAR-D ================= -->
 <section class="block" id="star-d">
   <div class="wrap">
     <div class="g4 sec-head">
-      <p class="eye">REXUS 38 · 2025–2027</p>
       <div style="grid-column: 1 / 3">
         <h2>STAR-D</h2>
         <p class="sub">Space Test of Amoeba Response: Dictyostelium</p>
@@ -525,10 +578,10 @@ footer a:hover { color: var(--fg); }
     </div>
 
     <dl class="g4 stats">
-      <div><dt>Apogee</dt><dd>85<small>km</small></dd></div>
-      <div><dt>Sensors + camera</dt><dd>6+1</dd></div>
-      <div><dt>Team</dt><dd>17<small>people</small></dd></div>
-      <div><dt>Launch, Esrange</dt><dd><small>Mar</small>2027</dd></div>
+      <div><dt>Apogee</dt><dd><span class="cnt" data-to="85">85</span><small>km</small></dd></div>
+      <div><dt>Sensors + camera</dt><dd><span class="cnt" data-to="6">6</span>+<span class="cnt" data-to="1">1</span></dd></div>
+      <div><dt>Team</dt><dd><span class="cnt" data-to="17">17</span><small>people</small></dd></div>
+      <div><dt>Launch, Esrange</dt><dd><small>Mar</small><span class="cnt" data-to="2027">2027</span></dd></div>
     </dl>
 
     <div class="g4 mission">
@@ -550,43 +603,45 @@ footer a:hover { color: var(--fg); }
           <span class="eye">Role</span>
           <h4>Lead Software Engineer</h4>
           <span class="eye">Data-flow architecture I designed</span>
-          <ol class="chips chain"><li>Acquisition</li><li>Sequencing &amp; logging</li><li>Storage</li><li>Telemetry</li><li>Uplink handling</li></ol>
+          <p>Acquisition, sequencing and logging, storage, telemetry and uplink handling.</p>
         </div>
         <div class="tiles">
-          <div class="first"><b>1st</b><small>French team selected in 9 years</small></div>
-          <div><span class="eye">Buses</span><ul class="chips"><li>SPI</li><li>I²C</li><li>UART</li><li>RS-422</li></ul></div>
-          <div class="wide"><span class="eye">SED software chapters</span><ul class="chips"><li>Written to ECSS standards</li><li>Defended at each review</li></ul></div>
+          <div class="first"><b>1st</b><span>French team selected<br>in 9 years</span></div>
+          <div><span class="eye">Interfaces</span><ul class="chips"><li>SPI</li><li>I²C</li><li>UART</li><li>RS-422</li></ul></div>
+          <p class="wide doc"><strong>Student Experiment Documentation</strong> written to ECSS standards and defended at each review.</p>
         </div>
       </div>
 
       <figure class="map">
-        <span class="eye">Where the work happens</span>
-        <svg viewBox="60 30 520 670" role="img" aria-labelledby="map-t">
-          <title id="map-t">Map of Europe with four sites: Paris, where the experiment is built; Oberpfaffenhofen (DLR), design review; Bremen (ZARM), integration tests; Esrange (SSC Space) in Sweden, training week and launch.</title>
-          <path class="land" d="M454.50 11.69h0.01M472.50 11.69h0.01M452.25 19.49h0.01M479.25 19.49h27M436.50 27.28h54M526.50 27.28h0.01M443.25 35.07h126M409.50 42.87h189M407.25 50.66h189M400.50 58.46h9M427.50 58.46h171M407.25 66.25h189M391.50 74.05h207M371.25 81.84h0.01M398.25 81.84h198M382.50 89.63h216M11.25 97.43h9M56.25 97.43h0.01M371.25 97.43h0.01M389.25 97.43h153M560.25 97.43h0.01M578.25 97.43h18M4.50 105.22h54M355.50 105.22h0.01M382.50 105.22h180M2.25 113.02h54M371.25 113.02h207M4.50 120.81h54M373.50 120.81h207M2.25 128.60h63M371.25 128.60h207M4.50 136.40h54M364.50 136.40h225M2.25 144.19h54M362.25 144.19h225M4.50 151.99h27M364.50 151.99h99M490.50 151.99h108M353.25 159.78h90M497.25 159.78h99M355.50 167.58h90M499.50 167.58h99M353.25 175.37h90M488.25 175.37h108M346.50 183.16h99M490.50 183.16h108M344.25 190.96h99M479.25 190.96h117M337.50 198.75h108M481.50 198.75h117M326.25 206.55h117M470.25 206.55h126M319.50 214.34h9M346.50 214.34h90M472.50 214.34h126M308.25 222.14h117M461.25 222.14h135M310.50 229.93h108M463.50 229.93h135M290.25 237.72h126M461.25 237.72h135M301.50 245.52h108M463.50 245.52h135M272.25 253.31h135M470.25 253.31h126M265.50 261.11h144M472.50 261.11h126M263.25 268.90h144M470.25 268.90h126M265.50 276.70h144M472.50 276.70h63M580.50 276.70h18M263.25 284.49h0.01M299.25 284.49h108M470.25 284.49h45M578.25 284.49h18M175.50 292.28h0.01M265.50 292.28h144M481.50 292.28h27M562.50 292.28h36M263.25 300.08h162M452.25 300.08h0.01M497.25 300.08h0.01M560.25 300.08h36M265.50 307.87h171M526.50 307.87h72M263.25 315.67h171M515.25 315.67h81M265.50 323.46h162M508.50 323.46h90M101.25 331.25h0.01M119.25 331.25h0.01M263.25 331.25h171M506.25 331.25h90M94.50 339.05h0.01M112.50 339.05h27M274.50 339.05h45M346.50 339.05h72M490.50 339.05h9M517.50 339.05h81M119.25 346.84h9M263.25 346.84h45M344.25 346.84h63M488.25 346.84h0.01M524.25 346.84h72M94.50 354.64h0.01M112.50 354.64h9M274.50 354.64h27M346.50 354.64h63M526.50 354.64h72M101.25 362.43h54M281.25 362.43h9M344.25 362.43h63M497.25 362.43h0.01M524.25 362.43h72M103.50 370.23h45M346.50 370.23h63M445.50 370.23h0.01M490.50 370.23h18M526.50 370.23h72M92.25 378.02h54M326.25 378.02h0.01M353.25 378.02h54M443.25 378.02h0.01M488.25 378.02h108M94.50 385.81h45M319.50 385.81h18M355.50 385.81h54M481.50 385.81h117M92.25 393.61h45M317.25 393.61h9M362.25 393.61h45M488.25 393.61h108M85.50 401.40h0.01M112.50 401.40h9M301.50 401.40h18M364.50 401.40h54M490.50 401.40h108M56.25 409.20h9M92.25 409.20h0.01M110.25 409.20h27M299.25 409.20h36M362.25 409.20h54M488.25 409.20h108M49.50 416.99h27M103.50 416.99h45M301.50 416.99h18M355.50 416.99h36M490.50 416.99h108M20.25 424.79h9M47.25 424.79h36M101.25 424.79h45M299.25 424.79h18M344.25 424.79h9M371.25 424.79h9M497.25 424.79h99M22.50 432.58h63M121.50 432.58h27M301.50 432.58h9M328.50 432.58h0.01M346.50 432.58h9M373.50 432.58h9M481.50 432.58h117M20.25 440.37h54M119.25 440.37h27M308.25 440.37h18M344.25 440.37h9M398.25 440.37h0.01M479.25 440.37h117M22.50 448.17h45M121.50 448.17h36M310.50 448.17h0.01M355.50 448.17h0.01M436.50 448.17h9M472.50 448.17h126M29.25 455.96h36M128.25 455.96h36M308.25 455.96h9M425.25 455.96h171M22.50 463.76h45M121.50 463.76h45M310.50 463.76h27M364.50 463.76h9M409.50 463.76h189M11.25 471.55h54M110.25 471.55h54M308.25 471.55h27M353.25 471.55h27M398.25 471.55h198M4.50 479.35h63M94.50 479.35h72M301.50 479.35h297M11.25 487.14h45M101.25 487.14h63M263.25 487.14h333M4.50 494.93h18M103.50 494.93h81M256.50 494.93h342M83.25 502.73h108M245.25 502.73h351M94.50 510.52h90M238.50 510.52h360M110.25 518.32h63M236.25 518.32h360M94.50 526.11h72M229.50 526.11h369M83.25 533.90h99M218.25 533.90h0.01M236.25 533.90h360M76.50 541.70h18M121.50 541.70h9M148.50 541.70h18M202.50 541.70h396M191.25 549.49h405M184.50 557.29h414M182.25 565.08h414M130.50 572.88h0.01M166.50 572.88h432M128.25 580.67h9M164.25 580.67h432M76.50 588.46h0.01M94.50 588.46h0.01M130.50 588.46h468M83.25 596.26h27M128.25 596.26h468M76.50 604.05h522M83.25 611.85h513M94.50 619.64h504M110.25 627.44h486M112.50 635.23h486M110.25 643.02h486M112.50 650.82h486M128.25 658.61h468M121.50 666.41h477M119.25 674.20h477M121.50 682.00h477M119.25 689.79h252M398.25 689.79h198M121.50 697.58h234M391.50 697.58h207M119.25 705.38h243M398.25 705.38h0.01M416.25 705.38h180M4.50 713.17h18M112.50 713.17h252M418.50 713.17h180M2.25 720.97h36M110.25 720.97h252M425.25 720.97h171M4.50 728.76h72M112.50 728.76h171M319.50 728.76h45M427.50 728.76h171M2.25 736.55h279M335.25 736.55h36M434.25 736.55h162M4.50 744.35h198M220.50 744.35h45M328.50 744.35h54M454.50 744.35h144M2.25 752.14h189M236.25 752.14h18M335.25 752.14h54M470.25 752.14h126M4.50 759.94h180M310.50 759.94h0.01M337.50 759.94h54M481.50 759.94h117M2.25 767.73h180M344.25 767.73h54M497.25 767.73h99M4.50 775.53h180M301.50 775.53h9M355.50 775.53h45M508.50 775.53h90M2.25 783.32h180M299.25 783.32h9M362.25 783.32h54M515.25 783.32h81M4.50 791.11h162M301.50 791.11h9M373.50 791.11h63M517.50 791.11h81M2.25 798.91h144M308.25 798.91h0.01M380.25 798.91h63M515.25 798.91h81M4.50 806.70h135M400.50 806.70h63M517.50 806.70h54M589.50 806.70h0.01M2.25 814.50h126M299.25 814.50h9M407.25 814.50h72M515.25 814.50h54M4.50 822.29h117M292.50 822.29h18M427.50 822.29h27M472.50 822.29h18M517.50 822.29h63M2.25 830.09h108M299.25 830.09h9M425.25 830.09h27M488.25 830.09h0.01M524.25 830.09h63"></path>
-          <path class="route" d="M191.2 600.3Q263.3 641.5 345.2 627.2"></path>
-          <path class="route" d="M191.2 600.3Q228.8 528.0 303.9 496.4"></path>
-          <path class="route" d="M191.2 600.3Q222.1 307.1 432.8 100.9"></path>
-          <circle cx="191.2" cy="600.3" r="6"></circle>
-          <circle cx="345.2" cy="627.2" r="4.5"></circle>
-          <circle cx="303.9" cy="496.4" r="4.5"></circle>
-          <circle cx="432.8" cy="100.9" r="4.5"></circle>
-          <text class="nm" x="176" y="596" text-anchor="end">Paris</text>
-          <text class="rl" x="176" y="614" text-anchor="end">Build</text>
-          <text class="nm" x="330" y="662">Oberpfaffenhofen<tspan> (DLR)</tspan></text>
-          <text class="rl" x="330" y="680">Design review</text>
-          <text class="nm" x="318" y="490">Bremen<tspan> (ZARM)</tspan></text>
-          <text class="rl" x="318" y="508">Integration tests</text>
-          <text class="nm" x="418" y="96" text-anchor="end">Esrange<tspan> (SSC Space)</tspan></text>
-          <text class="rl" x="418" y="114" text-anchor="end">Training week · Launch</text>
+        <svg viewBox="0 40 520 700" role="img" aria-labelledby="map-t">
+          <title id="map-t">Satellite map of Europe with four sites: Paris, where the experiment is built; Oberpfaffenhofen (DLR), design review; Bremen (ZARM), integration tests; Esrange (SSC Space) in Sweden, training week and launch.</title>
+          <defs>
+            <radialGradient id="map-fade-g" cx=".46" cy=".5" r=".62"><stop offset=".72" stop-color="#FAFDF6"></stop><stop offset="1" stop-color="#FAFDF6" stop-opacity="0"></stop></radialGradient>
+            <mask id="map-fade"><rect x="0" y="40" width="520" height="700" fill="url(#map-fade-g)"></rect></mask>
+          </defs>
+          <image href="assets/europe-map.webp" x="0" y="0" width="520" height="763" preserveAspectRatio="none" mask="url(#map-fade)"></image>
+          <path class="route" d="M159.1 554.1Q214 606 269.7 568.7"></path>
+          <path class="route" d="M159.1 554.1Q178 496 239.0 471.1"></path>
+          <path class="route" d="M159.1 554.1Q176 270 391.2 91.1"></path>
+          <circle cx="159.1" cy="554.1" r="6"></circle>
+          <circle cx="269.7" cy="568.7" r="4.5"></circle>
+          <circle cx="239.0" cy="471.1" r="4.5"></circle>
+          <circle cx="391.2" cy="91.1" r="4.5"></circle>
+          <text class="nm" x="145" y="550" text-anchor="end">Paris</text>
+          <text class="rl" x="145" y="568" text-anchor="end">Build</text>
+          <text class="nm" x="256" y="602">Oberpfaffenhofen<tspan> (DLR)</tspan></text>
+          <text class="rl" x="256" y="620">Design review</text>
+          <text class="nm" x="253" y="467">Bremen<tspan> (ZARM)</tspan></text>
+          <text class="rl" x="253" y="485">Integration tests</text>
+          <text class="nm" x="377" y="87" text-anchor="end">Esrange<tspan> (SSC Space)</tspan></text>
+          <text class="rl" x="377" y="105" text-anchor="end">Training week · Launch</text>
         </svg>
-        <figcaption>We build the experiment in Paris and travel for each milestone.</figcaption>
+        <figcaption>We build the experiment in Paris and travel for each milestone. Imagery: NASA Blue Marble.</figcaption>
       </figure>
     </div>
 
     <div class="g4 sub-head" id="flight-intro">
-      <p class="eye">Flight profile</p>
-      <h3>Scroll to fly</h3>
+      <h3>Flight profile</h3>
       <p class="tx">The plot follows your scroll, and the code panel shows the flight software I wrote for each stage, with comments shortened. The trajectory is a simple model; SODS at T−180 s, LO at T+0 and SOE at T+66 s are the real signal times.</p>
     </div>
   </div>
@@ -597,26 +652,21 @@ footer a:hover { color: var(--fg); }
       <div class="console">
         <div class="plotcol">
           <div class="ro">
-            <div class="c-met"><span class="eye">MET</span><b id="fl-met">T− 00:30.0</b></div>
-            <div><span class="eye">Mode</span><div class="modes" id="fl-modes"><i>NG</i><i>NF</i><i>NE</i></div></div>
-            <div><span class="eye">RXSM</span><div class="sigs" id="fl-sigs"><i>LO</i><i>SOE</i><i>SODS</i></div></div>
-            <div class="c-3"><span class="eye">Alt km</span><b id="fl-alt">0.0</b></div>
-            <div class="c-3"><span class="eye">Vz m/s</span><b id="fl-vz">+0</b></div>
-            <div class="c-3"><span class="eye">Accel g</span><b id="fl-acc">1.0</b></div>
-            <div class="c-f"><span class="eye">TM frame</span><b><span id="fl-frm">0570</span><small id="fl-crc">CRC OK</small></b></div>
+            <div><span class="eye">MET</span><b id="fl-met">T− 00:30.0</b></div>
+            <div><span class="eye">Alt km</span><b id="fl-alt">0.0</b></div>
+            <div><span class="eye">Mode</span><ul class="legend" id="fl-modes"><li><i>NG</i>Normal ground</li><li><i>NF</i>Normal flight</li><li><i>NE</i>Normal experiment</li></ul></div>
+            <div><span class="eye">RXSM signals</span><ul class="legend" id="fl-sigs"><li><i>LO</i>Lift-off</li><li><i>SOE</i>Start of experiment</li><li><i>SODS</i>Start of data storage</li></ul></div>
           </div>
           <div class="plot" id="fl-plot">
-            <canvas id="fl-canvas" role="img" aria-label="Altitude against mission time from T minus 30 to T plus 290 seconds, climbing to about 85 km, with markers for lift-off, burnout, start of experiment, apogee and end of microgravity, and the RXSM signals underneath."></canvas>
+            <canvas id="fl-canvas" role="img" aria-label="Altitude against mission time from T minus 30 to T plus 210 seconds, climbing to about 85 km at T plus 2 minutes, with markers for lift-off, burnout, start of experiment, apogee and end of microgravity. Landing, around T plus 10 minutes, is beyond the plot."></canvas>
           </div>
-          <p class="fl-cap"><a class="skip" href="#flight-end">Skip flight ↓</a><b id="fl-phase"></b><span id="fl-text"></span></p>
+          <p class="fl-cap"><a class="skip" href="#flight-end">Skip flight</a><b id="fl-phase"></b><span id="fl-text"></span></p>
         </div>
 
         <aside class="soft" aria-label="Flight software excerpt for this stage of the flight">
-          <div class="soft-h"><span class="eye">Onboard code</span><div class="tabs" id="fl-tabs"></div></div>
           <div class="code-meta"><span id="fl-file"></span><span class="lang" id="fl-lang"></span></div>
           <p class="code-t" id="fl-code-t"></p>
           <div class="code-body" id="fl-code"></div>
-          <p class="code-src">ESP32-S3 flight firmware in C (ESP-IDF)<br>Pi CM5 imaging and storage in Python</p>
         </aside>
       </div>
     </div>
@@ -625,9 +675,8 @@ footer a:hover { color: var(--fg); }
 
   <div class="wrap">
     <div class="g4 sub-head" style="margin-top: clamp(48px, 6vw, 88px)">
-      <p class="eye">What I've built</p>
-      <h3>Interfaces and data flow</h3>
-      <p class="tx">The links my flight software drives, and the data flow I designed to run across them.</p>
+      <h3>What I've built</h3>
+      <p class="tx">The interfaces my flight software drives, and the data flow I designed to run across them.</p>
     </div>
 
     <div class="dgm" id="dgm">
@@ -648,7 +697,6 @@ footer a:hover { color: var(--fg); }
     </div>
 
     <div class="g4 sub-head">
-      <p class="eye">Programme</p>
       <h3>Project timeline</h3>
       <p class="tx">The programme follows the milestones of a real space project, each one in a different place.</p>
     </div>
@@ -662,21 +710,37 @@ footer a:hover { color: var(--fg); }
       <li data-s="todo"><span class="n-i">07</span><b>Launch</b><span>Flight Readiness Review and flight</span><span class="loc">Esrange (SSC Space)</span><em>March 2027</em></li>
     </ol>
 
-    <div class="g4 module-row">
-      <div class="module-text">
-        <p class="eye">Final integration</p>
-        <h3>The module my software flies in</h3>
-        <p>The STAR-D experiment, integrated in its REXUS module. My contribution is the flight software and data-flow architecture that run it in flight.</p>
-      </div>
-      <figure>
-        <img src="assets/module-final.webp" width="1100" height="959" loading="lazy" alt="The final integrated STAR-D module on a table: a blue anodised REXUS cylinder with machined aluminium experiment hardware and yellow and red wiring visible through its open top and rectangular hatch.">
-      </figure>
-    </div>
+  </div>
 
+  <!-- Final integration: concept, golden mesh, then the real module building itself as the page scrolls -->
+  <div class="build" id="build">
+    <div class="build-stage">
+      <div class="wrap build-in">
+        <div class="build-text">
+          <div class="phr">
+            <p class="ph-x pre" id="ph-1" aria-hidden="true">The concept</p>
+            <p class="ph-x pre" id="ph-2" aria-hidden="true">The fully-integrated module</p>
+            <h3 class="ph-x" id="ph-3">The module my software flies in</h3>
+          </div>
+          <p class="build-p" id="build-p">The STAR-D experiment, integrated in its REXUS module. My contribution is the flight software and data-flow architecture that run it in flight.</p>
+        </div>
+        <div class="build-vis">
+          <canvas id="build-gl" role="img" aria-label="The STAR-D module, first as its CAD model, then as a golden wireframe mesh that rebuilds itself into the real anodised blue REXUS module."></canvas>
+          <img src="assets/module-real.webp" width="1100" height="940" loading="lazy" alt="The final integrated STAR-D module: a blue anodised REXUS cylinder with machined aluminium experiment hardware and yellow and red wiring visible through its open top and rectangular hatch.">
+        </div>
+      </div>
+    </div>
+    <svg class="flow-defs" aria-hidden="true" focusable="false">
+      <filter id="flow-1" x="-15%" y="-40%" width="130%" height="180%"><feTurbulence type="fractalNoise" baseFrequency="0.011 0.07" numOctaves="2" seed="3"></feTurbulence><feDisplacementMap id="flow-1-d" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
+      <filter id="flow-2" x="-15%" y="-40%" width="130%" height="180%"><feTurbulence type="fractalNoise" baseFrequency="0.011 0.07" numOctaves="2" seed="8"></feTurbulence><feDisplacementMap id="flow-2-d" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
+      <filter id="flow-3" x="-15%" y="-40%" width="130%" height="180%"><feTurbulence type="fractalNoise" baseFrequency="0.011 0.07" numOctaves="2" seed="13"></feTurbulence><feDisplacementMap id="flow-3-d" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
+    </svg>
+  </div>
+
+  <div class="wrap">
     <div class="g4 sub-head">
-      <p class="eye">Esrange · Jan 2026</p>
       <h3>Training Week</h3>
-      <p class="tx">Lectures, the PDR and a first week with the other Cycle 17 teams.</p>
+      <p class="tx">Esrange, January 2026. Lectures, the PDR and a first week with the other Cycle 17 teams.</p>
     </div>
   </div>
 
@@ -686,15 +750,15 @@ footer a:hover { color: var(--fg); }
       <div class="hgal-track">
         <figure class="hcard" style="--ar: 1.5">
           <img src="assets/cycle17-esrange.webp" width="1800" height="1200" loading="lazy" alt="Around a hundred students in winter coats in front of the SSC Space building at Esrange, with a sounding rocket on display behind them.">
-          <figcaption><span class="eye">Esrange · Jan 2026</span><p>REXUS/BEXUS Cycle 17 teams at SSC Space during Training Week.</p></figcaption>
+          <figcaption><p>REXUS/BEXUS Cycle 17 teams at SSC Space during Training Week.</p></figcaption>
         </figure>
         <figure class="hcard" style="--ar: 1.3333">
           <img src="assets/stard-team-esrange.webp" width="1400" height="1050" loading="lazy" alt="Four members of the STAR-D team standing in the snow in front of the SSC Space sign.">
-          <figcaption><span class="eye">Esrange · Jan 2026</span><p>Part of the STAR-D team at SSC Space.</p></figcaption>
+          <figcaption><p>Part of the STAR-D team at SSC Space.</p></figcaption>
         </figure>
         <figure class="hcard" style="--ar: 1.5713">
           <img src="assets/stw-software-lecture.webp" width="1400" height="891" loading="lazy" alt="A lecture hall lit in red, with a slide titled Software Design for REXUS and BEXUS Experiments.">
-          <figcaption><span class="eye">Training Week · Jan 2026</span><p>Software design lecture for REXUS and BEXUS experiments.</p></figcaption>
+          <figcaption><p>Software design lecture for REXUS and BEXUS experiments.</p></figcaption>
         </figure>
       </div>
       <div class="wrap hgal-foot">
@@ -709,12 +773,11 @@ footer a:hover { color: var(--fg); }
 <section class="block" id="cspace" style="padding-top: 0">
   <div class="wrap">
     <div class="g4 sec-head">
-      <p class="eye">C'Space · LéoFly · 2025–2026</p>
       <div style="grid-column: 1 / 3">
         <img class="leofly" src="assets/logo-leofly.webp" width="640" height="311" loading="lazy" alt="LéoFly">
-        <h2>Rockets</h2>
+        <h2 data-flow="0">Rockets</h2>
       </div>
-      <p class="tx">
+      <p class="tx" data-flow=".18">
         Two experimental mini-rockets built with LéoFly, ESILV's student aerospace association, for C'Space,
         the launch campaign run by CNES and Planète Sciences. Both were qualified by CNES controllers and flew.
       </p>
@@ -759,7 +822,6 @@ footer a:hover { color: var(--fg); }
 <section class="block" id="education" style="padding-top: 0">
   <div class="wrap">
     <div class="g4 sec-head">
-      <p class="eye">Paris · Melbourne</p>
       <h2>Education</h2>
       <p class="tx">An aerospace engineering degree in Paris, an exchange semester in Melbourne, and an international upbringing that included the UAE and Ghana.</p>
     </div>
@@ -767,7 +829,7 @@ footer a:hover { color: var(--fg); }
     <div class="g4 schools">
       <article class="school">
         <img class="logo" src="assets/logo-esilv.webp" width="192" height="192" loading="lazy" alt="ESILV, De Vinci Engineering School">
-        <div class="when">2023 → now · Paris</div>
+        <div class="when">2023 – now · Paris</div>
         <h3>ESILV</h3>
         <p class="deg">Engineering degree, 4th year (Master 1) · Aerospace &amp; Defence major</p>
         <ul>
@@ -777,7 +839,7 @@ footer a:hover { color: var(--fg); }
       </article>
       <article class="school">
         <img class="logo" src="assets/logo-swinburne.webp" width="400" height="202" loading="lazy" alt="Swinburne University of Technology">
-        <div class="when">Jul → Nov 2025 · Melbourne</div>
+        <div class="when">Jul – Nov 2025 · Melbourne</div>
         <h3>Swinburne University of Technology</h3>
         <p class="deg">Exchange semester · 50 credit points</p>
         <ul>
@@ -806,8 +868,7 @@ footer a:hover { color: var(--fg); }
         </figure>
       </div>
       <div class="fly-text">
-        <p class="eye">Pilot training</p>
-        <h3 style="margin-top: 10px">Learning to fly</h3>
+        <h3>Learning to fly</h3>
         <p>Initial training towards the Light Aircraft Pilot Licence (LAPL) at the Loire-Atlantique flying club, after the BIA, France's national aeronautics certificate.</p>
         <div class="fly-nums">
           <div><b>10<small>h</small></b><span class="eye">Flight hours</span></div>
@@ -819,15 +880,13 @@ footer a:hover { color: var(--fg); }
 </section>
 
 <!-- ================= CONTACT ================= -->
-<section class="block contact" id="contact" style="padding-top: 0">
+<section class="block contact" id="contact">
   <div class="wrap g4">
-    <p class="eye">Contact</p>
-    <h2>Let's talk</h2>
-    <p class="tx">I'm looking for a 4–5 month internship from April 2027 in flight software, avionics or space systems.</p>
-    <div class="cbtns">
+    <h2 data-flow="0" data-lift>Let's talk</h2>
+    <p class="tx" data-flow=".2">I'm looking for a 4–5 month internship from April 2027 in flight software, avionics or space systems.</p>
+    <div class="cbtns" data-blur>
       <a class="cbtn li" href="https://www.linkedin.com/in/alexandre-rollet" target="_blank" rel="noopener">
         LinkedIn
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 14 14 6M7 6h7v7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
       </a>
       <div class="mailrow">
         <span id="email">alexandre.rollet@edu.devinci.fr</span>
@@ -842,7 +901,7 @@ footer a:hover { color: var(--fg); }
 <footer>
   <div class="wrap">
     <span>© 2026 Alexandre Rollet</span>
-    <a href="#top">Back to top ↑</a>
+    <a href="#top">Back to top</a>
   </div>
 </footer>
 
@@ -853,6 +912,56 @@ footer a:hover { color: var(--fg); }
   var $ = function (id) { return document.getElementById(id); };
   var clamp = function (x, a, b) { return x < a ? a : x > b ? b : x; };
   var pad = function (n, w) { n = String(n); while (n.length < w) n = '0' + n; return n; };
+
+  // Star field behind the whole page (the FrameSat stars): seeded points that twinkle slowly and drift sideways;
+  // nearer, brighter ones also travel further as the page scrolls, which gives the plain background some depth
+  (function () {
+    var canvas = document.querySelector('canvas.sky');
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext('2d'), TAU = Math.PI * 2, W = 0, H = 0, raf = 0, clock = 0, last = 0, seed = 7;
+    function rand() {
+      seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    var STARS = [];
+    for (var i = 0; i < 200; i++) STARS.push([rand(), rand(), rand(), rand() * 6]);   // x, y, depth, twinkle phase
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      var sy = window.scrollY || 0, F = H * 1.3, drift = clock * 1.75;
+      for (var i = 0; i < STARS.length; i++) {
+        var s = STARS[i], d = s[2];
+        var y = ((s[1] * F - sy * (.03 + .2 * d)) % F + F) % F - (F - H) / 2;
+        if (y < -2 || y > H + 2) continue;
+        var tw = reduce ? 1 : .7 + .3 * Math.sin(clock * (.6 + d) + s[3]);
+        ctx.fillStyle = 'rgba(250,253,246,' + ((.08 + .34 * d) * tw).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.arc(((s[0] * W + drift * (.3 + d)) % W + W) % W, y, .5 + d * .8, 0, TAU);
+        ctx.fill();
+      }
+    }
+    function size() {
+      var dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = Math.max(1, window.innerWidth); H = Math.max(1, window.innerHeight);
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+    function frame(now) {
+      raf = 0;
+      clock += last ? Math.min(.05, (now - last) / 1000) : 0; last = now;
+      draw();
+      if (!document.hidden) raf = requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize', size);
+    size();
+    if (reduce) window.addEventListener('scroll', draw, { passive: true });
+    else {
+      raf = requestAnimationFrame(frame);
+      document.addEventListener('visibilitychange', function () { if (!document.hidden && !raf) { last = 0; raf = requestAnimationFrame(frame); } });
+    }
+  })();
 
   // Highlight the nav link of the section in view
   var links = document.querySelectorAll('.bar nav a');
@@ -922,32 +1031,18 @@ footer a:hover { color: var(--fg); }
     var ctx = canvas.getContext('2d'), stage = root.querySelector('.stage');
     var lerp = function (a, b, u) { return a + (b - a) * u; };
 
-    // Flight model in km and s. Schematic, apart from SODS at T-180, LO at T+0 and SOE at T+66.
-    var TB = 26, ACC = 0.0453, G = 0.00981, EL = 84 * Math.PI / 180;
-    var sE = Math.sin(EL);
-    var ZB = 0.5 * ACC * TB * TB * sE, VZB = ACC * TB * sE;
-    var T_APO = TB + VZB / G;
-    var DT_R = (VZB + Math.sqrt(VZB * VZB - 2 * G * (20 - ZB))) / G;   // ballistic until back at 20 km
-    var T_R = TB + DT_R, TAU = 20 / (G * DT_R - VZB);
-    var T_START = -30, T_SOE = 66, T_MU_END = 2 * T_APO - T_SOE, T_END = 290;
+    // Flight model in km and s. Schematic: constant thrust to burnout at T+26 s, then a coast whose
+    // deceleration is fitted so apogee lands at 85 km near T+2 min. SODS at T-180, LO at T+0 and SOE
+    // at T+66 are the real signal times. Landing is around T+10 min; the plot stops once only descent is left.
+    var TB = 26, T_APO = 120, Z_APO = 85;
+    var GE = Z_APO / (0.5 * (T_APO - TB) * T_APO), VZB = GE * (T_APO - TB);
+    var T_START = -30, T_SOE = 66, T_MU_END = 2 * T_APO - T_SOE, T_END = 210;
 
     function alt(t) {
       if (t <= 0) return 0;
-      if (t <= TB) return 0.5 * ACC * t * t * sE;
-      if (t <= T_R) { var d = t - TB; return ZB + VZB * d - 0.5 * G * d * d; }
-      return 20 * Math.exp(-(t - T_R) / TAU);
-    }
-    function vel(t) {   // m/s
-      if (t <= 0) return 0;
-      if (t <= TB) return ACC * t * sE * 1000;
-      if (t <= T_R) return (VZB - G * (t - TB)) * 1000;
-      return -alt(t) / TAU * 1000;
-    }
-    function acc(t) {   // sensed, in g
-      if (t <= 0) return 1;
-      if (t <= TB) return (ACC * sE + G) / G;
-      if (t <= T_R) return 0;
-      return alt(t) / (TAU * TAU) / G + 1;
+      if (t <= TB) return 0.5 * VZB / TB * t * t;
+      var d = t - T_APO;
+      return Math.max(0, Z_APO - 0.5 * GE * d * d);
     }
 
     // Scroll progress to mission time: more scroll is spent around LO and SOE
@@ -970,10 +1065,9 @@ footer a:hover { color: var(--fg); }
       [TB, 'Coast', 'Motor burnout. Every frame carries a CRC-16 and the ground station drops any that fail.'],
       [T_SOE, 'Start of experiment', 'SOE arrives at T+66 s. The software enters experiment mode and the sample is injected.'],
       [80, 'Microgravity', 'Raw video goes to the SSD on its own thread, so a slow write cannot stall the link.'],
-      [T_APO - 6, 'Apogee', 'Top of the flight, about 85 km above Esrange.'],
+      [T_APO - 6, 'Apogee', 'Top of the flight, about 85 km above Esrange, two minutes after lift-off.'],
       [T_APO + 10, 'Microgravity', 'Weightless on the way down. Logs rotate every 20 s and video every 30 s to bound the loss from a bad write.'],
-      [T_MU_END, 'Re-entry', 'Microgravity ends as the payload falls back into the atmosphere.'],
-      [T_R + 6, 'Descent', 'The payload comes down under parachute. SOE and SODS go off before power cutoff at T+600 s.']
+      [T_MU_END, 'Re-entry', 'Microgravity ends and the payload falls back into the atmosphere. It lands under parachute around T+10 min.']
     ];
 
     // Excerpts of the STAR-D flight software, one per stage of the flight. Code as in the repository;
@@ -1067,16 +1161,6 @@ footer a:hover { color: var(--fg); }
         '}'] }
     ];
 
-    // Same algorithm as crc16.c: the readout checks a real CRC over the simulated frame
-    function crc16(b) {
-      var c = 0xFFFF;
-      for (var i = 0; i < b.length; i++) {
-        c ^= b[i] << 8;
-        for (var j = 0; j < 8; j++) c = c & 0x8000 ? ((c << 1) ^ 0x1021) & 0xFFFF : (c << 1) & 0xFFFF;
-      }
-      return c;
-    }
-
     // ---- text helpers ----
     function met(t) {
       var d = Math.round(Math.abs(t) * 10), m = Math.floor(d / 600), s = (d % 600) / 10;
@@ -1116,25 +1200,18 @@ footer a:hover { color: var(--fg); }
     }
 
     // ---- static UI ----
-    var tabs = CODE.map(function (s) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.textContent = s.tab; b.title = s.title;
-      b.addEventListener('click', function () { jump(s.t + 0.2); });
-      $('fl-tabs').appendChild(b);
-      return b;
-    });
     var modes = [].slice.call($('fl-modes').children), sigs = [].slice.call($('fl-sigs').children);
 
     // ---- plot ----
-    var W = 1, H = 1, DPR = 1, AL = 38, AR = 10, TOPH = 30, AXH = 18, LH = 15;
-    var FG = '#F3F4F2', MID = '#878C91', DIM = '#54585C', LINE = '#26292C', ACCENT = '#F5B041';
-    var EVENTS = [[0, 'LO', 1], [TB, 'BURNOUT', 0, 1], [T_SOE, 'SOE', 1], [T_APO, 'APOGEE', 0], [T_MU_END, 'END µG', 0]];
+    var W = 1, H = 1, DPR = 1, AL = 38, AR = 10, TOPH = 30, AXH = 18;
+    var FG = '#FAFDF6', MID = 'rgba(250,253,246,.56)', DIM = 'rgba(250,253,246,.32)', LINE = 'rgba(250,253,246,.13)', ACCENT = '#DDD92A';
+    var EVENTS = [[0, 'LO', 1], [TB, 'Burnout', 0, 1], [T_SOE, 'SOE', 1], [T_APO, 'Apogee', 0], [T_MU_END, 'End µg', 0]];
     function size() {
       var r = canvas.getBoundingClientRect();
       W = Math.max(1, r.width); H = Math.max(1, r.height);
       DPR = Math.min(2, window.devicePixelRatio || 1);
       canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
-      AL = W < 480 ? 30 : 38; LH = H < 300 ? 13 : 15;
+      AL = W < 480 ? 30 : 38;
     }
     function X(t) { return AL + (t - T_START) / (T_END - T_START) * (W - AL - AR); }
     function cr(v) { return Math.round(v) + 0.5; }
@@ -1147,14 +1224,14 @@ footer a:hover { color: var(--fg); }
       ctx.lineWidth = 1;
       ctx.font = '400 10px "IBM Plex Mono", ui-monospace, monospace';
       ctx.textBaseline = 'middle';
-      var lanes = 4 * LH, yT = TOPH, yB = H - lanes - AXH, cx = cr(X(T));
+      var yT = TOPH, yB = H - AXH, cx = cr(X(T));
       function Y(z) { return yT + (1 - z / 100) * (yB - yT); }
 
       // axes: 10 km and 10 s ticks, labelled every 20 km and 60 s
       tx('km', 0, 8, MID);
       for (var z = 0; z <= 100; z += 10) {
         var y = cr(Y(z));
-        if (z % 20 === 0) { ln(AL, y, W - AR, y, z ? '#17191B' : LINE); tx(String(z), AL - 8, y, MID, 'right'); }
+        if (z % 20 === 0) { ln(AL, y, W - AR, y, z ? 'rgba(250,253,246,.05)' : LINE); tx(String(z), AL - 8, y, MID, 'right'); }
         ln(AL - 4, y, AL, y, z % 20 ? LINE : DIM);
       }
       ln(cr(AL), yT, cr(AL), yB, LINE);
@@ -1164,10 +1241,10 @@ footer a:hover { color: var(--fg); }
         if (t % 60 === 0) tx(t === 0 ? 'T+0' : '+' + t, x, cr(yB) + 12, MID, 'center');
       }
 
-      // event markers run from their label down through the plot and the signal lanes
+      // event markers run from their label down to the time axis
       EVENTS.forEach(function (e) {
         var x = cr(X(e[0]));
-        ln(x, e[3] ? 25 : 13, x, yB + AXH - 2, e[0] <= T ? '#3A3D40' : '#1F2123');
+        ln(x, e[3] ? 25 : 13, x, yB, e[0] <= T ? 'rgba(250,253,246,.22)' : 'rgba(250,253,246,.08)');
       });
 
       // predicted path, then the flown path (amber through microgravity)
@@ -1188,45 +1265,21 @@ footer a:hover { color: var(--fg); }
       EVENTS.forEach(function (e) {
         var done = e[0] <= T, c = done ? (e[2] ? ACCENT : FG) : MID, x = cr(X(e[0])), y = cr(Y(alt(e[0])));
         tx(e[1], x, e[3] ? 20 : 8, c, 'center');
-        ctx.fillStyle = done ? c : '#0A0B0C'; ctx.fillRect(x - 2.5, y - 2.5, 5, 5);
+        ctx.fillStyle = done ? c : '#232028'; ctx.fillRect(x - 2.5, y - 2.5, 5, 5);
         ctx.strokeStyle = c; ctx.strokeRect(x - 2.5, y - 2.5, 5, 5);
       });
 
-      // signal lanes: software mode, then the three RXSM discretes
-      var y0 = yB + AXH;
-      function lane(i, label, tOn) {
-        var yl = y0 + i * LH, hi = cr(yl + 2), lo = cr(yl + LH - 3), xOn = cr(X(tOn));
-        tx(label, 0, yl + LH / 2, MID);
-        function step() {
-          ctx.beginPath();
-          if (tOn <= T_START) { ctx.moveTo(X(T_START), hi); ctx.lineTo(X(T_END), hi); }
-          else { ctx.moveTo(X(T_START), lo); ctx.lineTo(xOn, lo); ctx.lineTo(xOn, hi); ctx.lineTo(X(T_END), hi); }
-          ctx.stroke();
-        }
-        ctx.strokeStyle = DIM; step();
-        ctx.save(); ctx.beginPath(); ctx.rect(0, yl, cx, LH); ctx.clip();
-        ctx.strokeStyle = FG; step();
-        ctx.restore();
-      }
-      tx('MODE', 0, y0 + LH / 2, MID);
-      [[T_START, 0, 'NG'], [0, T_SOE, 'NF'], [T_SOE, T_END, 'NE']].forEach(function (m) {
-        var on = T >= m[0] && (T < m[1] || m[1] === T_END);
-        ln(cr(X(m[0])), y0 + 1, cr(X(m[0])), y0 + LH - 2, DIM);
-        tx(m[2], X(m[0]) + 5, y0 + LH / 2, on ? ACCENT : MID);
-      });
-      lane(1, 'LO', 0);
-      lane(2, 'SOE', T_SOE);
-      lane(3, 'SODS', -180);
+      tx('landing ≈ T+10 min', W - AR, cr(Y(0)) - 9, MID, 'right');   // the plot stops during descent
 
       // cursor
       var yNow = cr(Y(alt(T)));
-      ln(AL, yNow, cx, yNow, '#3A3D40');
-      ln(cx, yT - 2, cx, H, MID);
+      ln(AL, yNow, cx, yNow, 'rgba(250,253,246,.22)');
+      ln(cx, yT - 2, cx, yB + 4, MID);
       ctx.fillStyle = FG; ctx.fillRect(cx - 2.5, yNow - 2.5, 5, 5);
     }
 
     // ---- readouts ----
-    var cache = {}, slot = -1, run = [], cur = -1, modeN = -1, frameN = -1;
+    var cache = {}, slot = -1, run = [], cur = -1, modeN = -1;
     function set(id, v) { if (cache[id] !== v) { cache[id] = v; $(id).textContent = v; } }
     function renderCode(i) {
       var s = CODE[i], st = { block: false }, html = '';
@@ -1239,7 +1292,6 @@ footer a:hover { color: var(--fg); }
       $('fl-code').innerHTML = html;
       $('fl-code').scrollTop = 0;
       set('fl-file', s.file); set('fl-lang', s.lang); set('fl-code-t', s.title);
-      tabs.forEach(function (b, n) { b.classList.toggle('on', n === i); });
       cur = -1;
     }
     function hud(T) {
@@ -1248,9 +1300,6 @@ footer a:hover { color: var(--fg); }
       for (var i = 0; i < STORY.length; i++) if (T >= STORY[i][0]) st = STORY[i];
       set('fl-phase', st[1]); set('fl-text', st[2]);
       set('fl-alt', alt(T).toFixed(1));
-      var v = vel(T);
-      set('fl-vz', (v < -0.5 ? '−' : '+') + Math.abs(Math.round(v)));
-      set('fl-acc', acc(T).toFixed(1));
 
       // NG on the ground, NF from LO, NE from SOE. SOE stays on past this plot: NE runs 474 s, to T+540.
       var m = T < 0 ? 0 : T < T_SOE ? 1 : 2;
@@ -1258,15 +1307,6 @@ footer a:hover { color: var(--fg); }
       sigs[0].classList.toggle('on', T >= 0);
       sigs[1].classList.toggle('on', T >= T_SOE);
       sigs[2].classList.add('on');
-
-      // One telemetry frame a second since power-on at T-600
-      var f = Math.floor(T + 600);
-      if (f !== frameN) {
-        frameN = f;
-        var a = Math.round(alt(T) * 100), c = crc16([f >> 8 & 255, f & 255, m, a >> 8 & 255, a & 255]);
-        set('fl-frm', pad(f, 4));
-        set('fl-crc', 'CRC ' + pad(c.toString(16).toUpperCase(), 4) + ' OK');
-      }
 
       var si = 0;
       for (i = 0; i < CODE.length; i++) if (T >= CODE[i].t) si = i;
@@ -1329,24 +1369,24 @@ footer a:hover { color: var(--fg); }
         intro: 'Every link my flight software drives, from the sensors to the ground station. Hover, tap or tab to a node.',
         size: { w: [920, 330], n: [358, 478] },
         groups: {
-          w: [['SENSORS', 0, 178, 10], ['FLIGHT COMPUTERS', 262, 610, 10], ['MICROFLUIDIC ASSEMBLY', 700, 920, 10], ['STORAGE', 700, 920, 136], ['ROCKET', 262, 610, 262], ['GROUND', 700, 920, 262]],
-          n: [['SENSORS', 0, 358, 8], ['FLIGHT COMPUTERS', 192, 358, 180]]
+          w: [['Sensors', 0, 178, 10], ['Flight computers', 262, 610, 10], ['Microfluidic assembly', 700, 920, 10], ['Storage', 700, 920, 136], ['Rocket', 262, 610, 262], ['Ground', 700, 920, 262]],
+          n: [['Sensors', 0, 358, 8], ['Flight computers', 192, 358, 180]]
         },
         nodes: {
-          lsm: { t: 'LSM6DSM', s: 'Inertial · SPI', w: [0, 30, 178, 40], n: [0, 24, 166, 40], d: [['Part', 'LSM6DSM IMU, ±16 g, ±2000 dps'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Motion data (DA-03). Readings frozen for 20 samples raise a latched fault.'], ['Code', 'imu_driver.c, health_monitor.c']] },
-          abp: { t: 'ABP', s: 'Fluid pressure · SPI', w: [0, 78, 178, 40], n: [0, 70, 166, 40], d: [['Part', 'ABP pressure sensor'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Fluid pressure in the experiment (DA-09).'], ['Code', 'sensors.c, health_monitor.c']] },
-          slf: { t: 'SLF3S', s: 'Fluid flow · I²C', w: [0, 126, 178, 40], n: [0, 116, 166, 40], d: [['Part', 'SLF3S flow sensor, 40 ml/min full scale'], ['Bus', 'I²C'], ['Rate', '10 Hz'], ['Role', 'Fluid flow (DA-10). A CRC failure on the sensor word raises a latched fault.'], ['Code', 'i2c_interface.c, sensors.c']] },
-          pt: { t: 'PT100', s: 'MFC temp · SPI', w: [0, 174, 178, 40], n: [192, 24, 166, 40], d: [['Part', 'PT100 with MAX31865'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Closed-loop temperature control, 21–23 °C (DA-04). No valid reading, heaters off.'], ['Code', 'pt100_driver.c, temperature_control.c']] },
-          ext: { t: 'External BME280', s: 'Environment · SPI', w: [0, 222, 178, 40], n: [192, 70, 166, 40], d: [['Part', 'BME280, outside the pressure vessel'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Environment (DA-02). Pressure is only range-checked on the ground: above about 9 km it reads below the sensor floor.'], ['Code', 'bme_driver.c, health_monitor.c']] },
-          int: { t: 'BME280', s: 'Environment · SPI', w: [0, 270, 178, 40], n: [192, 116, 166, 40], d: [['Part', 'BME280, inside the pressure vessel'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Environment (DA-02). A falling pressure reading indicates a leak.'], ['Code', 'bme_driver.c, health_monitor.c']] },
-          esp: { t: 'ESP32', s: 'Flight computer · C', big: 1, w: [262, 30, 150, 200], n: [0, 196, 150, 56], d: [['Part', 'ESP32-S3, C on ESP-IDF'], ['Bus', 'SPI, I²C, UART, RS-422'], ['Role', 'Owns the mission: mode transitions, sensor reads, telemetry and the 32-bit error word.'], ['Code', 'state_machine.c, error_manager.c, watchdog.c']] },
-          pi: { t: 'RasPi', s: 'Imaging · Python', big: 1, w: [470, 30, 140, 100], n: [208, 196, 150, 56], d: [['Part', 'Raspberry Pi CM5, Python'], ['Bus', 'SPI to the ESP32 at 1 MHz'], ['Rate', 'Status 1 Hz, sensors 10 Hz'], ['Role', 'Drives the experiment hardware, records video and writes logs. Keeps recording if the ESP32 link drops.'], ['Code', '__main__.py, spi_link.py']] },
-          fl: { t: 'Ext. flash', s: 'Buffer · SPI', w: [470, 170, 140, 40], n: [22, 266, 144, 40], d: [['Part', 'W25Q01JV external flash'], ['Bus', 'SPI'], ['Role', 'Temporary storage, so the ESP32 can handle more data if needed (DA-01).']] },
-          stp: { t: 'Stepper motors', s: 'GPIO', w: [700, 30, 220, 40], n: [192, 266, 144, 40], d: [['Part', 'NEMA-8 syringe pump, 28BYJ-48 focus'], ['Bus', 'GPIO'], ['Role', 'Inject particles and focus the microscope during the experiment (DA-13).']] },
-          cam: { t: 'RasPi Camera V2', s: 'SPI', w: [700, 78, 220, 40], n: [192, 314, 144, 40], d: [['Part', 'Camera V2 (IMX219), 1640×1232 raw YUV420'], ['Bus', 'SPI'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Role', 'Microscope video (DA-05). Declared stalled after 20 frames without a new timestamp.'], ['Code', 'camera_control.py, video_writer.py']] },
-          ssd: { t: 'M.2 data SSD', s: 'SPI', w: [700, 154, 220, 40], n: [192, 362, 144, 40], d: [['Part', 'M.2 2230 SSD, 128 GB'], ['Bus', 'SPI'], ['Rate', 'About 127 MB/s of raw video in NE'], ['Role', 'About 60 GB of video plus CSV logs (DA-06). Written with fsync, rotated every 20 to 30 s.'], ['Code', 'storage_manager.py, csv_manager.py']] },
-          rx: { t: 'RXSM', s: 'Rocket · RS-422', w: [262, 282, 120, 40], n: [22, 314, 144, 40], d: [['Part', 'REXUS service module'], ['Bus', 'RS-422'], ['Rate', 'SODS T−180 s, LO T+0, SOE T+66 s'], ['Role', 'Mission signals (DA-07). Five agreeing samples before a change is believed.'], ['Code', 'rs422_interface.c, state_machine.c']] },
-          tcu: { t: 'TCU', s: 'Rocket · UART', w: [470, 282, 140, 40], n: [22, 362, 144, 40], d: [['Part', 'Telemetry central unit'], ['Bus', 'UART, 115200 baud, 8N1'], ['Rate', '32-byte frame at 1 Hz'], ['Role', 'Carries telemetry down and telecommands up.'], ['Code', 'uart_tcu.c, telemetry.c']] },
+          lsm: { t: 'LSM6DSM', s: 'Inertial · SPI', w: [0, 30, 178, 40], n: [0, 24, 166, 40], d: [['Part', 'LSM6DSM IMU, ±16 g, ±2000 dps'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Motion data. Readings frozen for 20 samples raise a latched fault.']] },
+          abp: { t: 'ABP', s: 'Fluid pressure · SPI', w: [0, 78, 178, 40], n: [0, 70, 166, 40], d: [['Part', 'ABP pressure sensor'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Fluid pressure in the experiment.']] },
+          slf: { t: 'SLF3S', s: 'Fluid flow · I²C', w: [0, 126, 178, 40], n: [0, 116, 166, 40], d: [['Part', 'SLF3S flow sensor, 40 ml/min full scale'], ['Bus', 'I²C'], ['Rate', '10 Hz'], ['Role', 'Fluid flow. A CRC failure on the sensor word raises a latched fault.']] },
+          pt: { t: 'PT100', s: 'MFC temp · SPI', w: [0, 174, 178, 40], n: [192, 24, 166, 40], d: [['Part', 'PT100 with MAX31865'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Closed-loop temperature control, 21–23 °C. No valid reading, heaters off.']] },
+          ext: { t: 'External BME280', s: 'Environment · SPI', w: [0, 222, 178, 40], n: [192, 70, 166, 40], d: [['Part', 'BME280, outside the pressure vessel'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Environment. Pressure is only range-checked on the ground: above about 9 km it reads below the sensor floor.']] },
+          int: { t: 'BME280', s: 'Environment · SPI', w: [0, 270, 178, 40], n: [192, 116, 166, 40], d: [['Part', 'BME280, inside the pressure vessel'], ['Bus', 'SPI'], ['Rate', '10 Hz'], ['Role', 'Environment. A falling pressure reading indicates a leak.']] },
+          esp: { t: 'ESP32', s: 'Flight computer · C', big: 1, w: [262, 30, 150, 200], n: [0, 196, 150, 56], d: [['Part', 'ESP32-S3, C on ESP-IDF'], ['Bus', 'SPI, I²C, UART, RS-422'], ['Role', 'Owns the mission: mode transitions, sensor reads, telemetry and the 32-bit error word.']] },
+          pi: { t: 'RasPi', s: 'Imaging · Python', big: 1, w: [470, 30, 140, 100], n: [208, 196, 150, 56], d: [['Part', 'Raspberry Pi CM5, Python'], ['Bus', 'SPI to the ESP32 at 1 MHz'], ['Rate', 'Status 1 Hz, sensors 10 Hz'], ['Role', 'Drives the experiment hardware, records video and writes logs. Keeps recording if the ESP32 link drops.']] },
+          fl: { t: 'Ext. flash', s: 'Buffer · SPI', w: [470, 170, 140, 40], n: [22, 266, 144, 40], d: [['Part', 'W25Q01JV external flash'], ['Bus', 'SPI'], ['Role', 'Temporary storage, so the ESP32 can handle more data if needed.']] },
+          stp: { t: 'Stepper motors', s: 'GPIO', w: [700, 30, 220, 40], n: [192, 266, 144, 40], d: [['Part', 'NEMA-8 syringe pump, 28BYJ-48 focus'], ['Bus', 'GPIO'], ['Role', 'Inject particles and focus the microscope during the experiment.']] },
+          cam: { t: 'RasPi Camera V2', s: 'SPI', w: [700, 78, 220, 40], n: [192, 314, 144, 40], d: [['Part', 'Camera V2 (IMX219), 1640×1232 raw YUV420'], ['Bus', 'SPI'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Role', 'Microscope video. Declared stalled after 20 frames without a new timestamp.']] },
+          ssd: { t: 'M.2 data SSD', s: 'SPI', w: [700, 154, 220, 40], n: [192, 362, 144, 40], d: [['Part', 'M.2 2230 SSD, 128 GB'], ['Bus', 'SPI'], ['Rate', 'About 127 MB/s of raw video in NE'], ['Role', 'About 60 GB of video plus CSV logs. Written with fsync, rotated every 20 to 30 s.']] },
+          rx: { t: 'RXSM', s: 'Rocket · RS-422', w: [262, 282, 120, 40], n: [22, 314, 144, 40], d: [['Part', 'REXUS service module'], ['Bus', 'RS-422'], ['Rate', 'SODS T−180 s, LO T+0, SOE T+66 s'], ['Role', 'Mission signals. Five agreeing samples before a change is believed.']] },
+          tcu: { t: 'TCU', s: 'Rocket · UART', w: [470, 282, 140, 40], n: [22, 362, 144, 40], d: [['Part', 'Telemetry central unit'], ['Bus', 'UART, 115200 baud, 8N1'], ['Rate', '32-byte frame at 1 Hz'], ['Role', 'Carries telemetry down and telecommands up.']] },
           gs: { t: 'Ground station', s: 'Uplink / downlink', w: [700, 282, 220, 40], n: [22, 430, 144, 40], d: [['Bus', 'RF link through the TCU'], ['Rate', 'Budget 0.320 kbit/s each way'], ['Role', 'Reads the status word. Sends WIPE and TEST before launch.']] }
         },
         edges: [
@@ -1372,33 +1412,33 @@ footer a:hover { color: var(--fg); }
         size: { w: [940, 396], n: [358, 564] },
         groups: { w: [], n: [] },
         nodes: {
-          sen: { t: 'Sensors', w: [0, 80, 110, 44], n: [0, 0, 166, 40], d: [['Part', 'Six sensors on the ESP32'], ['Bus', 'SPI and I²C'], ['Rate', '10 Hz'], ['Data', 'DA-02, 03, 04, 09, 10'], ['Code', 'sensors.c']] },
-          cam: { t: 'Camera V2', w: [0, 170, 110, 44], n: [192, 0, 166, 40], d: [['Part', 'Camera V2 (IMX219) on the Pi'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Data', 'DA-05, microscope imaging'], ['Code', 'camera_control.py']] },
-          rx: { t: 'RXSM', w: [0, 270, 110, 44], n: [258, 140, 100, 40], d: [['Part', 'REXUS service module'], ['Bus', 'RS-422'], ['Rate', 'SODS T−180 s, LO T+0, SOE T+66 s'], ['Data', 'DA-07, signals that start each mission phase'], ['Code', 'rs422_interface.c']] },
-          p1: { t: 'Acquire sensor data', s: 'P1', k: 'p', w: [170, 80, 160, 44], n: [0, 66, 166, 44], d: [['Runs on', 'ESP32'], ['Rate', '10 Hz'], ['Role', 'Builds each snapshot in a local copy and publishes it in one go, so a reader never sees half-old, half-new values.'], ['Code', 'sensors.c']] },
-          p2: { t: 'Acquire imaging', s: 'P2', k: 'p', w: [170, 170, 160, 44], n: [192, 66, 166, 44], d: [['Runs on', 'Raspberry Pi'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Role', 'Capture and writing run on separate threads. A full queue drops and counts a frame, never blocks.'], ['Code', 'camera_control.py, video_writer.py']] },
-          d2: { t: 'Flash buffer', s: 'D2 · ESP32', k: 'd', w: [170, 6, 160, 36], n: [0, 140, 100, 36], d: [['Part', 'W25Q01JV external flash'], ['Data', 'DA-01, temporary storage'], ['Role', 'Takes sensor data on overflow and flushes it back to P3.']] },
-          p3: { t: 'Sequence and log', s: 'P3', s2: 'State + error tracking', k: 'p', w: [400, 80, 150, 234], n: [0, 210, 358, 52], d: [['Runs on', 'ESP32 and Raspberry Pi'], ['Rate', 'CSV logs at 10 Hz'], ['Role', 'Decides the mode, holds the 32-bit error word and keeps the in-memory table the logs and telemetry read from.'], ['Code', 'state_machine.c, error_manager.c, csv_manager.py']] },
-          d1: { t: 'M.2 data SSD', s: 'D1', k: 'd', w: [400, 6, 150, 36], n: [0, 290, 110, 36], d: [['Part', 'M.2 2230 SSD, 128 GB'], ['Data', 'DA-06, mission logs and imaging'], ['Role', 'Logs rotate every 20 s, video every 30 s in NE, to bound the loss from a bad write.'], ['Code', 'storage_manager.py, video_writer.py']] },
-          st: { t: 'Stepper motors', w: [400, 352, 150, 40], n: [248, 290, 110, 40], d: [['Part', 'NEMA-8 syringe pump, 28BYJ-48 focus'], ['Data', 'DA-13, activate drivers'], ['Role', 'Inject particles and focus the microscope during the experiment.']] },
-          p4: { t: 'Build telemetry packet', s: 'P4', k: 'p', w: [610, 80, 170, 44], n: [0, 360, 166, 44], d: [['Runs on', 'ESP32'], ['Rate', '32 bytes at 1 Hz'], ['Data', 'DA-11, CRC-16/CCITT-FALSE'], ['Role', 'Assembled from the in-memory table, never from stored files.'], ['Code', 'telemetry.c, crc16.c']] },
-          tcu: { t: 'TCU', w: [610, 170, 170, 44], n: [60, 440, 238, 40], d: [['Part', 'Telemetry central unit'], ['Bus', 'UART, 115200 baud, 8N1'], ['Data', 'DA-11 in, DA-08 down, DA-12 up'], ['Code', 'uart_tcu.c']] },
-          p5: { t: 'Process uplink', s: 'P5 · WIPE → D1 · TEST → P3', k: 'p', w: [610, 270, 170, 44], n: [192, 360, 166, 44], d: [['Runs on', 'ESP32, forwards to the Pi'], ['Data', 'DA-12, wipe data, test mode, heater override'], ['Role', 'A sequence number makes each command idempotent. Pre-launch only.'], ['Code', 'uart_tcu.c, spi_link.py']] },
-          gs: { t: 'Ground station', w: [830, 170, 110, 44], n: [60, 520, 238, 40], d: [['Rate', 'Budget 0.320 kbit/s each way'], ['Data', 'DA-08 flight status, DA-12 commands'], ['Role', 'Checks each frame against its CRC and reads the status word.']] }
+          sen: { t: 'Sensors', w: [0, 80, 110, 44], n: [0, 0, 166, 40], d: [['Part', 'Six sensors on the ESP32'], ['Bus', 'SPI and I²C'], ['Rate', '10 Hz']] },
+          cam: { t: 'Camera V2', w: [0, 170, 110, 44], n: [192, 0, 166, 40], d: [['Part', 'Camera V2 (IMX219) on the Pi'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Role', 'Microscope imaging']] },
+          rx: { t: 'RXSM', w: [0, 270, 110, 44], n: [258, 140, 100, 40], d: [['Part', 'REXUS service module'], ['Bus', 'RS-422'], ['Rate', 'SODS T−180 s, LO T+0, SOE T+66 s'], ['Role', 'Signals that start each mission phase']] },
+          p1: { t: 'Acquire sensor data', s: 'P1', k: 'p', w: [170, 80, 160, 44], n: [0, 66, 166, 44], d: [['Runs on', 'ESP32'], ['Rate', '10 Hz'], ['Role', 'Builds each snapshot in a local copy and publishes it in one go, so a reader never sees half-old, half-new values.']] },
+          p2: { t: 'Acquire imaging', s: 'P2', k: 'p', w: [170, 170, 160, 44], n: [192, 66, 166, 44], d: [['Runs on', 'Raspberry Pi'], ['Rate', '41.85 fps in NE, 4 fps otherwise'], ['Role', 'Capture and writing run on separate threads. A full queue drops and counts a frame, never blocks.']] },
+          d2: { t: 'Flash buffer', s: 'D2 · ESP32', k: 'd', w: [170, 6, 160, 36], n: [0, 140, 100, 36], d: [['Part', 'W25Q01JV external flash'], ['Role', 'Takes sensor data on overflow and flushes it back to P3.']] },
+          p3: { t: 'Sequence and log', s: 'P3', s2: 'State + error tracking', k: 'p', w: [400, 80, 150, 234], n: [0, 210, 358, 52], d: [['Runs on', 'ESP32 and Raspberry Pi'], ['Rate', 'CSV logs at 10 Hz'], ['Role', 'Decides the mode, holds the 32-bit error word and keeps the in-memory table the logs and telemetry read from.']] },
+          d1: { t: 'M.2 data SSD', s: 'D1', k: 'd', w: [400, 6, 150, 36], n: [0, 290, 110, 36], d: [['Part', 'M.2 2230 SSD, 128 GB'], ['Role', 'Mission logs and imaging. Logs rotate every 20 s, video every 30 s in NE, to bound the loss from a bad write.']] },
+          st: { t: 'Stepper motors', w: [400, 352, 150, 40], n: [248, 290, 110, 40], d: [['Part', 'NEMA-8 syringe pump, 28BYJ-48 focus'], ['Role', 'Activated to inject particles and focus the microscope during the experiment.']] },
+          p4: { t: 'Build telemetry packet', s: 'P4', k: 'p', w: [610, 80, 170, 44], n: [0, 360, 166, 44], d: [['Runs on', 'ESP32'], ['Rate', '32 bytes at 1 Hz'], ['Check', 'CRC-16/CCITT-FALSE'], ['Role', 'Assembled from the in-memory table, never from stored files.']] },
+          tcu: { t: 'TCU', w: [610, 170, 170, 44], n: [60, 440, 238, 40], d: [['Part', 'Telemetry central unit'], ['Bus', 'UART, 115200 baud, 8N1'], ['Role', 'Carries telemetry down and telecommands up.']] },
+          p5: { t: 'Process uplink', s: 'P5 · WIPE to D1, TEST to P3', k: 'p', w: [610, 270, 170, 44], n: [192, 360, 166, 44], d: [['Runs on', 'ESP32, forwards to the Pi'], ['Commands', 'Wipe data, test mode, heater override'], ['Role', 'A sequence number makes each command idempotent. Pre-launch only.']] },
+          gs: { t: 'Ground station', w: [830, 170, 110, 44], n: [60, 520, 238, 40], d: [['Rate', 'Budget 0.320 kbit/s each way'], ['Role', 'Checks each frame against its CRC and reads the status word.']] }
         },
         edges: [
-          ['sen', 'p1', [110, 102, 170, 102], [83, 40, 83, 66], [[0, 72, 'DA-02,03,04,09,10']], [[89, 56, 'DA-02,03,04,09,10']]],
-          ['cam', 'p2', [110, 192, 170, 192], [275, 40, 275, 66], [[140, 185, 'DA-05', 'm']], [[281, 56, 'DA-05']]],
-          ['p1', 'd2', [250, 80, 250, 42], [40, 110, 40, 140], [[256, 64, 'overflow · DA-01']], [[46, 128, 'DA-01']]],
+          ['sen', 'p1', [110, 102, 170, 102], [83, 40, 83, 66], [], []],
+          ['cam', 'p2', [110, 192, 170, 192], [275, 40, 275, 66], [], []],
+          ['p1', 'd2', [250, 80, 250, 42], [40, 110, 40, 140], [[256, 64, 'overflow']], [[46, 128, 'overflow']]],
           ['d2', 'p3', [330, 24, 372, 24, 372, 92, 400, 92], [50, 176, 50, 210], [[351, 17, 'flush', 'm']], [[56, 196, 'flush']]],
           ['p1', 'p3', [330, 108, 400, 108], [130, 110, 130, 210]],
           ['p2', 'p3', [330, 192, 400, 192], [220, 110, 220, 210]],
-          ['rx', 'p3', [110, 292, 400, 292], [308, 180, 308, 210], [[255, 285, 'LO/SOE/SODS · DA-07', 'm']], [[302, 198, 'DA-07', 'e']]],
-          ['p3', 'd1', [475, 80, 475, 42], [55, 262, 55, 290], [[481, 64, 'write · DA-06']], [[61, 279, 'DA-06']]],
-          ['p3', 'st', [475, 314, 475, 352], [303, 262, 303, 290], [[481, 336, 'activate · DA-13']], [[297, 279, 'DA-13', 'e']]],
-          ['p3', 'p4', [550, 102, 610, 102], [140, 262, 140, 360], [[580, 95, 'DA-11', 'm']], [[146, 345, 'DA-11']]],
+          ['rx', 'p3', [110, 292, 400, 292], [308, 180, 308, 210], [[255, 285, 'LO/SOE/SODS', 'm']], [[302, 198, 'LO/SOE/SODS', 'e']]],
+          ['p3', 'd1', [475, 80, 475, 42], [55, 262, 55, 290], [[481, 64, 'write']], [[61, 279, 'write']]],
+          ['p3', 'st', [475, 314, 475, 352], [303, 262, 303, 290], [[481, 336, 'activate']], [[297, 279, 'activate', 'e']]],
+          ['p3', 'p4', [550, 102, 610, 102], [140, 262, 140, 360], [], []],
           ['p4', 'tcu', [695, 124, 695, 170], [83, 404, 83, 440]],
-          ['tcu', 'gs', [780, 192, 830, 192], [179, 480, 179, 520], [[805, 184, 'DA-08 →', 'm'], [805, 207, 'DA-12 ←', 'm']], [[185, 503, 'DA-08 ↓  DA-12 ↑']], '2d'],
+          ['tcu', 'gs', [780, 192, 830, 192], [179, 480, 179, 520], [[805, 184, 'downlink', 'm'], [805, 207, 'uplink', 'm']], [[185, 503, 'downlink · uplink']], '2d'],
           ['tcu', 'p5', [695, 214, 695, 270], [275, 440, 275, 404]],
           ['p5', 'p3', [610, 292, 550, 292], [220, 360, 220, 262], [[580, 285, 'dispatch', 'm']], [[226, 345, 'dispatch']]]
         ]
@@ -1464,21 +1504,17 @@ footer a:hover { color: var(--fg); }
       intro();
     }
     function select(id) {
-      var D = DIAGRAMS[tab], n = D.nodes[id], links = [];
+      var D = DIAGRAMS[tab], n = D.nodes[id];
       svg.classList.add('sel');
       Object.keys(nodeEls).forEach(function (k) { nodeEls[k].classList.remove('on', 'nb'); });
       nodeEls[id].classList.add('on');
       D.edges.forEach(function (e, i) {
-        var hit = e[0] === id || e[1] === id, other = e[0] === id ? e[1] : e[0];
+        var hit = e[0] === id || e[1] === id;
         edgeEls[i].classList.toggle('on', hit);
-        if (!hit) return;
-        nodeEls[other].classList.add('nb');
-        links.push(((e[6] || '').indexOf('2') >= 0 ? '↔ ' : e[0] === id ? '→ ' : '← ') + D.nodes[other].t);
+        if (hit) nodeEls[e[0] === id ? e[1] : e[0]].classList.add('nb');
       });
-      var rows = n.d.map(function (r) {
-        return '<div><dt>' + r[0] + '</dt><dd' + (r[0] === 'Code' ? ' class="code"' : '') + '>' + r[1] + '</dd></div>';
-      }).join('');
-      read.innerHTML = '<h4>' + n.t + '</h4><dl>' + rows + '<div><dt>Links</dt><dd>' + links.join(', ') + '</dd></div></dl>';
+      var rows = n.d.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+      read.innerHTML = '<h4>' + n.t + '</h4><dl>' + rows + '</dl>';
     }
 
     // Pointer: hover previews, a click or tap pins. Keyboard: focus selects, Escape clears.
@@ -1589,6 +1625,336 @@ footer a:hover { color: var(--fg); }
     });
     if (narrow.addEventListener) narrow.addEventListener('change', render);
     render();
+  })();
+  // ---------- Final integration: the CAD turns into a golden mesh, the real module builds itself out of it ----------
+  // One WebGL pass mixes the two cut-outs. Scroll sets the target progress; the shown progress eases towards it,
+  // so wheel steps still read as one continuous motion. Without WebGL, or with reduced motion, the section stays as
+  // its static version: the final heading, the text and the photo.
+  (function () {
+    var root = $('build');
+    if (!root || reduce) return;
+    var canvas = $('build-gl'), stage = root.querySelector('.build-stage'), box = root.querySelector('.build-vis');
+    var gl = null;
+    try { gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false }) || canvas.getContext('experimental-webgl'); } catch (e) {}
+    if (!gl) return;
+
+    var VS = 'attribute vec2 aPos; varying vec2 vUv;' +
+      'void main(){ vUv = vec2(aPos.x * .5 + .5, .5 - aPos.y * .5); gl_Position = vec4(aPos, 0., 1.); }';
+    var FS = [
+      'precision highp float;',
+      'varying vec2 vUv;',
+      'uniform sampler2D uCad, uMod, uFlow;',
+      'uniform vec2 uTexel, uRes;',
+      'uniform float uP, uT;',
+      // palette: Golden Glow, Banana Cream, Vanilla Custard, Porcelain
+      'const vec3 GOLD = vec3(.867, .851, .165), BANANA = vec3(.918, .882, .318), VANILLA = vec3(.933, .937, .659), PORC = vec3(.98, .992, .965);',
+      'float h21(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }',
+      'float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);',
+      '  return mix(mix(h21(i), h21(i + vec2(1., 0.)), f.x), mix(h21(i + vec2(0., 1.)), h21(i + vec2(1., 1.)), f.x), f.y); }',
+      'float fbm(vec2 p){ float v = 0., a = .5; for (int i = 0; i < 4; i++) { v += a * vn(p); p *= 2.03; a *= .5; } return v; }',
+      'float lum(vec3 c){ return dot(c, vec3(.299, .587, .114)); }',
+      'float L(vec4 s){ return lum(s.rgb) * s.a + s.a * .6; }',
+      // Sobel on luminance and alpha: the drawn lines of the CAD and the outline of each object
+      'float edge(sampler2D t, vec2 uv){ vec2 o = uTexel * 1.3;',
+      '  float a = L(texture2D(t, uv + o * vec2(-1., -1.))), b = L(texture2D(t, uv + o * vec2(0., -1.))), c = L(texture2D(t, uv + o * vec2(1., -1.)));',
+      '  float d = L(texture2D(t, uv + o * vec2(-1., 0.))), f = L(texture2D(t, uv + o * vec2(1., 0.)));',
+      '  float g = L(texture2D(t, uv + o * vec2(-1., 1.))), h = L(texture2D(t, uv + o * vec2(0., 1.))), k = L(texture2D(t, uv + o * vec2(1., 1.)));',
+      '  return length(vec2(c + 2. * f + k - a - 2. * d - g, g + 2. * h + k - a - 2. * b - c)); }',
+      // soft halo just outside the silhouette
+      'float halo(sampler2D t, vec2 uv){ vec2 o = uTexel * 10.; float s = 0.;',
+      '  s += texture2D(t, uv + o * vec2(1., 0.)).a + texture2D(t, uv - o * vec2(1., 0.)).a + texture2D(t, uv + o * vec2(0., 1.)).a + texture2D(t, uv - o * vec2(0., 1.)).a;',
+      '  s += texture2D(t, uv + o * vec2(.7, .7)).a + texture2D(t, uv - o * vec2(.7, .7)).a + texture2D(t, uv + o * vec2(.7, -.7)).a + texture2D(t, uv - o * vec2(.7, -.7)).a;',
+      '  return s / 8.; }',
+      // triangulated technical mesh, 18 texture px per cell
+      'float tri(vec2 uv){ vec2 q = uv / uTexel / 18.; float w = .055, m = 0.;',
+      '  float v = q.x; m = max(m, 1. - smoothstep(w * .4, w, abs(v - floor(v + .5))));',
+      '  v = dot(q, vec2(.5, .866)); m = max(m, 1. - smoothstep(w * .4, w, abs(v - floor(v + .5))));',
+      '  v = dot(q, vec2(-.5, .866)); m = max(m, 1. - smoothstep(w * .4, w, abs(v - floor(v + .5))));',
+      '  return m; }',
+      // the hologram of one object: bright edges, mesh, faint shaded fill, fine moving scanlines and an outer glow
+      'vec4 holo(sampler2D t, vec2 uv){ vec4 s = texture2D(t, uv); float e = clamp(edge(t, uv) * 1.7, 0., 1.);',
+      '  float scan = .55 + .45 * sin(uv.y * uRes.y * .9 - uT * 5.);',
+      '  float body = s.a * (.07 + .06 * scan + lum(s.rgb) * .2) + tri(uv) * s.a * .3 + e;',
+      '  float glow = clamp(halo(t, uv) - s.a, 0., 1.) * .5;',
+      '  float I = body + glow; vec3 c = mix(GOLD, VANILLA, e * .65);',
+      '  return vec4(c * I, clamp(I, 0., 1.)); }',
+      'vec4 over(vec4 top, vec4 bot){ return top + bot * (1. - top.a); }',
+      'vec4 addg(vec4 base, vec4 g){ return vec4(base.rgb + g.rgb, clamp(base.a + g.a * (1. - base.a), 0., 1.)); }',
+      // Both pictures are shown as they are: the whole CAD render, and the photo (moved and scaled only). The photo
+      // was taken from a little lower and closer, so the two do not quite superpose; uFlow holds that difference as two
+      // smooth offset fields (rg: from a point of the CAD to the same point of the photo; ba: the reverse), in frame px
+      // around 128. They are only used while the module is a golden wireframe: as m runs 0 -> 1 the CAD's mesh flows
+      // into the photo's shape while the module's mesh, flowing the other way, takes its place along a front rising
+      // from the bottom; then the photo fills in, undistorted. m is 0 for the solid CAD and 1 for the solid photo.
+      'void main(){',
+      '  vec2 uv = vUv; float p = uP;',
+      '  vec4 fl = texture2D(uFlow, uv);',
+      '  float m = smoothstep(.32, .58, p);',
+      '  vec2 uvC = uv + m * (fl.ba * 255. - 128.) / vec2(1100., 940.);',
+      '  vec2 uvP = uv + (1. - m) * (fl.rg * 255. - 128.) / vec2(1100., 940.);',
+      '  vec4 mo = texture2D(uMod, uvP), cad = texture2D(uCad, uvC);',
+      '  float n = fbm(uv * 5. + vec2(0., uT * .04));',
+      '  float kB = smoothstep(.10, .32, p), fB = mix(-.2, 1.2, kB);',
+      '  float sB = uv.y + (n - .5) * .18;',
+      '  float meshed = smoothstep(fB + .012, fB - .012, sB);',
+      '  float bandB = exp(-abs(sB - fB) * 38.) * step(.001, kB) * step(kB, .999);',
+      '  float kM = smoothstep(.36, .58, p), fM = mix(1.15, -.15, kM);',
+      '  float sM = uv.y + (n - .5) * .14;',
+      '  float modVis = smoothstep(fM - .03, fM + .03, sM);',
+      '  float bandM = exp(-abs(sM - fM) * 40.) * step(.001, kM) * step(kM, .999);',
+      '  float kD = smoothstep(.60, .82, p), fD = mix(1.2, -.2, kD);',
+      '  float sD = uv.y + (n - .5) * .2;',
+      '  float real = smoothstep(fD - .012, fD + .012, sD);',
+      '  float bandD = exp(-abs(sD - fD) * 36.) * step(.001, kD) * step(kD, .999);',
+      '  float rim = 1. - smoothstep(.82, .94, p);',
+      '  vec4 col = vec4(cad.rgb * cad.a, cad.a) * (1. - meshed);',
+      '  if (kB > 0. && modVis < .999) {',
+      '    col = addg(col, holo(uCad, uvC) * meshed * (1. - modVis));',
+      '    col = addg(col, vec4(VANILLA, 1.) * bandB * clamp(cad.a + halo(uCad, uvC) * .6, 0., 1.) * .9);',
+      '  }',
+      '  if (kM > 0.) {',
+      '    vec4 realC = vec4(mo.rgb * mo.a, mo.a) * real;',
+      '    col = over(realC, col * (1. - real * mo.a));',
+      '    col = addg(col, holo(uMod, uvP) * modVis * mix(1., .22 * rim, real));',
+      '    float hm = halo(uMod, uvP);',
+      '    col = addg(col, vec4(VANILLA, 1.) * bandM * clamp(max(mo.a, cad.a) + hm * .5, 0., 1.) * .8);',
+      '    col = addg(col, vec4(PORC, 1.) * bandD * clamp(mo.a + hm * .5, 0., 1.) * .85);',
+      '  }',
+      '  gl_FragColor = col;',
+      '}'
+    ].join('\n');
+
+    function sh(type, src) {
+      var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+      return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+    }
+    var vs = sh(gl.VERTEX_SHADER, VS), fs = sh(gl.FRAGMENT_SHADER, FS);
+    if (!vs || !fs) return;
+    var prog = gl.createProgram(); gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+    var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    var aPos = gl.getAttribLocation(prog, 'aPos'); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+    var U = {};
+    ['uCad', 'uMod', 'uFlow', 'uTexel', 'uRes', 'uP', 'uT'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    gl.uniform1i(U.uCad, 0); gl.uniform1i(U.uMod, 1); gl.uniform1i(U.uFlow, 2);
+    gl.uniform2f(U.uTexel, 1 / 1100, 1 / 940);
+
+    function tex(unit, img) {
+      var t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+
+    // The two offset fields between the CAD and the photo: thin-plate splines fitted offline on points both pictures
+    // show (rim, hatch corners and screws, slots, the box, the outline). Evaluated here once, at a fifth of the frame
+    // resolution, into an RGBA texture: 1 frame px per step around 128.
+    var FLOW = {"a":{"p":[0.24122,0.49356,0.64512,0.56622,0.63966,0.8164,0.2709,0.74122,0.43232,0.5539,0.43232,0.8164,0.64778,0.6904,0.30856,0.5084,0.41622,0.5364,0.53732,0.54732,0.65856,0.53556,0.6692,0.6001,0.6692,0.6862,0.6692,0.76712,0.65856,0.8248,0.33544,0.79232,0.2912,0.46024,0.3682,0.48558,0.45836,0.5014,0.553,0.5042,0.6482,0.4958,0.73584,0.4762,0.8134,0.4468,0.4578,0.4601,0.553,0.4636,0.6482,0.4559,0.553,0.07958,0.46088,0.20558,0.71498,0.23582,0.3703,0.3369,0.64442,0.37918,0.1442,0.2648,0.182206,0.177825,0.289103,0.107148,0.44486,0.066012,0.54985,0.059,0.65484,0.066012,0.810597,0.107148,0.917494,0.177825,0.9555,0.2648,0.898059,0.754121,0.814212,0.823633,0.682598,0.867917,0.5593,0.8794,0.436002,0.867917,0.304388,0.823633,0.220541,0.754121,0.15785,0.37085,0.946575,0.37085,0.1715,0.4769,0.93765,0.4769,0.18515,0.58295,0.928725,0.58295],"x":[-0.579085,-0.401237,0.555445,-0.879656,0.267976,0.078746,-0.38259,-0.074469,-0.155928,0.117523,0.273963,0.051481,0.24182,0.115921,0.684814,-0.557135,-0.321588,-0.084865,0.048113,0.385664,-0.006489,0.226187,0.704466,0.154671,-0.832503,0.234855,0.232503,0.261315,-0.47401,0.313903,-0.216597,-0.15785,-0.011923,-0.026511,-0.123348,-0.161384,0.028259,0.057666,0.012533,0.233221,0.032628,-0.112108,-0.720427,-0.360681,0.098342,0.578535,0.530999,0.076243,-0.160046,0.366146,-0.295844,0.379398,-0.247063,0.085891,-0.148011,-0.026533],"y":[-0.878007,-0.27458,-0.232334,-0.701585,-0.165049,-0.415009,-0.333882,0.2772,0.508883,0.265134,0.349771,0.096811,0.311601,0.178458,-0.147737,-0.067038,-0.276348,-0.153563,0.1565,0.186619,0.090076,0.089696,-0.600318,-0.233273,-0.283659,-0.180831,0.040857,-0.067654,-0.037929,-0.119304,-0.166154,-0.533902,0.124991,0.166092,0.097365,0.044379,0.081312,0.152632,0.133177,-0.484202,-0.048413,-0.033548,0.129272,0.145546,0.28766,0.293886,0.288239,0.290611,0.272312,0.539809,0.283023,0.4096,0.142807,0.083804,-0.028175,-0.085708]},"b":{"p":[0.226824,0.485606,0.653886,0.554339,0.646601,0.822906,0.261896,0.745422,0.429126,0.5405,0.430361,0.818187,0.652782,0.687467,0.291588,0.500835,0.406181,0.528901,0.543584,0.537871,0.676407,0.527699,0.682055,0.596609,0.679934,0.691585,0.67463,0.776401,0.662507,0.834113,0.326842,0.801689,0.272689,0.445805,0.353333,0.466644,0.45432,0.485697,0.560323,0.488617,0.662033,0.479686,0.756922,0.462305,0.831406,0.432297,0.454098,0.435671,0.543139,0.437819,0.661822,0.432203,0.5504,0.163909,0.467529,0.233637,0.694954,0.255689,0.373567,0.32597,0.643083,0.355974,0.149944,0.296141,0.186523,0.23574,0.289942,0.186329,0.440823,0.157167,0.542589,0.151858,0.644399,0.156262,0.795533,0.18408,0.899388,0.232569,0.936503,0.292643,0.844904,0.780514,0.77061,0.845117,0.653724,0.886584,0.5441,0.897688,0.434381,0.887559,0.317131,0.847134,0.242265,0.783194,0.168122,0.402873,0.918371,0.399537,0.186301,0.509605,0.900239,0.50643,0.20448,0.616337,0.882107,0.613323],"x":[0.772613,0.405704,-0.54566,1.059318,-0.243787,-0.046694,0.427755,0.161179,0.135258,-0.060953,-0.262359,-0.139976,-0.33517,-0.148747,-0.764952,0.686157,0.350337,0.056363,-0.058634,-0.305854,0.07275,-0.291036,-1.011448,-0.132212,0.707387,-0.18172,-0.24589,-0.385571,0.633338,-0.322327,0.100028,0.170732,0.00737,0.018001,0.223735,0.204006,-0.121245,-0.039304,0.017913,-0.266276,0.01401,0.286711,0.725823,0.221328,-0.081208,-0.492137,-0.80818,-0.281034,0.431607,-0.576001,0.457303,-0.443541,0.245191,-0.100275,0.172768,0.032482],"y":[1.173142,0.222946,0.211833,0.896437,0.154447,0.284131,0.265299,-0.138045,-0.458207,-0.259041,-0.294014,-0.026401,-0.221429,-0.144906,0.152683,0.161791,0.363851,0.050856,-0.199858,-0.205762,-0.146102,-0.023432,0.922398,0.13374,0.200865,0.082241,-0.126812,0.527614,0.365297,0.392538,0.368956,0.724481,-0.163494,-0.362701,-0.395163,-0.191298,-0.285381,-0.367954,-0.182705,0.672523,0.046327,-0.00029,-0.149005,-0.101669,-0.172433,-0.23098,-0.510479,-0.608632,-0.559543,-0.836539,-0.439188,-0.450284,-0.122647,-0.116622,0.025467,0.132642]}};
+    function flowTex() {
+      var fw = 220, fh = 188, d = new Uint8Array(fw * fh * 4), K = 1000;
+      function ev(f, x, y, out) {
+        var P = f.p, n = P.length / 2, X = f.x, Y = f.y, dx = X[n] + X[n + 1] * x + X[n + 2] * y, dy = Y[n] + Y[n + 1] * x + Y[n + 2] * y;
+        for (var i = 0; i < n; i++) {
+          var ex = x - P[2 * i], ey = y - P[2 * i + 1], r2 = ex * ex + ey * ey;
+          if (r2 > 1e-12) { var u = .5 * r2 * Math.log(r2); dx += X[i] * u; dy += Y[i] * u; }
+        }
+        out[0] = dx * K; out[1] = dy * K;
+      }
+      var a = [0, 0], b = [0, 0], q = function (v) { return Math.max(0, Math.min(255, Math.round(128 + v))); };
+      for (var j = 0; j < fh; j++) for (var i = 0; i < fw; i++) {
+        var x = (i + .5) * 5 / K, y = (j + .5) * 5 / K, o = (j * fw + i) * 4;
+        ev(FLOW.a, x, y, a); ev(FLOW.b, x, y, b);
+        d[o] = q(a[0]); d[o + 1] = q(a[1]); d[o + 2] = q(b[0]); d[o + 3] = q(b[1]);
+      }
+      var t = gl.createTexture(); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, fw, fh, 0, gl.RGBA, gl.UNSIGNED_BYTE, d);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+    flowTex();
+
+    // phrases: a gradient wipe with a golden leading edge, plus a liquid displacement while each one moves
+    var PH = [$('ph-1'), $('ph-2'), $('ph-3')], para = $('build-p');
+    var DM = [$('flow-1-d'), $('flow-2-d'), $('flow-3-d')], scaleCache = [-1, -1, -1];
+    var ease = function (u) { return u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; };
+    var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+    function phrase(i, enter, exit) {
+      var el = PH[i];
+      el.style.setProperty('--a', (-12 + 145 * enter).toFixed(2) + '%');
+      el.style.setProperty('--b', (-45 + 150 * exit).toFixed(2) + '%');
+      var s = Math.round(16 * Math.max(Math.sin(Math.PI * enter), Math.sin(Math.PI * exit)) * 10) / 10;
+      if (s !== scaleCache[i]) {
+        scaleCache[i] = s;
+        if (DM[i]) DM[i].setAttribute('scale', s);
+        el.style.filter = s > 0.2 ? 'url(#flow-' + (i + 1) + ')' : 'none';
+      }
+    }
+    function text(p) {
+      phrase(0, 1, ease(seg(p, .27, .37)));
+      phrase(1, ease(seg(p, .35, .46)), ease(seg(p, .78, .87)));
+      phrase(2, ease(seg(p, .85, .94)), 0);
+      var pe = ease(seg(p, .90, .985));
+      para.style.opacity = pe.toFixed(3);
+      para.style.transform = 'translateY(' + ((1 - pe) * 14).toFixed(1) + 'px)';
+    }
+
+    var target = 0, shown = 0, clock = 0, last = 0, raf = 0, visible = false, travel = 1, cssW = 1, cssH = 1;
+    function progress() {
+      var top = parseFloat(getComputedStyle(stage).top) || 0;
+      return clamp((top - root.getBoundingClientRect().top) / travel, 0, 1);
+    }
+    function size() {
+      travel = Math.max(1, root.offsetHeight - stage.offsetHeight);
+      var bw = box.clientWidth, bh = box.clientHeight, ar = 1100 / 940;
+      cssW = Math.min(bw, bh * ar); cssH = cssW / ar;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2), w = Math.round(Math.min(cssW * dpr, 1800));
+      canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
+      canvas.width = w; canvas.height = Math.round(w / ar);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      target = progress();
+    }
+    function draw() {
+      gl.uniform1f(U.uP, shown); gl.uniform1f(U.uT, clock);
+      gl.uniform2f(U.uRes, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+    function frame(now) {
+      raf = 0;
+      var dt = last ? Math.min(.05, (now - last) / 1000) : 0; last = now;
+      clock += dt;
+      shown += (target - shown) * (1 - Math.pow(.86, dt * 60 || 1));
+      if (Math.abs(target - shown) < .0004) shown = target;
+      text(shown); draw();
+      if (visible) raf = requestAnimationFrame(frame);
+    }
+    function kick() { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }
+
+    var imgs = [new Image(), new Image()], loaded = 0;
+    imgs[0].src = 'assets/module-concept.webp'; imgs[1].src = 'assets/module-real.webp';
+    imgs.forEach(function (im, i) {
+      im.onload = function () {
+        tex(i, im);
+        if (++loaded < 2) return;
+        root.classList.add('on');
+        size(); shown = target; text(shown); draw();
+        window.addEventListener('scroll', function () { target = progress(); kick(); }, { passive: true });
+        window.addEventListener('resize', function () { size(); kick(); });
+        if ('ResizeObserver' in window) new ResizeObserver(function () { size(); kick(); }).observe(box);
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) kick(); }).observe(root);
+        } else { visible = true; kick(); }
+      };
+    });
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); root.classList.remove('on'); });
+  })();
+  // Pulse Glass cursor, for mouse and trackpad only: the dot sits exactly on the pointer, the glass lens trails it,
+  // widens and turns golden over anything clickable, and presses in on click. Touch screens keep their own behaviour.
+  (function () {
+    if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var dot = document.createElement('div'), ring = document.createElement('div');
+    dot.className = 'cur cur-dot'; ring.className = 'cur cur-ring'; ring.appendChild(document.createElement('i'));
+    dot.setAttribute('aria-hidden', 'true'); ring.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(ring); document.body.appendChild(dot);
+    var x = -100, y = -100, rx = -100, ry = -100, raf = 0, shown = false;
+    var HOT = 'a, button, [role="tab"], .n, #fl-canvas';
+    function loop() {
+      raf = 0;
+      var k = reduce ? 1 : .2;
+      rx += (x - rx) * k; ry += (y - ry) * k;
+      ring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0)';
+      if (Math.abs(x - rx) + Math.abs(y - ry) > .3) raf = requestAnimationFrame(loop);
+    }
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType && e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+      x = e.clientX; y = e.clientY;
+      dot.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+      if (!shown) {
+        shown = true; rx = x; ry = y;
+        dot.classList.add('on'); ring.classList.add('on'); document.documentElement.classList.add('has-cur');
+      }
+      var t = e.target;
+      ring.classList.toggle('hot', !!(t && t.closest && t.closest(HOT)));
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+    document.addEventListener('pointerdown', function () { ring.classList.add('down'); });
+    document.addEventListener('pointerup', function () { ring.classList.remove('down'); });
+    document.documentElement.addEventListener('mouseleave', function () {
+      dot.classList.remove('on'); ring.classList.remove('on'); shown = false;
+    });
+  })();
+  // Scroll reveals: headings and text marked data-flow wipe in with the golden edge and liquid ripple used for the
+  // module phrases (data-flow holds a delay); data-lift also rises; children of data-blur go from blurred to sharp.
+  (function () {
+    var flows = [].slice.call(document.querySelectorAll('[data-flow]')), blurs = [].slice.call(document.querySelectorAll('[data-blur]'));
+    if (reduce || !(flows.length || blurs.length)) return;
+    var NS = 'http://www.w3.org/2000/svg', defs = document.createElementNS(NS, 'svg');
+    defs.setAttribute('class', 'flow-defs'); defs.setAttribute('aria-hidden', 'true'); document.body.appendChild(defs);
+    var ease = function (u) { return u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; };
+    flows.forEach(function (el, i) {
+      var f = document.createElementNS(NS, 'filter'), id = 'flowr-' + i;
+      f.setAttribute('id', id); f.setAttribute('x', '-10%'); f.setAttribute('y', '-30%'); f.setAttribute('width', '120%'); f.setAttribute('height', '160%');
+      var t = document.createElementNS(NS, 'feTurbulence');
+      t.setAttribute('type', 'fractalNoise'); t.setAttribute('baseFrequency', '0.011 0.07'); t.setAttribute('numOctaves', '2'); t.setAttribute('seed', String(21 + i));
+      var d = document.createElementNS(NS, 'feDisplacementMap');
+      d.setAttribute('in', 'SourceGraphic'); d.setAttribute('scale', '0'); d.setAttribute('xChannelSelector', 'R'); d.setAttribute('yChannelSelector', 'G');
+      f.appendChild(t); f.appendChild(d); defs.appendChild(f);
+      el._dm = d; el._id = id; el._s = -1; el._delay = parseFloat(el.getAttribute('data-flow')) || 0;
+      el.classList.add('flow-on');
+    });
+    var kids = [];
+    blurs.forEach(function (b) { [].forEach.call(b.children, function (c, i) { kids.push([b, c, i]); }); });
+    function upd() {
+      var vh = window.innerHeight || 1;
+      var atEnd = (window.scrollY || 0) + vh >= document.documentElement.scrollHeight - 4;   // nothing left half-revealed at the page end
+      flows.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        var e = atEnd ? 1 : ease(clamp((vh * .96 - r.top) / (vh * .45) - el._delay, 0, 1));
+        el.style.setProperty('--a', (-12 + 145 * e).toFixed(2) + '%');
+        if (el.hasAttribute('data-lift')) el.style.transform = 'translateY(' + ((1 - e) * 36).toFixed(1) + 'px)';
+        var s = Math.round(14 * Math.sin(Math.PI * e) * 10) / 10;
+        if (s !== el._s) { el._s = s; el._dm.setAttribute('scale', s); el.style.filter = s > .2 ? 'url(#' + el._id + ')' : 'none'; }
+      });
+      kids.forEach(function (k) {
+        var r = k[0].getBoundingClientRect();
+        var u = atEnd ? 1 : ease(clamp((vh * .98 - r.top) / (vh * .4) - k[2] * .1, 0, 1));
+        k[1].style.filter = u < .999 ? 'blur(' + ((1 - u) * 22).toFixed(1) + 'px)' : 'none';
+        k[1].style.opacity = (.12 + .88 * u).toFixed(3);
+        k[1].style.transform = 'translateY(' + ((1 - u) * 22).toFixed(1) + 'px)';
+      });
+    }
+    window.addEventListener('scroll', upd, { passive: true });
+    window.addEventListener('resize', upd);
+    upd();
+  })();
+
+  // Stats: each figure counts up from 0 as its row scrolls into view, in step with the scroll (and back down on the
+  // way up). Each number keeps its final width so the units beside it never shift.
+  (function () {
+    var els = [].slice.call(document.querySelectorAll('.cnt'));
+    if (!els.length || reduce) return;
+    els.forEach(function (el) { el._to = +el.getAttribute('data-to'); el._v = el._to; el.style.minWidth = el.getBoundingClientRect().width + 'px'; });
+    function upd() {
+      var vh = window.innerHeight || 1;
+      els.forEach(function (el) {
+        var u = clamp((vh * .96 - el.getBoundingClientRect().top) / (vh * .42), 0, 1);
+        var v = Math.round(el._to * (1 - Math.pow(1 - u, 3)));
+        if (v !== el._v) { el._v = v; el.textContent = v; }
+      });
+    }
+    window.addEventListener('scroll', upd, { passive: true });
+    window.addEventListener('resize', upd);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {
+      els.forEach(function (el) { el.textContent = el._to; el.style.minWidth = ''; el.style.minWidth = el.getBoundingClientRect().width + 'px'; el._v = el._to; });
+      upd();
+    });
+    upd();
   })();
 })();
 </script>
