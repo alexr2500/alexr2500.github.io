@@ -1976,6 +1976,8 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       if (!getComputedStyle(el).getPropertyValue('--flow-ink').trim()) el.style.setProperty('--flow-ink', getComputedStyle(el).color);
       el.classList.add('flow-on');
     });
+    // Kiruna photos, where they follow one by one: a plain fade from soft to sharp, so nothing golden plays over the auroras
+    var softs = [].slice.call(document.querySelectorAll('#hgal .hcard img'));
     var kids = [];
     blurs.forEach(function (b) { [].forEach.call(b.children, function (c, i) { kids.push([b, c, i]); }); });
     function play(el) {
@@ -1998,6 +2000,11 @@ html.has-cur, html.has-cur * { cursor: none !important; }
         if (el.hasAttribute('data-lift')) el.style.transform = 'translateY(' + ((1 - e) * 36).toFixed(1) + 'px)';
         var s = Math.round(el._k * Math.sin(Math.PI * e) * 10) / 10;
         if (s !== el._s) { el._s = s; el._dm.setAttribute('scale', s); el.style.filter = s > .2 ? 'url(#' + el._id + ')' : 'none'; }
+      });
+      var stacked = window.innerWidth <= 860;
+      softs.forEach(function (im) {
+        var u = stacked && !atEnd ? ease(clamp((vh * .99 - im.parentNode.getBoundingClientRect().top) / (vh * .30), 0, 1)) : 1;
+        im.style.opacity = u < .999 ? u.toFixed(3) : ''; im.style.filter = u < .999 ? 'blur(' + ((1 - u) * 10).toFixed(1) + 'px)' : '';
       });
       kids.forEach(function (k) {
         var r = k[0].getBoundingClientRect();
@@ -2035,14 +2042,13 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     upd();
   })();
 
-  // ---------- Pictures: each one condenses out of golden dust, the same fuzz as the module ----------
+  // ---------- Rockets: each picture condenses out of golden dust, the same fuzz as the module ----------
   // One shared WebGL canvas draws whichever pictures are mid-reveal and is copied into a 2D canvas laid over each one.
   // The dust belt comes down from the top, which is the part that scrolls in first: grains gather, settle on the
   // picture's own lines, and the picture fills in grain by grain behind them, in step with the scroll (both ways).
   // Once finished the canvas hides and the plain <img> is shown; without WebGL, or with reduced motion, it always is.
   (function () {
-    // the Rockets pictures, and on narrow screens the Kiruna photos too, where they also follow one by one
-    var imgs = [].slice.call(document.querySelectorAll('#cspace .pair img' + (window.innerWidth <= 860 ? ', #hgal .hcard img' : '')));
+    var imgs = [].slice.call(document.querySelectorAll('#cspace .pair img'));
     if (!imgs.length || reduce) return;
     var gcv = document.createElement('canvas'), gl = null;
     try { gl = gcv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, preserveDrawingBuffer: true }); } catch (e) {}
