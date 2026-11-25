@@ -12,18 +12,21 @@
 <style>
 /* Layout: a four-column engineering grid with hairlines centred in its gutters. Type and data sit on it; photos run edge to edge. */
 :root {
-  /* palette: Shadow Grey #2D2A32 (page ground darkened to #232028), Golden Glow #DDD92A, Banana Cream #EAE151, Vanilla Custard #EEEFA8, Porcelain #FAFDF6; every colour below is one of these */
-  --bg: #232028;                       /* Shadow Grey, a step darker */
-  --fg: #FAFDF6;                       /* Porcelain */
-  --fg-2: rgba(250, 253, 246, .74);    /* Porcelain, softened for secondary text */
-  --muted: rgba(250, 253, 246, .56);   /* Porcelain, labels */
-  --rule: rgba(250, 253, 246, .13);    /* Porcelain hairline */
-  --rule-2: rgba(250, 253, 246, .26);
-  --grid: rgba(250, 253, 246, .05);
-  --accent: #DDD92A;                   /* Golden Glow */
-  --accent-2: #EAE151;                 /* Banana Cream, hover */
-  --soft: #EEEFA8;                     /* Vanilla Custard: item titles, figures, active marks (Golden Glow is kept for section titles) */
-  --on-accent: #232028;
+  /* palette (vibrant versions of 88-AB-B2, 52-78-7F and 35-4E-7E, same hues): Ink #0A0E18, Lagoon #0DB1CE, Mist #76E3F9, Fjord #1F62E2; text is a pale tint of Mist, which the palette has no white for */
+  --bg: #0A0E18;                       /* Ink, the page ground */
+  --fg: #EDF2F3;                       /* Mist, almost white: text */
+  --fg-2: rgba(237, 242, 243, .74);    /* secondary text */
+  --muted: rgba(237, 242, 243, .56);   /* labels */
+  --rule: rgba(237, 242, 243, .13);    /* hairlines */
+  --rule-2: rgba(237, 242, 243, .26);
+  --grid: rgba(237, 242, 243, .05);
+  --title: #1F62E2;                    /* Fjord: section titles and the top bar, the same blue as the filled buttons */
+  --accent: #76E3F9;                   /* Mist: small accents and active lines, which need the contrast */
+  --accent-2: #0DB1CE;                 /* Lagoon, hover */
+  --soft: #76E3F9;                     /* Mist: item titles, figures, active marks */
+  --fill: #1F62E2;                     /* Fjord: filled buttons */
+  --on-accent: #0A0E18;
+  --on-fill: #EDF2F3;
   /* SF Pro cannot be hosted (Apple licence): Apple devices render it as the system font, everything else gets Inter */
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Inter", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -58,18 +61,18 @@ button { font: inherit; color: inherit; cursor: pointer; border-radius: 0; }
 .eye { margin: 0; font: 400 13.5px/1.4 var(--sans); color: var(--muted); }
 h1, h2, h3, h4 { margin: 0; font-weight: 500; text-wrap: balance; }
 h1 { font-size: clamp(48px, 7vw, 104px); line-height: .95; letter-spacing: -.04em; }
-h2 { font-size: clamp(44px, 5.4vw, 80px); line-height: .95; letter-spacing: -.035em; color: var(--accent); --flow-ink: var(--accent); }
+h2 { font-size: clamp(44px, 5.4vw, 80px); line-height: .95; letter-spacing: -.035em; color: var(--title); --flow-ink: var(--title); }
 h3 { font-size: clamp(28px, 2.8vw, 38px); line-height: 1.1; letter-spacing: -.02em; }
 
 /* ---------- top bar ---------- */
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--rule); }
 .bar .wrap { display: flex; align-items: center; gap: 24px; height: var(--bar-h); }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.brand b { font: 500 15px/1 var(--sans); white-space: nowrap; color: var(--accent); }
+.brand b { font: 500 15px/1 var(--sans); white-space: nowrap; color: var(--title); }
 .bar nav { display: flex; gap: 22px; margin-left: auto; }
 .bar nav a { padding-block: 6px; font: 400 14px/1 var(--sans); color: var(--fg-2); text-decoration: none; white-space: nowrap; border-bottom: 1px solid transparent; }
 .bar nav a:hover { color: var(--fg); }
-.bar nav a.on { color: var(--fg); border-bottom-color: var(--accent); }
+.bar nav a.on { color: var(--fg); border-bottom-color: var(--title); }
 .brand .short { display: none; }
 @media (max-width: 520px) {
   .bar nav a.opt { display: none; }
@@ -104,7 +107,7 @@ dd { margin: 0; }
   font: 500 14px/1 var(--sans); text-decoration: none; white-space: nowrap;
 }
 .btn:hover { border-color: var(--fg); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary { background: var(--fill); border-color: var(--fill); color: var(--on-fill); }
 .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
 .btn.btn-lt { background: var(--soft); border-color: var(--soft); color: var(--on-accent); }
 .btn.btn-lt:hover { background: var(--fg); border-color: var(--fg); }
@@ -129,7 +132,7 @@ dd { margin: 0; }
 }
 .aurora.on { display: block; }
 .kiruna .sub-head .tx { color: var(--fg); }
-.kiruna .sub-head { margin: 0 0 10px; text-shadow: 0 0 14px rgba(35, 32, 40, .75); }   /* sits right above the photos, inside the pinned view */
+.kiruna .sub-head { margin: 0 0 10px; text-shadow: 0 0 14px rgba(10, 14, 24, .75); }   /* sits right above the photos, inside the pinned view */
 .hgal-stage > .wrap { width: 100%; }
 
 .hgal { position: relative; }
@@ -149,7 +152,7 @@ dd { margin: 0; }
 @media (max-width: 860px) {
   .hgal-stage { gap: 28px; }
   .hgal-stage > .hgal-track { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-inline: 0; }
-  .hcard figcaption { position: static; max-width: none; padding: 12px var(--gut) 0; background: none; text-shadow: 0 0 14px rgba(35, 32, 40, .9); }
+  .hcard figcaption { position: static; max-width: none; padding: 12px var(--gut) 0; background: none; text-shadow: 0 0 14px rgba(10, 14, 24, .9); }
 }
 .pair { display: grid; grid-template-columns: var(--a, 1fr) var(--b, 1fr); gap: 2px; }
 .pair figure { margin: 0; min-width: 0; }
@@ -235,8 +238,8 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .map circle { fill: var(--fg); stroke: var(--bg); stroke-width: 2; }
 .map text { paint-order: stroke; stroke: var(--bg); stroke-width: 7px; stroke-linejoin: round; }
 .map .nm { font: 500 20px var(--sans); fill: var(--fg); }
-.map .nm tspan { font-weight: 400; fill: #FAFDF6; }
-.map .rl { font: 400 15px var(--sans); fill: #FAFDF6; }
+.map .nm tspan { font-weight: 400; fill: #EDF2F3; }
+.map .rl { font: 400 15px var(--sans); fill: #EDF2F3; }
 .map figcaption { margin-top: 8px; font-size: 14px; color: var(--fg-2); }
 @media (max-width: 900px) { .mission > div, .map { grid-column: 1 / -1; } }
 
@@ -277,7 +280,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .ln { display: flex; gap: 10px; padding-right: 4px; white-space: pre; }
 .ln i { flex: none; width: 20px; text-align: right; font-style: normal; color: var(--rule-2); }
 .ln code { font: inherit; color: var(--fg-2); }
-.ln.on { background: rgba(250, 253, 246, .07); box-shadow: inset 1px 0 var(--accent); }
+.ln.on { background: rgba(237, 242, 243, .07); box-shadow: inset 1px 0 var(--accent); }
 .ln.on i { color: var(--accent); }
 .t-k, .t-f { color: var(--fg); } .t-n { color: var(--accent); } .t-c { color: var(--muted); }
 
@@ -388,7 +391,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
   .seq .loc { margin-top: 4px; }
 }
 
-/* ---------- final integration: the CAD becomes a golden mesh, then the real module builds itself, driven by scroll ---------- */
+/* ---------- final integration: the CAD becomes a glowing mesh, then the real module builds itself, driven by scroll ---------- */
 /* static by default (heading, text, photo); script with WebGL pins the stage and plays the sequence */
 .build { position: relative; margin-top: clamp(72px, 9vw, 128px); }
 .build-stage { padding-block: 24px 0; }
@@ -413,7 +416,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .build.on .build-vis img { display: none; }
 .build.on .build-vis canvas { display: block; }
 .build.on .ph-x.pre { display: block; }
-/* the wipe: transparent, a golden edge, the text, a golden edge, transparent; --b and --a move the two edges */
+/* the wipe: transparent, a bright edge, the text, a bright edge, transparent; --b and --a move the two edges */
 .build.on .ph-x, .flow-on {
   --a: 133%; --b: -45%;
   background-image: linear-gradient(100deg, transparent calc(var(--b) - 8%), var(--accent) var(--b), var(--soft) calc(var(--b) + 6%), var(--flow-ink, var(--fg)) calc(var(--b) + 16%), var(--flow-ink, var(--fg)) calc(var(--a) - 18%), var(--soft) calc(var(--a) - 8%), var(--accent) calc(var(--a) - 2%), transparent calc(var(--a) + 6%));
@@ -484,7 +487,7 @@ section.block { padding-block: clamp(88px, 11vw, 160px); }
 .cbtns > * { flex: 1 1 0; }
 .cbtns > .mailrow { flex: 1.5 1 0; }
 .cbtn { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 30px 22px; font: 500 20px/1 var(--sans); letter-spacing: -.01em; text-decoration: none; }
-.cbtn.cv { background: var(--accent); color: var(--on-accent); }
+.cbtn.cv { background: var(--fill); color: var(--on-fill); }
 .cbtn.li { background: var(--fg); color: var(--bg); }
 .cbtn:hover { opacity: .9; }
 .mailrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 22px; border: 1px solid var(--rule-2); min-width: 0; }
@@ -502,27 +505,27 @@ footer a:hover { color: var(--fg); }
 /* ---------- Pulse Glass cursor: a precise dot and a trailing glass lens that breathes; mouse and trackpad only ---------- */
 .cur { position: fixed; left: 0; top: 0; z-index: 100; pointer-events: none; opacity: 0; transition: opacity .25s; }
 .cur.on { opacity: 1; }
-.cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--fg); box-shadow: 0 0 0 1px rgba(35, 32, 40, .5); }
+.cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--fg); box-shadow: 0 0 0 1px rgba(10, 14, 24, .5); }
 .cur-ring { width: 38px; height: 38px; margin: -19px 0 0 -19px; transition: opacity .25s, width .25s, height .25s, margin .25s; }
 .cur-ring i {
   position: absolute; inset: 0; border-radius: 50%;
-  border: 1px solid rgba(250, 253, 246, .42);
-  background: radial-gradient(circle at 32% 28%, rgba(250, 253, 246, .24), rgba(250, 253, 246, .05) 55%, rgba(250, 253, 246, .02));
+  border: 1px solid rgba(237, 242, 243, .42);
+  background: radial-gradient(circle at 32% 28%, rgba(237, 242, 243, .24), rgba(237, 242, 243, .05) 55%, rgba(237, 242, 243, .02));
   -webkit-backdrop-filter: blur(2.5px) saturate(1.6); backdrop-filter: blur(2.5px) saturate(1.6);
-  box-shadow: inset 0 1px 1px rgba(250, 253, 246, .4), 0 6px 16px rgba(35, 32, 40, .45);
+  box-shadow: inset 0 1px 1px rgba(237, 242, 243, .4), 0 6px 16px rgba(10, 14, 24, .45);
   animation: cur-pulse 2.6s ease-in-out infinite;
   transition: transform .2s, border-color .25s, background .25s;
 }
-.cur-ring::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(221, 217, 42, .55); animation: cur-wave 2.6s ease-out infinite; }
+.cur-ring::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(118, 227, 249, .55); animation: cur-wave 2.6s ease-out infinite; }
 @keyframes cur-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
 @keyframes cur-wave { 0% { transform: scale(1); opacity: .55; } 65%, 100% { transform: scale(1.75); opacity: 0; } }
 .cur-ring.hot { width: 58px; height: 58px; margin: -29px 0 0 -29px; }
-.cur-ring.hot i { border-color: rgba(221, 217, 42, .8); background: radial-gradient(circle at 32% 28%, rgba(238, 239, 168, .28), rgba(221, 217, 42, .09) 60%); }
+.cur-ring.hot i { border-color: rgba(118, 227, 249, .8); background: radial-gradient(circle at 32% 28%, rgba(118, 227, 249, .28), rgba(118, 227, 249, .09) 60%); }
 .cur-ring.down i { transform: scale(.82); animation: none; }
 html.has-cur, html.has-cur * { cursor: none !important; }
 @media (prefers-reduced-motion: reduce) { .cur-ring i, .cur-ring::after { animation: none; } }
 
-/* scroll reveals outside the module section: the same golden-edged wipe; the contact boxes sharpen into focus */
+/* scroll reveals outside the module section: the same bright-edged wipe; the contact boxes sharpen into focus */
 .flow-on { width: fit-content; max-width: 100%; }
 .sec-head .tx { --flow-ink: var(--fg-2); }
 .flow-on b { color: inherit; }
@@ -653,7 +656,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
         <svg viewBox="0 40 520 700" role="img" aria-labelledby="map-t">
           <title id="map-t">Satellite map of Europe with four sites: Paris, where the experiment is built; Oberpfaffenhofen (DLR), design review and bench tests; Bremen (ZARM), Integration Testing Week; Esrange (SSC Space) in Sweden, training week and launch.</title>
           <defs>
-            <radialGradient id="map-fade-g" cx=".46" cy=".5" r=".62"><stop offset=".72" stop-color="#FAFDF6"></stop><stop offset="1" stop-color="#FAFDF6" stop-opacity="0"></stop></radialGradient>
+            <radialGradient id="map-fade-g" cx=".46" cy=".5" r=".62"><stop offset=".72" stop-color="#EDF2F3"></stop><stop offset="1" stop-color="#EDF2F3" stop-opacity="0"></stop></radialGradient>
             <mask id="map-fade"><rect x="0" y="40" width="520" height="700" fill="url(#map-fade-g)"></rect></mask>
           </defs>
           <image href="assets/europe-map.webp" x="0" y="0" width="520" height="763" preserveAspectRatio="none" mask="url(#map-fade)"></image>
@@ -750,7 +753,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 
   </div>
 
-  <!-- Final integration: concept, golden mesh, then the real module building itself as the page scrolls -->
+  <!-- Final integration: concept, glowing mesh, then the real module building itself as the page scrolls -->
   <div class="build" id="build">
     <div class="build-stage">
       <div class="wrap build-in">
@@ -763,7 +766,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
           <p class="build-p" id="build-p">The STAR-D experiment, integrated in its REXUS module. My contribution is the flight software and data-flow architecture that run it in flight.</p>
         </div>
         <div class="build-vis">
-          <canvas id="build-gl" role="img" aria-label="The STAR-D module, first as its CAD model, then as a golden wireframe mesh that rebuilds itself into the real anodised blue REXUS module."></canvas>
+          <canvas id="build-gl" role="img" aria-label="The STAR-D module, first as its CAD model, then as a glowing wireframe mesh that rebuilds itself into the real anodised blue REXUS module."></canvas>
           <img src="assets/module-real.webp" width="1100" height="940" loading="lazy" alt="The final integrated STAR-D module: a blue anodised REXUS cylinder with machined aluminium experiment hardware and yellow and red wiring visible through its open top and rectangular hatch.">
         </div>
       </div>
@@ -796,7 +799,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
           <figcaption><p>Part of the STAR-D team at SSC Space.</p></figcaption>
         </figure>
         <figure class="hcard">
-          <img src="assets/system-engineering-course.webp" width="1320" height="880" loading="lazy" alt="A speaker in front of a slide titled System Engineering with the ESA logo, seen from the back of a full lecture hall with orange doors.">
+          <img src="assets/system-engineering-course.webp" width="1500" height="1000" loading="lazy" alt="A speaker in front of a slide titled System Engineering with the ESA logo, seen from the back of a full lecture hall with orange doors.">
           <figcaption><p>System Engineering course (Image: ESA credit)</p></figcaption>
         </figure>
       </div>
@@ -974,7 +977,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
         var y = ((s[1] * F - sy * (.03 + .2 * d)) % F + F) % F - (F - H) / 2;
         if (y < -2 || y > H + 2) continue;
         var tw = reduce ? 1 : .7 + .3 * Math.sin(clock * (.6 + d) + s[3]);
-        ctx.fillStyle = 'rgba(250,253,246,' + ((.08 + .34 * d) * tw).toFixed(3) + ')';
+        ctx.fillStyle = 'rgba(237,242,243,' + ((.08 + .34 * d) * tw).toFixed(3) + ')';
         ctx.beginPath();
         ctx.arc(((s[0] * W + drift * (.3 + d)) % W + W) % W, y, .5 + d * .8, 0, TAU);
         ctx.fill();
@@ -1211,7 +1214,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 
     // ---- plot ----
     var W = 1, H = 1, DPR = 1, AL = 38, AR = 10, TOPH = 30, AXH = 18;
-    var FG = '#FAFDF6', MID = 'rgba(250,253,246,.56)', DIM = 'rgba(250,253,246,.32)', LINE = 'rgba(250,253,246,.13)', ACCENT = '#DDD92A';
+    var FG = '#EDF2F3', MID = 'rgba(237,242,243,.56)', DIM = 'rgba(237,242,243,.32)', LINE = 'rgba(237,242,243,.13)', ACCENT = '#76E3F9';
     var EVENTS = [[0, 'LO', 1], [TB, 'Burnout', 0, 1], [T_SOE, 'SOE', 1], [T_APO, 'Apogee', 0], [T_MU_END, 'End µg', 0]];
     function size() {
       var r = canvas.getBoundingClientRect();
@@ -1238,7 +1241,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       tx('km', 0, 8, MID);
       for (var z = 0; z <= 100; z += 10) {
         var y = cr(Y(z));
-        if (z % 20 === 0) { ln(AL, y, W - AR, y, z ? 'rgba(250,253,246,.05)' : LINE); tx(String(z), AL - 8, y, MID, 'right'); }
+        if (z % 20 === 0) { ln(AL, y, W - AR, y, z ? 'rgba(237,242,243,.05)' : LINE); tx(String(z), AL - 8, y, MID, 'right'); }
         ln(AL - 4, y, AL, y, z % 20 ? LINE : DIM);
       }
       ln(cr(AL), yT, cr(AL), yB, LINE);
@@ -1251,7 +1254,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       // event markers run from their label down to the time axis
       EVENTS.forEach(function (e) {
         var x = cr(X(e[0]));
-        ln(x, e[3] ? 25 : 13, x, yB, e[0] <= T ? 'rgba(250,253,246,.22)' : 'rgba(250,253,246,.08)');
+        ln(x, e[3] ? 25 : 13, x, yB, e[0] <= T ? 'rgba(237,242,243,.22)' : 'rgba(237,242,243,.08)');
       });
 
       // predicted path, then the flown path (amber through microgravity)
@@ -1272,7 +1275,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       EVENTS.forEach(function (e) {
         var done = e[0] <= T, c = done ? (e[2] ? ACCENT : FG) : MID, x = cr(X(e[0])), y = cr(Y(alt(e[0])));
         tx(e[1], x, e[3] ? 20 : 8, c, 'center');
-        ctx.fillStyle = done ? c : '#232028'; ctx.fillRect(x - 2.5, y - 2.5, 5, 5);
+        ctx.fillStyle = done ? c : '#0A0E18'; ctx.fillRect(x - 2.5, y - 2.5, 5, 5);
         ctx.strokeStyle = c; ctx.strokeRect(x - 2.5, y - 2.5, 5, 5);
       });
 
@@ -1280,7 +1283,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
 
       // cursor
       var yNow = cr(Y(alt(T)));
-      ln(AL, yNow, cx, yNow, 'rgba(250,253,246,.22)');
+      ln(AL, yNow, cx, yNow, 'rgba(237,242,243,.22)');
       ln(cx, yT - 2, cx, yB + 4, MID);
       ctx.fillStyle = FG; ctx.fillRect(cx - 2.5, yNow - 2.5, 5, 5);
     }
@@ -1633,7 +1636,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     if (narrow.addEventListener) narrow.addEventListener('change', render);
     render();
   })();
-  // ---------- Final integration: the CAD turns into a golden mesh, the real module builds itself out of it ----------
+  // ---------- Final integration: the CAD turns into a glowing mesh, the real module builds itself out of it ----------
   // One WebGL pass mixes the two cut-outs. Scroll sets the target progress; the shown progress eases towards it,
   // so wheel steps still read as one continuous motion. Without WebGL, or with reduced motion, the section stays as
   // its static version: the final heading, the text and the photo.
@@ -1665,8 +1668,8 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       'uniform sampler2D uCad, uMod;',
       'uniform vec2 uTexel, uRes;',
       'uniform float uP, uT;',
-      // palette: Golden Glow, Banana Cream, Vanilla Custard, Porcelain
-      'const vec3 GOLD = vec3(.867, .851, .165), BANANA = vec3(.918, .882, .318), VANILLA = vec3(.933, .937, .659), PORC = vec3(.98, .992, .965);',
+      // palette: Lagoon, Fjord, Mist and its pale tint
+      'const vec3 LAGOON = vec3(.051, .694, .808), FJORD = vec3(.122, .384, .886), MIST = vec3(.463, .890, .976), PALE = vec3(.929, .949, .953);',
       NOISE,
       'float fbm(vec2 p){ float v = 0., a = .5; for (int i = 0; i < 4; i++) { v += a * vn(p); p *= 2.03; a *= .5; } return v; }',
       'float lum(vec3 c){ return dot(c, vec3(.299, .587, .114)); }',
@@ -1693,11 +1696,11 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       '  float scan = .55 + .45 * sin(uv.y * uRes.y * .9 - uT * 5.);',
       '  float body = s.a * (.07 + .06 * scan + lum(s.rgb) * .2) + tri(uv) * s.a * .3 + e;',
       '  float glow = clamp(halo(t, uv) - s.a, 0., 1.) * .5;',
-      '  float I = body + glow; vec3 c = mix(GOLD, VANILLA, e * .65);',
+      '  float I = body + glow; vec3 c = mix(LAGOON, MIST, e * .65);',
       '  return vec4(c * I, clamp(I, 0., 1.)); }',
       'vec4 over(vec4 top, vec4 bot){ return top + bot * (1. - top.a); }',
       'vec4 addg(vec4 base, vec4 g){ return vec4(base.rgb + g.rgb, clamp(base.a + g.a * (1. - base.a), 0., 1.)); }',
-      // Neither picture is ever warped. 1. a scan turns the CAD into its golden mesh; 2. the fuzz: the mesh lets go grain
+      // Neither picture is ever warped. 1. a scan turns the CAD into its glowing mesh; 2. the fuzz: the mesh lets go grain
       // by grain, scattering as frosted glass would, while the grains program carries the dust across and the module's
       // mesh condenses out of it; 3. the photo fills the mesh in from the bottom along a grainy front.
       'void main(){',
@@ -1717,7 +1720,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       '      float keep = 1. - smoothstep(-.02, .02, dt + (gr - .5) * .15);',
       '      float loose = smoothstep(-.14, .06, dt) * step(.001, k);',
       '      if (keep > 0.) col = addg(col, holo(uCad, uv + gd * loose * 16.) * meshed * keep * (1. + loose * .7));',
-      '      if (bandB > .01) col = addg(col, vec4(VANILLA, 1.) * bandB * clamp(cad.a + halo(uCad, uv) * .6, 0., 1.) * .9);',
+      '      if (bandB > .01) col = addg(col, vec4(MIST, 1.) * bandB * clamp(cad.a + halo(uCad, uv) * .6, 0., 1.) * .9);',
       '    }',
       '  }',
       '  if (k > .1) {',
@@ -1733,7 +1736,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       '    col = over(vec4(mo.rgb * mo.a, mo.a) * real, col);',
       '    float tr = on * mix(1., .22 * rim, real);',
       '    if (tr > .002) col = addg(col, holo(uMod, uv + gd * settle * 16.) * tr * (1. + settle * .7));',
-      '    if (near > .01) col = addg(col, vec4(VANILLA, 1.) * near * gr * clamp(mo.a, 0., 1.) * .42);',
+      '    if (near > .01) col = addg(col, vec4(MIST, 1.) * near * gr * clamp(mo.a, 0., 1.) * .42);',
       '  }',
       // a thin luminous dust haze that binds the two shapes while the grains are in the air
       '  float air = smoothstep(.0, .06, k - gone(uv) + .05) * (1. - smoothstep(-.06, .10, k - land(uv)));',
@@ -1741,7 +1744,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       '    float h = 0.; vec2 o = uTexel * 14.;',
       '    for (int i = 0; i < 6; i++) { float a = float(i) * 1.0472 + ga * .16; vec2 q = uv + vec2(cos(a), sin(a)) * o; h += mix(texture2D(uCad, q).a, texture2D(uMod, q).a, smoothstep(.25, .75, k)); }',
       '    float d = fbm(uv * 26. + vec2(uT * .05, -uT * .12)); d = .35 + .65 * smoothstep(.3, .75, d);',
-      '    col = addg(col, vec4(GOLD, .6) * (h / 6.) * d * air * .13);',
+      '    col = addg(col, vec4(FJORD, .6) * (h / 6.) * d * air * .13);',
       '  }',
       '  gl_FragColor = col;',
       '}'
@@ -1787,7 +1790,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       '  q += vec2(cos(aR.x * 43.), sin(aR.x * 43.)) * pow(fract(aR.y * 5.17), 2.2) * .030 * bell - vec2(0., .012 * bell);',
       '  float big = step(.972, fract(aR.x * 7.31 + aR.y * 3.7));',
       '  vA = smoothstep(0., .05, k - a) * (1. - smoothstep(0., .10, k - b)) * (.50 + .30 * sin(uT * (1.5 + 3. * aR.x) + aR.y * 40.)) * mix(.9, .22, big);',
-      '  vC = mix(mix(vec3(.867, .851, .165), vec3(.933, .937, .659), aR.y), vec3(.98, .992, .965), step(.93, aR.x));',
+      '  vC = mix(mix(vec3(.051, .694, .808), vec3(.463, .890, .976), aR.y), vec3(.929, .949, .953), step(.93, aR.x));',
       '  gl_Position = vec4(q.x * 2. - 1., 1. - q.y * 2., 0., 1.);',
       '  gl_PointSize = (vA <= .003) ? 0. : uPx * mix(1.2 + 1.5 * aR.x * aR.x, 6.5, big);',
       '}'].join('\n');
@@ -1833,7 +1836,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       PN = N; pp = pr;
     }
 
-    // phrases: a gradient wipe with a golden leading edge, plus a liquid displacement while each one moves
+    // phrases: a gradient wipe with a glowing leading edge, plus a liquid displacement while each one moves
     var PH = [$('ph-1'), $('ph-2'), $('ph-3')], para = $('build-p');
     var DM = [$('flow-1-d'), $('flow-2-d'), $('flow-3-d')], scaleCache = [-1, -1, -1];
     var ease = function (u) { return u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; };
@@ -1919,7 +1922,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); root.classList.remove('on'); });
   })();
   // Pulse Glass cursor, for mouse and trackpad only: the dot sits exactly on the pointer, the glass lens trails it,
-  // widens and turns golden over anything clickable, and presses in on click. Touch screens keep their own behaviour.
+  // widens and lights up over anything clickable, and presses in on click. Touch screens keep their own behaviour.
   (function () {
     if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     var dot = document.createElement('div'), ring = document.createElement('div');
@@ -1953,7 +1956,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       dot.classList.remove('on'); ring.classList.remove('on'); shown = false;
     });
   })();
-  // Scroll reveals: headings and text marked data-flow wipe in with the golden edge and liquid ripple used for the
+  // Scroll reveals: headings and text marked data-flow wipe in with the glowing edge and liquid ripple used for the
   // module phrases (data-flow holds a delay); data-lift also rises; children of data-blur go from blurred to sharp.
   // Inside data-flow-early they start sooner and take less scroll. data-flow-load is for a title near the first screen: if
   // it is in plain view on arrival it plays by itself, otherwise it starts from where it rests, so it is never half-drawn.
@@ -1976,7 +1979,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       if (!getComputedStyle(el).getPropertyValue('--flow-ink').trim()) el.style.setProperty('--flow-ink', getComputedStyle(el).color);
       el.classList.add('flow-on');
     });
-    // Kiruna photos, where they follow one by one: a plain fade from soft to sharp, so nothing golden plays over the auroras
+    // Kiruna photos, where they follow one by one: a plain fade from soft to sharp, so nothing bright plays over the auroras
     var softs = [].slice.call(document.querySelectorAll('#hgal .hcard img'));
     var kids = [];
     blurs.forEach(function (b) { [].forEach.call(b.children, function (c, i) { kids.push([b, c, i]); }); });
@@ -2042,7 +2045,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     upd();
   })();
 
-  // ---------- Rockets: each picture condenses out of golden dust, the same fuzz as the module ----------
+  // ---------- Rockets: each picture condenses out of glowing dust, the same fuzz as the module ----------
   // One shared WebGL canvas draws whichever pictures are mid-reveal and is copied into a 2D canvas laid over each one.
   // The dust belt comes down from the top, which is the part that scrolls in first: grains gather, settle on the
   // picture's own lines, and the picture fills in grain by grain behind them, in step with the scroll (both ways).
@@ -2063,7 +2066,7 @@ html.has-cur, html.has-cur * { cursor: none !important; }
     ].join('\n');
     var VS = 'attribute vec2 aPos; varying vec2 vUv; void main(){ vUv = vec2(aPos.x * .5 + .5, .5 - aPos.y * .5); gl_Position = vec4(aPos, 0., 1.); }';
     var FS = ['precision highp float; varying vec2 vUv; uniform sampler2D uImg; uniform vec4 uCover; uniform vec2 uRes; uniform float uP, uT;', NOISE,
-      'const vec3 GOLD = vec3(.867, .851, .165), VANILLA = vec3(.933, .937, .659);',
+      'const vec3 LAGOON = vec3(.051, .694, .808), FJORD = vec3(.122, .384, .886), MIST = vec3(.463, .890, .976);',
       'vec3 tx(vec2 u){ return texture2D(uImg, uCover.xy + u * uCover.zw).rgb; }',
       'float L(vec2 u){ return dot(tx(u), vec3(.299, .587, .114)); }',
       'float edge(vec2 u){ vec2 o = 1.4 / uRes;',
@@ -2072,16 +2075,16 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       'void main(){ vec2 u = vUv; float k = uP;',
       '  vec2 cell = floor(u * uRes / 1.5); float gr = h21(cell + uSeed), ga = h21(cell + 31.7) * 6.2832; vec2 gd = vec2(cos(ga), sin(ga)) / uRes;',
       '  float dt = k - land(u);',
-      '  float lines = smoothstep(-.02, .02, dt + (gr - .5) * .13);',                 // the golden lines condense,
+      '  float lines = smoothstep(-.02, .02, dt + (gr - .5) * .13);',                 // the glowing lines condense,
       '  float real = smoothstep(-.02, .02, dt - .13 + (gr - .5) * .16);',            // then the picture behind them
       '  float settle = 1. - smoothstep(-.02, .20, dt);',
       '  vec4 col = vec4(tx(u + gd * settle * 14.), 1.) * real;',
       '  if (lines > .002 && dt < .42) {',
       '    vec2 ul = u + gd * settle * 12.; float e = clamp(edge(ul) * 1.5, 0., 1.), fade = 1. - smoothstep(.10, .40, dt);',
-      '    float I = (e + .05) * lines * fade; col.rgb += mix(GOLD, VANILLA, e * .65) * I; col.a = clamp(col.a + I * (1. - col.a), 0., 1.);',
+      '    float I = (e + .05) * lines * fade; col.rgb += mix(LAGOON, MIST, e * .65) * I; col.a = clamp(col.a + I * (1. - col.a), 0., 1.);',
       '  }',
       '  float air = smoothstep(-.20, -.04, dt) * (1. - smoothstep(0., .16, dt));',
-      '  if (air > .01) { float d = vn(u * vec2(40., 27.) + vec2(uT * .3, -uT * .5)) * .6 + vn(u * vec2(90., 60.) - uT * .4) * .4; float I = smoothstep(.3, .8, d) * air * .16; col.rgb += GOLD * I; col.a = clamp(col.a + I * .6 * (1. - col.a), 0., 1.); }',
+      '  if (air > .01) { float d = vn(u * vec2(40., 27.) + vec2(uT * .3, -uT * .5)) * .6 + vn(u * vec2(90., 60.) - uT * .4) * .4; float I = smoothstep(.3, .8, d) * air * .16; col.rgb += FJORD * I; col.a = clamp(col.a + I * .6 * (1. - col.a), 0., 1.); }',
       '  gl_FragColor = col; }'].join('\n');
     var PVS = ['precision highp float; attribute vec4 aAB; attribute vec2 aR; attribute vec3 aC; uniform float uP, uT, uPx; varying float vA; varying vec3 vC;', NOISE,
       'vec2 curl(vec2 q){ float e = .12; return vec2(vn(q + vec2(0., e)) - vn(q - vec2(0., e)), vn(q - vec2(e, 0.)) - vn(q + vec2(e, 0.))) / (2. * e); }',
@@ -2091,8 +2094,8 @@ html.has-cur, html.has-cur * { cursor: none !important; }
       '  vec2 q = mix(aAB.xy, aAB.zw, e) + curl(aAB.zw * 9. + aR * .7 - uT * .10) * .018 * left;',
       '  float big = step(.975, fract(aR.x * 7.31 + aR.y * 3.7));',
       '  vA = smoothstep(0., .25, t) * step(.0001, t) * (1. - smoothstep(.02, .16, uP - b)) * (.52 + .30 * sin(uT * (1.5 + 3. * aR.x) + aR.y * 40.)) * mix(1., .2, big);',
-      '  vec3 gold = mix(vec3(.867, .851, .165), vec3(.933, .937, .659), aR.y);',
-      '  vC = mix(gold, aC, smoothstep(.0, .12, uP - b) * .7);',
+      '  vec3 dust = mix(vec3(.051, .694, .808), vec3(.463, .890, .976), aR.y);',
+      '  vC = mix(dust, aC, smoothstep(.0, .12, uP - b) * .7);',
       '  gl_Position = vec4(q.x * 2. - 1., 1. - q.y * 2., 0., 1.);',
       '  gl_PointSize = vA <= .003 ? 0. : uPx * mix(1.2 + 1.6 * aR.x * aR.x, 6., big); }'].join('\n');
     var PFS = 'precision mediump float; varying float vA; varying vec3 vC; void main(){ if (vA <= .003) discard; float d = length(gl_PointCoord - .5) * 2., a = (1. - smoothstep(.15, 1., d)) * vA; gl_FragColor = vec4(vC * a, a * .45); }';
